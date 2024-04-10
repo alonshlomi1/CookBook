@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CookBook</string>
+    <string name="Comments">תגובות</string>
+    <string name="Instructions">הוראות</string>
+    <string name="Ingredients">מרכיבים</string>
+    <string name="Recipe_Title">כותרת מתכון</string>
+    <string name="User_ID">מזהה משתמש</string>
+    <string name="Comment_Text">תוכן תגובה</string>
+    <string name="Search">חיפוש</string>
+    <string name="Name">שם</string>
+    <string name="Info">מידע</string>
+</resources>

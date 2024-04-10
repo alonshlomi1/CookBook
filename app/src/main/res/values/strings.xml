@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">CookBook</string>
+    <string name="Comments">Comments</string>
+    <string name="Instructions">Instructions</string>
+    <string name="Ingredients">Ingredients</string>
+    <string name="Recipe_Title">Recipe Title</string>
+    <string name="User_ID">User ID</string>
+    <string name="Comment_Text">Comment Text</string>
+    <string name="Search">Search</string>
+    <string name="Name">Name</string>
+    <string name="Info">Info</string>
+
+</resources>
