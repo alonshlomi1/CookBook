@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setMockupList();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-
+//        bottomNavigationView.setItemActiveIndicatorColor(getColorStateList(R.color.theme_6));
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new HomePageFragment(getApplicationContext(), recipeList))
                 .commit();
