@@ -141,7 +141,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 instructionsBuilder.append(instruction).append("\n");
             }
             recipeInstructions.setText(instructionsBuilder.toString());
-            Log.d("@@@@@@@", String.valueOf(recipe.getComments()));
             CommentAdapter commentAdapter = new CommentAdapter(context, recipe.getComments());
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
             linearLayoutManager.setOrientation(RecyclerView.VERTICAL);

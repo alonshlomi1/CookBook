@@ -10,4 +10,17 @@
     <string name="Search">Search</string>
     <string name="Name">Name</string>
     <string name="Info">Info</string>
+    <string name="New_Recipe_Title">New Recipe</string>
+    <string name="new_recipe_description_title">Recipe Descrioption</string>
+    <string name="new_recipe_description">Descrioption....</string>
+    <string name="new_recipe_ingredients_title">Ingredients</string>
+    <string name="new_recipe_ingredients">Ingredients</string>
+    <string name="new_recipe_instructions_title">Instructions</string>
+    <string name="new_recipe_instructions">Instructions.....</string>
+    <string name="new_recipe_name_title">Recipe Name</string>
+    <string name="new_recipe_name">Recipe Name</string>
+    <string name="new_recipe_image_title">Add Image</string>
+    <string name="new_recipe_tags_title">Add Tags</string>
+    <string name="new_recipe_tags">Add Tags.....</string>
+    <string name="Submit">Submit</string>
 </resources>

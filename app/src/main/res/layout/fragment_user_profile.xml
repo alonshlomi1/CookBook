@@ -11,21 +11,17 @@
         android:orientation="vertical"
         android:layout_margin="4dp">
 
-        <EditText
-            android:id="@+id/profile_ET_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/Search"
-            android:layout_marginHorizontal="32dp"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="8dp"
+            android:layout_marginHorizontal="8dp"
             android:background="@color/theme_1"
             >
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profile_SIV_image"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -45,6 +41,7 @@
                 >
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/profile_TV_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/Name"
@@ -53,6 +50,7 @@
                     android:layout_margin="8dp"
                     />
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/profile_TV_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/Info"
@@ -61,7 +59,7 @@
             </LinearLayout>
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="4dp"
             android:id="@+id/home_LST_recipe"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

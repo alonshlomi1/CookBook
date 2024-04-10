@@ -11,6 +11,7 @@ import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Rate;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.Models.Comment;
+import com.example.cookbook.Models.User;
 import com.example.cookbook.UI.Fragments.HomePageFragment;
 import com.example.cookbook.UI.Fragments.NewRecipeFragment;
 import com.example.cookbook.UI.Fragments.UserProfileFragment;
@@ -20,7 +21,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-    ArrayList<Recipe> recipeList = new ArrayList<>();
+    private ArrayList<Recipe> recipeList = new ArrayList<>();
+    private User user = new User();
+
 
 
     @Override
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setMockupList();
+        setMockupUser();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 //        bottomNavigationView.setItemActiveIndicatorColor(getColorStateList(R.color.theme_6));
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                     if (item.getItemId() == R.id.navigation_home)
                         selectedFragment = new HomePageFragment(getApplicationContext(), recipeList);
                     else if (item.getItemId() == R.id.navigation_profile)
-                        selectedFragment = new UserProfileFragment();
+                        selectedFragment = new UserProfileFragment(getApplicationContext(), user,  recipeList);
                     else if (item.getItemId() == R.id.new_recipe)
                         selectedFragment = new NewRecipeFragment();
 
@@ -57,6 +61,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
+
+    private void setMockupUser() {
+        user.setId("userID_1")
+                .setUsername("User1")
+                .setFirstName("First")
+                .setLastName("Last")
+                .setBio("hi..................................\nby....................")
+                .setEmail("email@gmail.com")
+                .setProfile_URL("http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?d=identicon\n");
+    }
     private void setMockupList(){
         // Recipe 1
         Recipe recipe1 = new Recipe();

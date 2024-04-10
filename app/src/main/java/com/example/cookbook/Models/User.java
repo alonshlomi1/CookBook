@@ -4,6 +4,8 @@ public class User {
 
     private String id = "";
     private String username = "";
+    private String firstName = "";
+    private String lastName = "";
     private String email = "";
     private String profile_URL = "";
     private String bio = "";
@@ -53,6 +55,24 @@ public class User {
 
     public User setBio(String bio) {
         this.bio = bio;
+        return this;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public User setFirstName(String firstName) {
+        this.firstName = firstName;
+        return this;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public User setLastName(String lastName) {
+        this.lastName = lastName;
         return this;
     }
 }

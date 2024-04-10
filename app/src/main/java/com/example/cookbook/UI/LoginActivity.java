@@ -42,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
         if(user == null)
             login();
         else {
-            Log.d("@@@@@@@@@@@@@@@@@@@",user.toString());
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -93,13 +92,11 @@ public class LoginActivity extends AppCompatActivity {
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Log.d("@@@@@@@@@@@@@", user.toString());
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
 
         } else {
-            Log.d("@@@@@@@@@@@@@", result.toString());
         }
     }
 
@@ -117,7 +114,6 @@ public class LoginActivity extends AppCompatActivity {
                                 // (Handle new user creation logic)
                             } else {
                                 // Existing user, log them in
-                                Log.d("@@@@@@@@@@@@@", "User signed in: " + user.toString());
                                 // ... (Proceed with logged-in user operations)
                             }
                         } else {
