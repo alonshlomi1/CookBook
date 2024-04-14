@@ -64,4 +64,7 @@ public class UserProfileFragment extends Fragment {
         profile_TV_info= view.findViewById(R.id.profile_TV_info);
         home_LST_recipe= view.findViewById(R.id.home_LST_recipe);
     }
+    public void updateUser(User user){
+        this.user = user;
+    }
 }

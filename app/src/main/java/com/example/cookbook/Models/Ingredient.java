@@ -1,10 +1,15 @@
 package com.example.cookbook.Models;
 
 public class Ingredient {
-    private String name = "";
+    public static enum AMOUNT_TYPE {
+        CUP, TEASPOON, SPOON, GRAMS, DEF
+    }
+    private String name = " ";
     private double amount = 0.0;
-    private String recipeId = "";
 
+    private String recipeId = " ";
+
+    private AMOUNT_TYPE type= AMOUNT_TYPE.DEF;
     public Ingredient() {
     }
 
@@ -32,6 +37,15 @@ public class Ingredient {
 
     public Ingredient setRecipeId(String recipeID) {
         this.recipeId = recipeID;
+        return this;
+    }
+
+    public String getType() {
+        return type.toString();
+    }
+
+    public Ingredient setType(AMOUNT_TYPE type) {
+        this.type = type;
         return this;
     }
 }

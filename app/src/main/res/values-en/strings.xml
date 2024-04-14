@@ -23,4 +23,7 @@
     <string name="new_recipe_tags_title">Add Tags</string>
     <string name="new_recipe_tags">Add Tags.....</string>
     <string name="Submit">Submit</string>
+    <string name="new_recipe_ingredients_name">Ingredients Name</string>
+    <string name="new_recipe_ingredients_amount">Ingredients Amount</string>
+    <string name="Add">Add</string>
 </resources>

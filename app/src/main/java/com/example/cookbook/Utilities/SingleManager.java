@@ -3,16 +3,16 @@ package com.example.cookbook.Utilities;
 import android.content.Context;
 import android.os.Vibrator;
 
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SingleManager {
     private static SingleManager instance = null;
     private Context context;
-    private FirebaseDatabase db;
+    private FirebaseFirestore db;
     private SingleManager(Context context) {
 
         this.context = context;
-        db = FirebaseDatabase.getInstance();
+        db = FirebaseFirestore.getInstance();
     }
 
     public static SingleManager getInstance() {
@@ -26,4 +26,7 @@ public class SingleManager {
         }
     }
 
+    public FirebaseFirestore getDb() {
+        return db;
+    }
 }

@@ -28,7 +28,7 @@ public class HomePageFragment extends Fragment {
 
 
     public HomePageFragment(Context Context, ArrayList<Recipe> recipeList) {
-        int limit = Math.min(recipeList.size(), 10);
+        //int limit = Math.min(recipeList.size(), 10);
         this.recipeList = recipeList;//(ArrayList<Recipe>) recipeList.subList(0, limit);
         applicationContext = Context;
     }
@@ -40,12 +40,11 @@ public class HomePageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home_page, container, false);
 
         findViews(view);
-        initViews(view);
+        initViews();
 
         return view;
     }
-
-    private void initViews(View view) {
+    private void initViews() {
         RecipeAdapter recipeAdapter = new RecipeAdapter(applicationContext, recipeList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(applicationContext);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -54,9 +53,13 @@ public class HomePageFragment extends Fragment {
         //highscoreAdapter.setHighscoreCallback(this.callbackHighScoreClicked);
     }
 
+
     private void findViews(View view) {
         home_LST_recipe = view.findViewById(R.id.home_LST_recipe);
     }
-
+    public void updateRecipeList(ArrayList<Recipe> recipeList){
+        this.recipeList = recipeList;
+        initViews();
+    }
 
 }

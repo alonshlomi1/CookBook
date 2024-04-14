@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Recipe {
     private String id = "";
-    private String Title = "";
+    private String title = "";
     private ArrayList<Ingredient> Ingredients = new ArrayList<>();
     private ArrayList<String> Instructions = new ArrayList<>();
     private String photoUrl = "";
@@ -29,11 +29,11 @@ public class Recipe {
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public Recipe setTitle(String title) {
-        Title = title;
+        title = title;
         return this;
     }
 
@@ -45,6 +45,10 @@ public class Recipe {
         Ingredients = ingredients;
         return this;
     }
+    public Recipe addIngredient(Ingredient ingredient) {
+        Ingredients.add(ingredient);
+        return this;
+    }
 
     public ArrayList<String> getInstructions() {
         return Instructions;
@@ -54,7 +58,10 @@ public class Recipe {
         Instructions = instructions;
         return this;
     }
-
+    public Recipe addInstructions(String instruction) {
+        Instructions.add(instruction);
+        return this;
+    }
     public String getPhotoUrl() {
         return photoUrl;
     }
