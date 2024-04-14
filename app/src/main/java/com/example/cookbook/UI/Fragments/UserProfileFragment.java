@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.bumptech.glide.Glide;
 import com.example.cookbook.Adapters.RecipeAdapter;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.Models.User;
@@ -32,8 +33,7 @@ public class UserProfileFragment extends Fragment {
     private ArrayList<Recipe> recipeList;
     private User user;
     public UserProfileFragment(Context Context, User user, ArrayList<Recipe> recipeList) {
-        int limit = Math.min(recipeList.size(), 10);
-        this.recipeList = recipeList;//(ArrayList<Recipe>) recipeList.subList(0, limit);
+        this.recipeList = recipeList;
         this.applicationContext = Context;
         this.user = user;
     }
@@ -41,7 +41,6 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         findViews(view);
@@ -50,7 +49,18 @@ public class UserProfileFragment extends Fragment {
 
     }
 
+    private void updateUserInfo() {
+        profile_TV_name.setText(user.getFirstName() + " " + user.getLastName());
+        profile_TV_info.setText(user.getBio());
+        Glide.with(this)
+                .load(user.getProfile_URL())
+                .centerCrop()
+                .placeholder(R.drawable.profile_icon)
+                .into(profile_SIV_image);
+    }
+
     private void initViews(View view) {
+        updateUserInfo();
         RecipeAdapter recipeAdapter = new RecipeAdapter(applicationContext, recipeList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(applicationContext);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -66,5 +76,8 @@ public class UserProfileFragment extends Fragment {
     }
     public void updateUser(User user){
         this.user = user;
+    }
+    public void updateRecipeList(ArrayList<Recipe> recipeList){
+        this.recipeList = recipeList;
     }
 }

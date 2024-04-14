@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements RecipeLoadCallback, UserLoadCallback, UserRecipeListLoadCallback {
     private UserLogic userLogic;
-    private RecipeLogic recipeLogic;// = new RecipeLogic();
+    private RecipeLogic recipeLogic;
 
 
     @Override
@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, selectedFragment)
                             .commit();
-
                     return true;
                 }
             };
@@ -93,9 +92,9 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
 
     @Override
     public void onUserRecipeListLoaded(ArrayList<Recipe> recipes) {
-        Fragment homePageFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if (homePageFragment instanceof HomePageFragment) {
-            ((HomePageFragment) homePageFragment).updateRecipeList(recipes);
+        Fragment userProfileFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (userProfileFragment instanceof UserProfileFragment) {
+            ((UserProfileFragment) userProfileFragment).updateRecipeList(recipes);
         }
     }
 
