@@ -57,11 +57,7 @@ public class HomePageFragment extends Fragment {
         home_LST_recipe.setLayoutManager(linearLayoutManager);
         home_LST_recipe.setAdapter(recipeAdapter);
         //highscoreAdapter.setHighscoreCallback(this.callbackHighScoreClicked);
-        home_SWIPE_refresh.setOnRefreshListener(() -> refreshCallback.refresh(
-//                () -> {
-//            home_SWIPE_refresh.setRefreshing(false);
-//        })
-        ));
+        home_SWIPE_refresh.setOnRefreshListener(() -> refreshCallback.refresh(home_SWIPE_refresh));
     }
 
 //    private void refresh() {

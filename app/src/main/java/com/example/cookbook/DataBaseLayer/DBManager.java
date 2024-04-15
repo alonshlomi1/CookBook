@@ -168,5 +168,25 @@ public class DBManager {
         return ingredients;
     }
 
+    public void updateRecipe(Recipe recipe) {
+        db.collection("recipes").document(recipe.getId())
+                // Update the fields of the document with the new data from the recipe object
+                .set(recipe)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Recipe updated successfully
+                        Log.d(TAG, "Recipe updated successfully");
+                        SingleManager.getInstance().toast("Comment Submitted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Failed to update recipe
+                        Log.e(TAG, "Error updating recipe", e);
+                    }
+                });
+    }
 }
 

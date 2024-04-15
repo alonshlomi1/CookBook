@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements RecipeLoadCallback, UserLoadCallback, UserRecipeListLoadCallback, RefreshHomeListener {
     private UserLogic userLogic;
     private RecipeLogic recipeLogic;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -64,18 +66,23 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
             };
 
 
-    public void refresh(){
+    public void refresh(SwipeRefreshLayout home_SWIPE_refresh){
         Log.d("REFRESH-------", "Refresh");
-        userLogic = new UserLogic(this, this);
+//        userLogic = new UserLogic(this, this);
+        swipeRefreshLayout = home_SWIPE_refresh;
         recipeLogic = new RecipeLogic(this, getApplicationContext());
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(),this))
-                .commit();
+
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.fragment_container, new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(),this))
+//                .commit();
     }
     public void onRecipeListLoaded(ArrayList<Recipe> recipes) {
         Fragment homePageFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (homePageFragment instanceof HomePageFragment) {
             ((HomePageFragment) homePageFragment).updateRecipeList(recipes);
+            if (swipeRefreshLayout != null)
+                swipeRefreshLayout.setRefreshing(false);
+
         }
 
     }

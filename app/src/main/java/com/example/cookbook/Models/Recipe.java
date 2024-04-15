@@ -97,7 +97,10 @@ public class Recipe {
         this.comments = comments;
         return this;
     }
-
+    public void addComment(Comment comment) {
+        // Add the comment to the comments list
+        comments.add(comment);
+    }
     public ArrayList<Rate> getRatings() {
         return ratings;
     }

@@ -116,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/theme_3"
+            android:layout_marginVertical="8dp"
             >
             <LinearLayout
                 android:id="@+id/home_LLO_comments_title"
@@ -138,6 +138,14 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/plus_icon"/>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/theme_3"
+                android:layout_margin="8dp"
+                >
+
             <EditText
                 android:id="@+id/home_ET_comments"
                 android:layout_width="match_parent"
@@ -150,6 +158,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/Submit"
                 android:layout_gravity="center"/>
+            </LinearLayout>
+
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recipe_LST_comments"

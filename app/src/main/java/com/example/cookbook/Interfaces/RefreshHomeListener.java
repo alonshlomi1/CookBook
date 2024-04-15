@@ -1,8 +1,8 @@
 package com.example.cookbook.Interfaces;
 
-import java.net.URL;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public interface RefreshHomeListener {
-    void refresh();
+    void refresh(SwipeRefreshLayout home_SWIPE_refresh);
 
 }

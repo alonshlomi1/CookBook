@@ -24,9 +24,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.cookbook.DataBaseLayer.DBManager;
+import com.example.cookbook.Models.Comment;
 import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.R;
+import com.example.cookbook.Utilities.SingleManager;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -145,7 +148,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 @Override
                 public void onClick(View v) {
                     // Toggle comments visibility
-
                     if (newCommentsVisible) {
                         home_ET_comments.setVisibility(View.VISIBLE);
                         home_BTN_comments.setVisibility(View.VISIBLE);
@@ -156,6 +158,30 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                         home_SIV_comments_icon.setImageResource(R.drawable.plus_icon);
                     }
                     newCommentsVisible = !newCommentsVisible;
+                }
+            });
+            home_BTN_comments.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+
+                    String commentText = home_ET_comments.getText().toString().trim();
+                    // Get the recipe at this position
+                    Recipe recipe = recipeList.get(getAdapterPosition());
+                    if (!commentText.isEmpty()) {
+                        Comment newComment = new Comment()
+                                .setUserId("userID_1")
+                                .setComment(commentText)
+                                .setRecipeId(recipe.getId());;
+
+                        // Add the new comment to the recipe
+                        recipe.addComment(newComment);
+                        DBManager db = new DBManager();
+                        db.updateRecipe(recipe);
+                        // Notify the adapter of the data change
+                        notifyItemChanged(getAdapterPosition());
+                        // Clear the EditText
+                        home_ET_comments.setText("");
+                    }
                 }
             });
         }
@@ -175,11 +201,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 instructionsBuilder.append(instruction).append("\n");
             }
             recipeInstructions.setText(instructionsBuilder.toString());
-            CommentAdapter commentAdapter = new CommentAdapter(context, recipe.getComments());
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-            linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-            recipeLSTComments.setLayoutManager(linearLayoutManager);
-            recipeLSTComments.setAdapter(commentAdapter);
+            setCommentsList(recipe);
             //recipeLSTComments.setAdapter(commentAdapter);
             recipeLSTComments.setVisibility(View.GONE);
             home_LLO_comments_title.setVisibility(View.GONE);
@@ -192,6 +214,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                     .fitCenter()
                     .placeholder(R.drawable.profile_icon)
                     .into(recipeImage);
+        }
+        private void setCommentsList(Recipe recipe){
+            CommentAdapter commentAdapter = new CommentAdapter(context, recipe.getComments());
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+            linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+            recipeLSTComments.setLayoutManager(linearLayoutManager);
+            recipeLSTComments.setAdapter(commentAdapter);
         }
     }
 }
