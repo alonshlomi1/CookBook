@@ -35,11 +35,19 @@ public class UserLogic {
         this.userCallback = userCallback;
         this.userResipeListCallback = userResipeListCallback;
         this.dbManager = new DBManager();
+        detMockupUser();
         setUserListFromDB();
         setUserRecipeListFromDB();
     }
-
-    private void setUserListFromDB() {
+    public UserLogic(UserLoadCallback userCallback, UserRecipeListLoadCallback userResipeListCallback, User user){
+        this.userCallback = userCallback;
+        this.userResipeListCallback = userResipeListCallback;
+        this.dbManager = new DBManager();
+        this.user = user;
+        setUserListFromDB();
+        setUserRecipeListFromDB();
+    }
+    private void detMockupUser(){
         user = new User();
         user.setId("userID_1")
                 .setUsername("User1")
@@ -48,6 +56,9 @@ public class UserLogic {
                 .setBio("hi..................................\nby....................")
                 .setEmail("email@gmail.com")
                 .setProfile_URL("https://i.stack.imgur.com/l60Hf.png");
+    }
+    private void setUserListFromDB() {
+
 
 
         StorageReference storageRef = SingleManager.getInstance().getStorage().getReference().child("images/"+ 1111 +".jpg");

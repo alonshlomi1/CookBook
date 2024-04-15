@@ -11,53 +11,90 @@
         android:orientation="vertical"
         android:layout_margin="4dp">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginHorizontal="8dp"
+            android:orientation="vertical"
+            android:layout_margin="4dp"
             android:background="@color/theme_1"
             >
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/profile_SIV_image"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/profile_icon"
-                android:scaleType="fitCenter"
-                android:layout_margin="8dp"
-                android:layout_gravity="center"
-
-                />
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:layout_margin="8dp"
-                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="8dp"
+                android:background="@color/theme_1"
                 >
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/profile_TV_name"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profile_SIV_image"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/Name"
-                    android:textStyle="bold"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:src="@drawable/profile_icon"
+                    android:scaleType="fitCenter"
                     android:layout_margin="8dp"
-                    />
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/profile_TV_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Info"
-                    android:layout_margin="8dp"/>
+                    android:layout_gravity="center"
 
+                    />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_margin="8dp"
+                    android:layout_gravity="center"
+                    >
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/profile_TV_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Name"
+                        android:textStyle="bold"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="8dp"
+                        />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/profile_TV_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Info"
+                        android:layout_margin="8dp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="2dp"
+                    android:text="change pic"
+                    android:backgroundTint="@color/theme_4"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="2dp"
+                    android:text="edit info"
+                    android:backgroundTint="@color/theme_4"/>
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="2dp"
+                    android:text="logout"
+                    android:backgroundTint="@color/theme_4"/>
             </LinearLayout>
         </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="4dp"
             android:id="@+id/home_LST_recipe"

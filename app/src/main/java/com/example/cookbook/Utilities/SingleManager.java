@@ -6,6 +6,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.widget.Toast;
 
+import com.example.cookbook.DataBaseLayer.DBManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -14,8 +15,9 @@ public class SingleManager {
     private Context context;
     private static FirebaseFirestore db;
     private static FirebaseStorage storage;
-
     private static Vibrator vibrator;
+    private static UserManager userManager;
+    private static DBManager dbManager;
 
     private SingleManager(Context context) {
         this.context = context;
@@ -29,8 +31,10 @@ public class SingleManager {
             if (instance == null) {
                 instance = new SingleManager(context);
                 db = FirebaseFirestore.getInstance();
+                dbManager = new DBManager();
                 storage = FirebaseStorage.getInstance();
                 vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                userManager = new UserManager();
 
             }
         }
@@ -39,9 +43,15 @@ public class SingleManager {
     public FirebaseFirestore getDb() {
         return db;
     }
+    public DBManager getDBManager() {
+        return dbManager;
+    }
+
     public FirebaseStorage getStorage() {
         return storage;
     }
+
+    public UserManager getUserManager(){ return userManager; }
     public void toast(String text) {
         Toast.makeText(
                         context

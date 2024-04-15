@@ -12,6 +12,7 @@ import com.example.cookbook.Interfaces.OnRecipesURLLoadedListener;
 import com.example.cookbook.Interfaces.RecipeResetListener;
 import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
+import com.example.cookbook.Models.User;
 import com.example.cookbook.Utilities.SingleManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -98,6 +99,32 @@ public class DBManager {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                             // Invoke the listener with the error
                             listener.onRecipesLoadFailed(task.getException());
+                        }
+                    }
+                });
+    }
+    public void getUser(OnUserLoadedListener listener, String email){
+        ArrayList<Recipe> recipeList = new ArrayList<>();
+
+        db.collection("Users")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                User user = document.toObject(User.class);
+                                Log.d("@@@@@@@@", user.getEmail());
+                                Log.d("@@@@@@@@", user.toString());
+                                // Pass the fetched user object to the listener
+                                listener.onUserLoaded(user);
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                            // Invoke the listener with the error
+                            listener.onUserLoadFailed(task.getException());
                         }
                     }
                 });

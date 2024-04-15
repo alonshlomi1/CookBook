@@ -10,8 +10,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.cookbook.DataBaseLayer.OnUserLoadedListener;
 import com.example.cookbook.MainActivity;
+import com.example.cookbook.Models.User;
 import com.example.cookbook.R;
+import com.example.cookbook.Utilities.SingleManager;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
@@ -25,7 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Arrays;
 import java.util.List;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements OnUserLoadedListener {
 
     private FirebaseAuth mAuth;
     private MaterialButton login_BTN_signout;
@@ -40,11 +43,15 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         if(user == null)
+
             login();
         else {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            SingleManager.getInstance().getDBManager().getUser(this, user.getEmail());
+
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//            intent.putExtra("user", user); // Pass the user object as an extra
+//            startActivity(intent);
+//            finish();
         }
     }
 
@@ -123,5 +130,19 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Sign in failed handling
         }
+    }
+
+    @Override
+    public void onUserLoaded(User user) {
+        SingleManager.getInstance().getUserManager().setUser(user);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        //intent.putExtra("user", user); // Pass the user object as an extra
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onUserLoadFailed(Exception e) {
+
     }
 }

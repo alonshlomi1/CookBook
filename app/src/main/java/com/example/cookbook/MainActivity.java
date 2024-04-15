@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.cookbook.DataBaseLayer.OnUserLoadedListener;
 import com.example.cookbook.Interfaces.RecipeLoadCallback;
 import com.example.cookbook.Interfaces.RefreshHomeListener;
 import com.example.cookbook.Interfaces.UserLoadCallback;
@@ -22,6 +23,8 @@ import com.example.cookbook.Models.User;
 import com.example.cookbook.UI.Fragments.HomePageFragment;
 import com.example.cookbook.UI.Fragments.NewRecipeFragment;
 import com.example.cookbook.UI.Fragments.UserProfileFragment;
+import com.example.cookbook.Utilities.SingleManager;
+import com.example.cookbook.Utilities.UserManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
         setContentView(R.layout.activity_main);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-        userLogic = new UserLogic(this, this);
+        userLogic = new UserLogic(this, this, UserManager.getUser());
         recipeLogic = new RecipeLogic(this, getApplicationContext());
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(),this))
@@ -68,13 +71,9 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
 
     public void refresh(SwipeRefreshLayout home_SWIPE_refresh){
         Log.d("REFRESH-------", "Refresh");
-//        userLogic = new UserLogic(this, this);
         swipeRefreshLayout = home_SWIPE_refresh;
         recipeLogic = new RecipeLogic(this, getApplicationContext());
 
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.fragment_container, new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(),this))
-//                .commit();
     }
     public void onRecipeListLoaded(ArrayList<Recipe> recipes) {
         Fragment homePageFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
