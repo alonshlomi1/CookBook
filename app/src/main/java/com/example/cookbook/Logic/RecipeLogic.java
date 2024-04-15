@@ -2,9 +2,14 @@ package com.example.cookbook.Logic;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.UUID;
 import com.example.cookbook.DataBaseLayer.DBManager;
@@ -20,10 +25,11 @@ public class RecipeLogic {
     private ArrayList<Recipe> recipeList = new ArrayList<>();
     private RecipeLoadCallback callback;
     private DBManager dbManager;
-
-    public RecipeLogic(RecipeLoadCallback callback){
+    private Context context;
+    public RecipeLogic(RecipeLoadCallback callback, Context context){
         this.callback = callback;
         this.dbManager = new DBManager();
+        this.context = context;
         setRecipeListFromDB();
     }
 
@@ -81,13 +87,30 @@ public class RecipeLogic {
     public boolean saveNewRecipe(Recipe recipe, Uri uri, RecipeResetListener resetListener){
         if(validateRecipe(recipe)){
             //recipe.setId(UUID.randomUUID().toString());
-            dbManager.addRecipe(recipe, uri, resetListener);
+            dbManager.addRecipe(recipe, compresImage(uri), resetListener);
             return true;
         }
 
         return false;
 
     }
+    public byte[] compresImage(Uri uri){
+        Bitmap bmp = null;
+        try {
+            bmp = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        // here we can choose quality factor
+        // in third parameter(ex. here it is 25)
+        bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
+
+        byte[] fileInBytes = baos.toByteArray();
+        return fileInBytes;
+    }
+
     private boolean validateRecipe(Recipe recipe){
         if(recipe.getTitle().length() < 3 || recipe.getTitle().length() > 20){
             SingleManager.getInstance().toast("Recipe Title must be between 3 and 20");
@@ -104,6 +127,10 @@ public class RecipeLogic {
             Log.d("Recipe Instructions Error", "min 1 max 100");
             return false;
         }
+
+
+
+
         return true;
     }
 

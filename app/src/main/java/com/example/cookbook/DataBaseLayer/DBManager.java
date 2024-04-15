@@ -37,7 +37,7 @@ public class DBManager {
         db = SingleManager.getInstance().getDb();
     }
 
-    public void addRecipe(Recipe recipe,Uri uri, RecipeResetListener resetListener){
+    public void addRecipe(Recipe recipe,byte[] uri, RecipeResetListener resetListener){
         db.collection("recipes").document(recipe.getId()).set(recipe)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -55,9 +55,9 @@ public class DBManager {
                 });
     }
 
-    public void saveImage(String id, Uri uri){
+    public void saveImage(String id, byte[] uri){
         StorageReference storageRef = SingleManager.getInstance().getStorage().getReference().child("images/"+id+".jpg");// new_recipe.getId() +".jpg");
-        UploadTask uploadTask = storageRef.putFile(uri);
+        UploadTask uploadTask = storageRef.putBytes(uri);
 
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override

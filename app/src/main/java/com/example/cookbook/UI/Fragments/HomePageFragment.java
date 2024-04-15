@@ -5,12 +5,15 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.cookbook.Adapters.RecipeAdapter;
+import com.example.cookbook.Interfaces.RefreshHomeListener;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.R;
 
@@ -18,8 +21,10 @@ import java.util.ArrayList;
 
 public class HomePageFragment extends Fragment {
     private RecyclerView home_LST_recipe;
+    private SwipeRefreshLayout home_SWIPE_refresh;
     private Context applicationContext;
     private ArrayList<Recipe> recipeList;
+    private RefreshHomeListener refreshCallback;
 
 
 //    public HomePageFragment() {
@@ -27,10 +32,11 @@ public class HomePageFragment extends Fragment {
 //    }
 
 
-    public HomePageFragment(Context Context, ArrayList<Recipe> recipeList) {
+    public HomePageFragment(Context Context, ArrayList<Recipe> recipeList, RefreshHomeListener refreshCallback) {
         //int limit = Math.min(recipeList.size(), 10);
         this.recipeList = recipeList;//(ArrayList<Recipe>) recipeList.subList(0, limit);
         applicationContext = Context;
+        this.refreshCallback = refreshCallback;
     }
 
     @Override
@@ -51,11 +57,22 @@ public class HomePageFragment extends Fragment {
         home_LST_recipe.setLayoutManager(linearLayoutManager);
         home_LST_recipe.setAdapter(recipeAdapter);
         //highscoreAdapter.setHighscoreCallback(this.callbackHighScoreClicked);
+        home_SWIPE_refresh.setOnRefreshListener(() -> refreshCallback.refresh(
+//                () -> {
+//            home_SWIPE_refresh.setRefreshing(false);
+//        })
+        ));
     }
+
+//    private void refresh() {
+//        Log.d("REFRESH-------", "Refresh");
+//        home_SWIPE_refresh.setRefreshing(false);
+//    }
 
 
     private void findViews(View view) {
         home_LST_recipe = view.findViewById(R.id.home_LST_recipe);
+        home_SWIPE_refresh = view.findViewById(R.id.home_SWIPE_refresh);
     }
     public void updateRecipeList(ArrayList<Recipe> recipeList){
         this.recipeList = recipeList;

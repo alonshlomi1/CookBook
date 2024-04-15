@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.cookbook.Interfaces.RecipeLoadCallback;
+import com.example.cookbook.Interfaces.RefreshHomeListener;
 import com.example.cookbook.Interfaces.UserLoadCallback;
 import com.example.cookbook.Interfaces.UserRecipeListLoadCallback;
 import com.example.cookbook.Logic.RecipeLogic;
@@ -24,7 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements RecipeLoadCallback, UserLoadCallback, UserRecipeListLoadCallback {
+public class MainActivity extends AppCompatActivity implements RecipeLoadCallback, UserLoadCallback, UserRecipeListLoadCallback, RefreshHomeListener {
     private UserLogic userLogic;
     private RecipeLogic recipeLogic;
 
@@ -36,9 +37,9 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
         userLogic = new UserLogic(this, this);
-        recipeLogic = new RecipeLogic(this);
+        recipeLogic = new RecipeLogic(this, getApplicationContext());
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList()))
+                .replace(R.id.fragment_container, new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(),this))
                 .commit();
     }
 
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     Fragment selectedFragment = null;
                     if (item.getItemId() == R.id.navigation_home)
-                        selectedFragment = new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList());
+                        selectedFragment = new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(), MainActivity.this);
                     else if (item.getItemId() == R.id.navigation_profile)
                         selectedFragment = new UserProfileFragment(getApplicationContext(), userLogic.getUser(),  userLogic.getUserRecipeList());
                     else if (item.getItemId() == R.id.new_recipe)
@@ -63,7 +64,14 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
             };
 
 
-
+    public void refresh(){
+        Log.d("REFRESH-------", "Refresh");
+        userLogic = new UserLogic(this, this);
+        recipeLogic = new RecipeLogic(this, getApplicationContext());
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(),this))
+                .commit();
+    }
     public void onRecipeListLoaded(ArrayList<Recipe> recipes) {
         Fragment homePageFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (homePageFragment instanceof HomePageFragment) {

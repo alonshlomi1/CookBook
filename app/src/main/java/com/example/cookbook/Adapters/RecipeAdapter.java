@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -26,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.R;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
@@ -80,12 +82,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     }
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder {
-        private ImageView recipeImage, recipe_comments_SIV_icon;
+        private ImageView recipeImage, recipe_comments_SIV_icon, home_SIV_comments_icon;
         private TextView recipeTitle, recipeIngredients, recipeInstructions, recipeCommentsTitle;
         private RatingBar recipeRating;
         private RecyclerView recipeLSTComments;
         private RelativeLayout recipeLLOSeg;
+        private LinearLayout home_LLO_comments_title, home_LLO_comments;
+        private EditText home_ET_comments;
+        private MaterialButton home_BTN_comments;
         private boolean commentsVisible = false;
+        private boolean newCommentsVisible = false;
 
         private void styleComments(){
 
@@ -108,6 +114,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             recipeCommentsTitle = itemView.findViewById(R.id.recipe_comments_title);
             recipeLSTComments = itemView.findViewById(R.id.recipe_LST_comments);
             recipeLLOSeg = itemView.findViewById(R.id.recipe_RLO_seg);
+            home_LLO_comments_title = itemView.findViewById(R.id.home_LLO_comments_title);
+            home_LLO_comments = itemView.findViewById(R.id.home_LLO_comments);
+            home_ET_comments = itemView.findViewById(R.id.home_ET_comments);
+            home_BTN_comments = itemView.findViewById(R.id.home_BTN_comments);
+            home_SIV_comments_icon = itemView.findViewById(R.id.home_SIV_comments_icon);
             styleComments();
             recipe_comments_SIV_icon = itemView.findViewById(R.id.recipe_comments_SIV_icon);
             recipeLLOSeg.setOnClickListener(new View.OnClickListener() {
@@ -116,13 +127,35 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                     // Toggle comments visibility
 
                     if (commentsVisible) {
+                        home_LLO_comments_title.setVisibility(View.VISIBLE);
                         recipeLSTComments.setVisibility(View.VISIBLE);
                         recipe_comments_SIV_icon.setImageResource(R.drawable.minus_icon);
                     } else {
+                        home_LLO_comments_title.setVisibility(View.GONE);
                         recipeLSTComments.setVisibility(View.GONE);
                         recipe_comments_SIV_icon.setImageResource(R.drawable.plus_icon);
+                        home_ET_comments.setVisibility(View.GONE);
+                        home_BTN_comments.setVisibility(View.GONE);
+                        home_SIV_comments_icon.setImageResource(R.drawable.plus_icon);
                     }
                     commentsVisible = !commentsVisible;
+                }
+            });
+            home_LLO_comments_title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Toggle comments visibility
+
+                    if (newCommentsVisible) {
+                        home_ET_comments.setVisibility(View.VISIBLE);
+                        home_BTN_comments.setVisibility(View.VISIBLE);
+                        home_SIV_comments_icon.setImageResource(R.drawable.minus_icon);
+                    } else {
+                        home_ET_comments.setVisibility(View.GONE);
+                        home_BTN_comments.setVisibility(View.GONE);
+                        home_SIV_comments_icon.setImageResource(R.drawable.plus_icon);
+                    }
+                    newCommentsVisible = !newCommentsVisible;
                 }
             });
         }
@@ -149,6 +182,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             recipeLSTComments.setAdapter(commentAdapter);
             //recipeLSTComments.setAdapter(commentAdapter);
             recipeLSTComments.setVisibility(View.GONE);
+            home_LLO_comments_title.setVisibility(View.GONE);
+//            home_LLO_comments.setVisibility(View.GONE);
+            home_ET_comments.setVisibility(View.GONE);
+            home_BTN_comments.setVisibility(View.GONE);
             commentsVisible = false;
             Glide.with(context)
                     .load(recipe.getPhotoUrl())

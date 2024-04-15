@@ -83,9 +83,7 @@
             android:layout_height="wrap_content"
             android:background="@color/theme_3"
             android:layout_margin="8dp"
-
             >
-
             <TextView
                 android:id="@+id/recipe_comments_title"
                 android:layout_width="wrap_content"
@@ -113,7 +111,46 @@
 
 
         </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/home_LLO_comments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/theme_3"
+            >
+            <LinearLayout
+                android:id="@+id/home_LLO_comments_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="32dp"
+                android:background="@color/theme_3"
 
+                >
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Comment"
+                    android:layout_margin="4dp"/>
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/home_SIV_comments_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/plus_icon"/>
+            </LinearLayout>
+            <EditText
+                android:id="@+id/home_ET_comments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/home_BTN_comments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Submit"
+                android:layout_gravity="center"/>
+        </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recipe_LST_comments"
             android:layout_width="match_parent"

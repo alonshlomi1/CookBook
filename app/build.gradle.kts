@@ -54,4 +54,7 @@ dependencies {
     implementation("com.firebaseui:firebase-ui-auth:7.2.0")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    //implementation ("id.zelory:compressor:3.0.0")
+
 }
