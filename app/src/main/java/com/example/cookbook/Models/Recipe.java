@@ -33,7 +33,7 @@ public class Recipe {
     }
 
     public Recipe setTitle(String title) {
-        title = title;
+        this.title = title;
         return this;
     }
 
@@ -42,11 +42,11 @@ public class Recipe {
     }
 
     public Recipe setIngredients(ArrayList<Ingredient> ingredients) {
-        Ingredients = ingredients;
+        this.Ingredients = ingredients;
         return this;
     }
     public Recipe addIngredient(Ingredient ingredient) {
-        Ingredients.add(ingredient);
+        this.Ingredients.add(ingredient);
         return this;
     }
 
@@ -55,7 +55,7 @@ public class Recipe {
     }
 
     public Recipe setInstructions(ArrayList<String> instructions) {
-        Instructions = instructions;
+        this.Instructions = instructions;
         return this;
     }
     public Recipe addInstructions(String instruction) {

@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
                     else if (item.getItemId() == R.id.navigation_profile)
                         selectedFragment = new UserProfileFragment(getApplicationContext(), userLogic.getUser(),  userLogic.getUserRecipeList());
                     else if (item.getItemId() == R.id.new_recipe)
-                        selectedFragment = new NewRecipeFragment(getApplicationContext());
+                        selectedFragment = new NewRecipeFragment(getApplicationContext(), recipeLogic, userLogic.getUser().getId());
 
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, selectedFragment)

@@ -40,12 +40,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/new_recipe_TV_name"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="23dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginBottom="12dp"
                 android:gravity="start"
-                android:text="@string/new_recipe_name"
+                android:hint="@string/new_recipe_name"
                 android:textSize="16sp" />
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/new_recipe_TV_ingredients"
                 android:layout_width="match_parent"
@@ -84,7 +85,7 @@
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="12dp"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/new_recipe_ingredients_name"
+                    android:hint="@string/new_recipe_ingredients_name"
                     android:textSize="16sp" />
                 <EditText
                     android:id="@+id/new_recipe_ET_ingredients_amount"
@@ -96,7 +97,7 @@
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="12dp"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/new_recipe_ingredients_amount"
+                    android:hint="@string/new_recipe_ingredients_amount"
                     android:textSize="16sp"
                     />
                 <com.google.android.material.button.MaterialButton
@@ -140,7 +141,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
-                    android:text="@string/new_recipe_instructions"
+                    android:hint="@string/new_recipe_instructions"
                     android:gravity="start"
                     android:layout_margin="12dp"
                     android:textSize="16sp"
@@ -190,7 +191,7 @@
                 android:id="@+id/new_recipe_ET_tags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/new_recipe_tags"
+                android:hint="@string/new_recipe_tags"
                 android:gravity="start"
                 android:layout_margin="12dp"
                 android:textSize="16sp"

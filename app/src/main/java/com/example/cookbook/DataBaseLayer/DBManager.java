@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
+import com.example.cookbook.Interfaces.RecipeResetListener;
 import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.Utilities.SingleManager;
@@ -21,6 +22,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Map;
 
+import javax.security.auth.callback.Callback;
+
 public class DBManager {
     private FirebaseFirestore db;
 
@@ -28,18 +31,19 @@ public class DBManager {
         db = SingleManager.getInstance().getDb();
     }
 
-    public void addRecipe(Recipe recipe){
+    public void addRecipe(Recipe recipe, RecipeResetListener resetListener){
         db.collection("recipes").document(recipe.getId()).set(recipe)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d("@@@@@@@@@@@@@@", "DocumentSnapshot successfully written!");
+                        SingleManager.getInstance().toast("Recipe Uploaded!");
+                        resetListener.resetRecipe();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w("@@@@@@@@@@@@@@", "Error writing document", e);
+                        SingleManager.getInstance().toast("Recipe Upload Failed!");
                     }
                 });
     }
