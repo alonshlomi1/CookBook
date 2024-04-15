@@ -2,11 +2,13 @@ package com.example.cookbook.DataBaseLayer;
 
 import static android.content.ContentValues.TAG;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
+import com.example.cookbook.Interfaces.OnRecipesURLLoadedListener;
 import com.example.cookbook.Interfaces.RecipeResetListener;
 import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
@@ -18,7 +20,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -31,11 +37,12 @@ public class DBManager {
         db = SingleManager.getInstance().getDb();
     }
 
-    public void addRecipe(Recipe recipe, RecipeResetListener resetListener){
+    public void addRecipe(Recipe recipe,Uri uri, RecipeResetListener resetListener){
         db.collection("recipes").document(recipe.getId()).set(recipe)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        saveImage(recipe.getId(), uri);
                         SingleManager.getInstance().toast("Recipe Uploaded!");
                         resetListener.resetRecipe();
                     }
@@ -48,7 +55,21 @@ public class DBManager {
                 });
     }
 
+    public void saveImage(String id, Uri uri){
+        StorageReference storageRef = SingleManager.getInstance().getStorage().getReference().child("images/"+id+".jpg");// new_recipe.getId() +".jpg");
+        UploadTask uploadTask = storageRef.putFile(uri);
 
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+            }
+        });
+    }
     public void getRecipes(OnRecipesLoadedListener listener){
         ArrayList<Recipe> recipeList = new ArrayList<>();
 
@@ -81,7 +102,25 @@ public class DBManager {
                     }
                 });
     }
-
+    public void getRecipesURI(OnRecipesURLLoadedListener listener, String recipeID){
+        StorageReference storageRef = SingleManager.getInstance().getStorage().getReference().child("images/"+ recipeID +".jpg");
+        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Got the download URL for 'users/me/profile.png'
+                try {
+                    listener.onRecipesURLLoaded(new URL(uri.toString()));
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.d("URI-@@@@@@@@@", exception.toString());
+            }
+        });
+    }
     public void getUserRecipes(OnRecipesLoadedListener listener, String id){
         ArrayList<Recipe> recipeList = new ArrayList<>();
 

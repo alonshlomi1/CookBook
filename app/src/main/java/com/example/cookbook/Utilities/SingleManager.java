@@ -7,11 +7,14 @@ import android.os.Vibrator;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 public class SingleManager {
     private static SingleManager instance = null;
     private Context context;
     private static FirebaseFirestore db;
+    private static FirebaseStorage storage;
+
     private static Vibrator vibrator;
 
     private SingleManager(Context context) {
@@ -26,6 +29,7 @@ public class SingleManager {
             if (instance == null) {
                 instance = new SingleManager(context);
                 db = FirebaseFirestore.getInstance();
+                storage = FirebaseStorage.getInstance();
                 vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
             }
@@ -34,6 +38,9 @@ public class SingleManager {
 
     public FirebaseFirestore getDb() {
         return db;
+    }
+    public FirebaseStorage getStorage() {
+        return storage;
     }
     public void toast(String text) {
         Toast.makeText(

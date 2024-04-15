@@ -2,10 +2,14 @@ package com.example.cookbook.Logic;
 
 import static android.content.ContentValues.TAG;
 
+import android.net.Uri;
 import android.util.Log;
+
+import java.net.URL;
 import java.util.UUID;
 import com.example.cookbook.DataBaseLayer.DBManager;
 import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
+import com.example.cookbook.Interfaces.OnRecipesURLLoadedListener;
 import com.example.cookbook.Interfaces.RecipeLoadCallback;
 import com.example.cookbook.Interfaces.RecipeResetListener;
 import com.example.cookbook.Models.Recipe;
@@ -29,9 +33,11 @@ public class RecipeLogic {
             public void onRecipesLoaded(ArrayList<Recipe> recipes) {
                 // Handle fetched recipes
                 recipeList = recipes;
+                attachURL(recipeList);
                 if (callback != null) {
                     callback.onRecipeListLoaded(recipeList);
                 }
+
             }
             @Override
             public void onRecipesLoadFailed(Exception e) {
@@ -43,21 +49,42 @@ public class RecipeLogic {
         });
     }
 
+    private void attachURL(ArrayList<Recipe> recipeList) {
+        for (Recipe recipe: recipeList) {
+            if(recipe.getPhotoUrl() != null) {
+                dbManager.getRecipesURI(new OnRecipesURLLoadedListener() {
+                    @Override
+                    public void onRecipesURLLoaded(URL url) {
+                        recipe.setPhotoUrl(url.toString());
+                    }
+
+                    @Override
+                    public void onRecipesURLLoadFailed(Exception e) {
+                        Log.d("Recipe Photo","Fail loading for recipe "+ recipe.getTitle());
+                    }
+                }, recipe.getId());
+            }
+
+        }
+    }
+
     public ArrayList<Recipe> getRecipeList() {
         return recipeList;
     }
+
 
     public RecipeLogic setRecipeList(ArrayList<Recipe> recipeList) {
         this.recipeList = recipeList;
         return this;
     }
 
-    public boolean saveNewRecipe(Recipe recipe, RecipeResetListener resetListener){
+    public boolean saveNewRecipe(Recipe recipe, Uri uri, RecipeResetListener resetListener){
         if(validateRecipe(recipe)){
-            recipe.setId(UUID.randomUUID().toString());
-            dbManager.addRecipe(recipe, resetListener);
+            //recipe.setId(UUID.randomUUID().toString());
+            dbManager.addRecipe(recipe, uri, resetListener);
             return true;
         }
+
         return false;
 
     }

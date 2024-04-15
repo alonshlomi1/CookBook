@@ -2,16 +2,25 @@ package com.example.cookbook.Logic;
 
 import static android.content.ContentValues.TAG;
 
+import android.net.Uri;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.example.cookbook.DataBaseLayer.DBManager;
 import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
+import com.example.cookbook.Interfaces.OnRecipesURLLoadedListener;
 import com.example.cookbook.Interfaces.UserLoadCallback;
 import com.example.cookbook.Interfaces.UserRecipeListLoadCallback;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.Models.User;
 import com.example.cookbook.Utilities.SingleManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.StorageReference;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class UserLogic {
@@ -20,10 +29,12 @@ public class UserLogic {
     private ArrayList<Recipe> userRecipeList = new ArrayList<>();
     private UserLoadCallback userCallback;
     private UserRecipeListLoadCallback userResipeListCallback;
+    private DBManager dbManager;
 
     public UserLogic(UserLoadCallback userCallback, UserRecipeListLoadCallback userResipeListCallback){
         this.userCallback = userCallback;
         this.userResipeListCallback = userResipeListCallback;
+        this.dbManager = new DBManager();
         setUserListFromDB();
         setUserRecipeListFromDB();
     }
@@ -37,18 +48,39 @@ public class UserLogic {
                 .setBio("hi..................................\nby....................")
                 .setEmail("email@gmail.com")
                 .setProfile_URL("https://i.stack.imgur.com/l60Hf.png");
+
+
+        StorageReference storageRef = SingleManager.getInstance().getStorage().getReference().child("images/"+ 1111 +".jpg");
+        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Got the download URL for 'users/me/profile.png'
+                Log.d("URI-@@@@@@@@@", uri.toString());
+
+                try {
+                    user.setProfile_URL(new URL(uri.toString()).toString() );
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.d("URI-@@@@@@@@@", exception.toString());
+            }
+        });
         if (userCallback != null) {
             userCallback.onUserLoaded(user);
         }
     }
 
     private void setUserRecipeListFromDB() {
-        DBManager dbManager = new DBManager();
         dbManager.getUserRecipes(new OnRecipesLoadedListener() {
             @Override
             public void onRecipesLoaded(ArrayList<Recipe> recipes) {
                 // Handle fetched recipes
                 userRecipeList = recipes;
+                attachURL(recipes);
                 if (userResipeListCallback != null) {
                     userResipeListCallback.onUserRecipeListLoaded(userRecipeList);
                 }
@@ -60,7 +92,23 @@ public class UserLogic {
             }
         }, user.getId());
     }
+    private void attachURL(ArrayList<Recipe> recipeList) {
+        for (Recipe recipe: recipeList) {
+            if(recipe.getPhotoUrl() != null){
+                dbManager.getRecipesURI(new OnRecipesURLLoadedListener() {
+                    @Override
+                    public void onRecipesURLLoaded(URL url) {
+                        recipe.setPhotoUrl(url.toString());
+                    }
 
+                    @Override
+                    public void onRecipesURLLoadFailed(Exception e) {
+                        Log.d("Recipe Photo","Fail loading for recipe "+ recipe.getTitle());
+                    }
+                }, recipe.getId());
+            }
+        }
+    }
     public User getUser() {
         return user;
     }

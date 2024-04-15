@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,9 +29,15 @@ import com.example.cookbook.Logic.RecipeLogic;
 import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.R;
+import com.example.cookbook.Utilities.SingleManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import java.util.UUID;
 
 
 public class NewRecipeFragment extends Fragment implements RecipeResetListener {
@@ -48,11 +55,13 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
     private RecipeLogic recipeLogic;
     private Recipe new_recipe;
     private String userID;
+    private Uri imageUri;
     public NewRecipeFragment(Context Context, RecipeLogic recipeLogic, String userID) {
         this.applicationContext = Context;
         this.new_recipe = new Recipe();
         this.userID = userID;
         this.new_recipe.setAuthorId(userID);
+        new_recipe.setId(UUID.randomUUID().toString());
         this.recipeLogic = recipeLogic;
 
     }
@@ -83,7 +92,6 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
             @Override
             public void afterTextChanged(Editable s) {
                 new_recipe.setTitle(s.toString());
-                Log.d("@@@@@@@@TITLE", "min 3 max 20 " +new_recipe.getTitle());
 
             }
         });
@@ -91,6 +99,7 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
             if(new_recipe_ET_instructions.getText().length() > 0){
                 addInstruction(new_recipe_ET_instructions.getText().toString());
                 setInstructionViews();
+                new_recipe_ET_instructions.setText("");
             }
         });
         new_recipe_BTN_ingredients_add.setOnClickListener(v -> {
@@ -101,6 +110,8 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
                         .setAmount(Double.parseDouble(5 + ""));
                 addIngredient(temp_ingredient);
                 setIngredientsViews();
+                new_recipe_ET_ingredients_name.setText("");
+                new_recipe_ET_ingredients_amount.setText("");
             }
         });
         setIngredientsViews();
@@ -129,8 +140,7 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
     }
 
     private void submit_recipe() {
-        Log.d("@@@@@@@@TITLE", "min 3 max 20 " +new_recipe.getTitle().toString());
-        recipeLogic.saveNewRecipe(new_recipe, this);
+        recipeLogic.saveNewRecipe(new_recipe, imageUri, this);
 
     }
     @Override
@@ -146,7 +156,10 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
         new_recipe_LST_instructions.setAdapter(null);
         // Clear Recipe object
         new_recipe = new Recipe();
-        new_recipe.setAuthorId(userID); // Assuming userID is accessible here
+        new_recipe.setAuthorId(userID);
+        new_recipe.setId(UUID.randomUUID().toString());
+        new_recipe_SIV_image.setImageResource(R.drawable.default_recipe_image);
+        new_recipe_SIV_image.setMinimumHeight(10);
     }
     private void setIngredientsViews(){
         IngredientAdapter ingredientAdapter = new IngredientAdapter(applicationContext, new_recipe.getIngredients());
@@ -186,14 +199,16 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
             // Handle the result when an image is successfully captured or selected from the gallery
             if (data != null) {
                 // Get the image URI
-                Uri imageUri = data.getData();
+                this.imageUri = data.getData();
                 // Do something with the image URI, such as displaying it in the ImageView
+                Log.d("img@@@@@@", imageUri.toString());
                 Glide.with(this)
                         .load(imageUri)
                         .fitCenter()
                         .placeholder(R.drawable.profile_icon)
                         .into(new_recipe_SIV_image);
                 new_recipe_SIV_image.setMinimumHeight(800);
+                new_recipe.setPhotoUrl(imageUri.toString());
             }
         }
     }

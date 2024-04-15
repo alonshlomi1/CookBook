@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.R;
@@ -149,6 +150,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             //recipeLSTComments.setAdapter(commentAdapter);
             recipeLSTComments.setVisibility(View.GONE);
             commentsVisible = false;
+            Glide.with(context)
+                    .load(recipe.getPhotoUrl())
+                    .fitCenter()
+                    .placeholder(R.drawable.profile_icon)
+                    .into(recipeImage);
         }
     }
 }
