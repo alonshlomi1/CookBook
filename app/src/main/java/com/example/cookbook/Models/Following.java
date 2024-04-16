@@ -2,21 +2,21 @@ package com.example.cookbook.Models;
 
 import java.util.ArrayList;
 
-public class following {
+public class Following {
 
     private String id = "";
     private String userId = "";
     private ArrayList<String> followers = new ArrayList<>();
     private ArrayList<String> following = new ArrayList<>();
 
-    public following() {
+    public Following() {
     }
 
     public String getId() {
         return id;
     }
 
-    public following setId(String id) {
+    public Following setId(String id) {
         this.id = id;
         return this;
     }
@@ -25,7 +25,7 @@ public class following {
         return userId;
     }
 
-    public following setUserId(String userId) {
+    public Following setUserId(String userId) {
         this.userId = userId;
         return this;
     }
@@ -34,7 +34,7 @@ public class following {
         return followers;
     }
 
-    public following setFollowers(ArrayList<String> followers) {
+    public Following setFollowers(ArrayList<String> followers) {
         this.followers = followers;
         return this;
     }
@@ -43,8 +43,16 @@ public class following {
         return following;
     }
 
-    public following setFollowing(ArrayList<String> following) {
+    public Following setFollowing(ArrayList<String> following) {
         this.following = following;
         return this;
     }
+
+    public void addFollowing(String  following_id) {
+        // Add the comment to the comments list
+        following.add(following_id);
+    }
+    public void addFollower(String  follower_id) {
+        // Add the comment to the comments list
+        followers.add(follower_id);    }
 }

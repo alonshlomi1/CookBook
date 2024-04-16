@@ -7,10 +7,12 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.cookbook.Interfaces.OnFollowsListener;
 import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
 import com.example.cookbook.Interfaces.OnRecipesURLLoadedListener;
 import com.example.cookbook.Interfaces.OnUserSavedListener;
 import com.example.cookbook.Interfaces.RecipeResetListener;
+import com.example.cookbook.Models.Following;
 import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.Models.User;
@@ -20,6 +22,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -238,6 +241,85 @@ public class DBManager {
                     }
                 });
     }
+
+    public void follow(Following following, String followingId) {
+        following.addFollowing(followingId);
+        db.collection("follow").document(following.getUserId())
+                .set(following)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "User followed successfully");
+                        updateFollowing(followingId, following.getUserId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Error following user", e);
+                    }
+                });
+    }
+
+    public void updateFollowing(String followingId, String followerId){
+        db.collection("follow")
+                .whereEqualTo("userId", followingId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Following following = document.toObject(Following.class);
+                                Log.d("@@@@@@@@", following.getUserId());
+                                following.addFollower(followerId);
+
+
+                                db.collection("follow").document(followingId)
+                                        .set(following)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "User following successfully");
+                                                SingleManager.getInstance().toast("User followed successfully");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.e(TAG, "Error following user", e);
+                                            }
+                                        });
+
+
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                            // Invoke the listener with the error
+                        }
+                    }
+                });
+    }
+
+    public void getFollowing(String user_Id, OnFollowsListener listener){
+        db.collection("follow")
+                .whereEqualTo("userId", user_Id)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Following following = document.toObject(Following.class);
+                                listener.onFollowReady(true, following);
+                            }
+                        } else {
+                            listener.onFollowReady(true, null);
+                        }
+                    }
+                });
+    }
+
 
 }
 
