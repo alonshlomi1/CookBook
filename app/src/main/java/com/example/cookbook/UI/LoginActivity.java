@@ -1,16 +1,23 @@
 package com.example.cookbook.UI;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.example.cookbook.DataBaseLayer.OnUserLoadedListener;
+import com.example.cookbook.Interfaces.OnUserSavedListener;
 import com.example.cookbook.MainActivity;
 import com.example.cookbook.Models.User;
 import com.example.cookbook.R;
@@ -23,49 +30,140 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
-public class LoginActivity extends AppCompatActivity implements OnUserLoadedListener {
+public class LoginActivity extends AppCompatActivity implements OnUserLoadedListener, OnUserSavedListener {
 
     private FirebaseAuth mAuth;
-    private MaterialButton login_BTN_signout;
+   // private MaterialButton login_BTN_signout;
+    private MaterialButton login_BTN_signin, login_BTN_signup;
+    private LinearLayout login_LLO_signin_form;
+    private MaterialTextView login_TV_signin;
+    private EditText login_ET_first_name, login_ET_last_name, login_ET_email, login_ET_password, login_ET_password_again;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         findViews();
         initViews();
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        if(user == null)
-            login();
-        else {
+        if(user != null)
             SingleManager.getInstance().getDBManager().getUser(this, user.getEmail());
-        }
     }
 
     private void initViews() {
-        login_BTN_signout.setOnClickListener(v ->{
-            AuthUI.getInstance()
-                    .signOut(this)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        public void onComplete(@NonNull Task<Void> task) {
-                            login();
-                        }
-                    });
-        });
+
+        login_BTN_signin.setOnClickListener(v -> login() );
+        login_TV_signin.setOnClickListener(v -> toggleSignInFormVisibility() );
+        login_BTN_signup.setOnClickListener(v -> signup() );
+        login_LLO_signin_form.setVisibility(View.GONE);
     }
+
 
     private void findViews() {
-        login_BTN_signout = findViewById(R.id.login_BTN_signout);
+
+        //login_BTN_signout = findViewById(R.id.login_BTN_signout);
+        login_BTN_signin = findViewById(R.id.login_BTN_signin);
+        login_BTN_signup = findViewById(R.id.login_BTN_signup);
+        login_LLO_signin_form = findViewById(R.id.login_LLO_signin_form);
+        login_TV_signin = findViewById(R.id.login_TV_signin);
+        login_ET_first_name = findViewById(R.id.login_ET_first_name);
+        login_ET_last_name = findViewById(R.id.login_ET_last_name);
+        login_ET_email = findViewById(R.id.login_ET_email);
+        login_ET_password = findViewById(R.id.login_ET_password);
+        login_ET_password_again = findViewById(R.id.login_ET_password_again);
+
     }
 
+    private void signup() {
+        if(validSignupDetails()){
+
+            setUserAuth().thenAccept(authenticated -> {
+                if (authenticated) {
+                    User new_user = new User()
+                            .setEmail(login_ET_email.getText().toString())
+                            .setFirstName(login_ET_first_name.getText().toString())
+                            .setLastName(login_ET_last_name.getText().toString())
+                            .setId(UUID.randomUUID().toString());
+                    SingleManager.getInstance().getDBManager().saveNewUser(new_user, this);
+                } else {
+                    Log.d("$$$", "auth Fail");
+                }
+            });
+
+        }
+
+    }
+
+    private CompletableFuture<Boolean> setUserAuth() {
+        CompletableFuture<Boolean> authResult = new CompletableFuture<>();
+
+        mAuth.createUserWithEmailAndPassword(login_ET_email.getText().toString(), login_ET_password.getText().toString())
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            authResult.complete(true);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            authResult.complete(false);
+                        }
+                    }
+                });
+        return authResult;
+    }
+
+    private boolean validSignupDetails() {
+        if(login_ET_first_name.getText().length() < 1 || login_ET_first_name.getText().length() > 20){
+            SingleManager.getInstance().toast("First Name length must be between 1 - 20 ");
+            return false;
+        }
+        if(login_ET_last_name.getText().length() < 1 || login_ET_last_name.getText().length() > 20){
+            SingleManager.getInstance().toast("Last Name length must be between 1 - 20 ");
+            return false;
+        }
+        if(login_ET_email.getText().length() < 1 || login_ET_email.getText().length() > 50){
+            SingleManager.getInstance().toast("Email length must be between 1 - 50 ");
+            return false;
+        }
+        if(login_ET_password.getText().length() < 6 || login_ET_password.getText().length() > 20){
+            SingleManager.getInstance().toast("Email length must be between 1 - 50 ");
+            return false;
+        }
+        if(login_ET_password_again.getText().length() < 6 || login_ET_password_again.getText().length() > 20){
+            SingleManager.getInstance().toast("Email length must be between 1 - 50 ");
+            return false;
+        }
+        if(!login_ET_password.getText().toString().equals(login_ET_password_again.getText().toString())){
+            SingleManager.getInstance().toast("Passwords not the same ");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void toggleSignInFormVisibility() {
+        if (login_LLO_signin_form.getVisibility() == View.VISIBLE) {
+            login_LLO_signin_form.setVisibility(View.GONE); // Hide the form
+        } else {
+            login_LLO_signin_form.setVisibility(View.VISIBLE); // Show the form
+        }
+    }
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
             new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
@@ -97,6 +195,8 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             SingleManager.getInstance().getDBManager().getUser(this, user.getEmail());
         } else {
+            Log.d("$$$$", "fail");
+            Log.d("$$$$", result.getResultCode().toString());
         }
     }
 
@@ -111,6 +211,19 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
 
     @Override
     public void onUserLoadFailed(Exception e) {
+
+    }
+
+    @Override
+    public void onUserSaved(boolean success, User user) {
+        if(success){
+            SingleManager.getInstance().getUserManager().setUser(user);
+            Log.d("USER1", SingleManager.getInstance().getUserManager().getUser().toString());
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
 
     }
 }

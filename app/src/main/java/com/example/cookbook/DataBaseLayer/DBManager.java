@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
 import com.example.cookbook.Interfaces.OnRecipesURLLoadedListener;
+import com.example.cookbook.Interfaces.OnUserSavedListener;
 import com.example.cookbook.Interfaces.RecipeResetListener;
 import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -211,6 +213,28 @@ public class DBManager {
                     public void onFailure(@NonNull Exception e) {
                         // Failed to update recipe
                         Log.e(TAG, "Error updating recipe", e);
+                    }
+                });
+    }
+
+    public void saveNewUser(User user, OnUserSavedListener listener) {
+        // Add a new document with a generated ID
+        db.collection("Users").document(user.getId())
+                .set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: ");
+                        // If user document added successfully, invoke the listener with success
+                        listener.onUserSaved(true, user);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                        // If adding user document failed, invoke the listener with failure
+                        listener.onUserSaved(false, null);
                     }
                 });
     }
