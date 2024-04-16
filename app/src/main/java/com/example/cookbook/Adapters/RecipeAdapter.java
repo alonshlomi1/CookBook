@@ -212,7 +212,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             Glide.with(context)
                     .load(recipe.getPhotoUrl())
                     .fitCenter()
-                    .placeholder(R.drawable.profile_icon)
+                    .placeholder(R.drawable.default_recipe_image)
                     .into(recipeImage);
         }
         private void setCommentsList(Recipe recipe){

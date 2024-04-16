@@ -96,36 +96,7 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             SingleManager.getInstance().getDBManager().getUser(this, user.getEmail());
-//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//            startActivity(intent);
-//            finish();
-
         } else {
-        }
-    }
-
-    private void onSignInResult3(FirebaseAuthUIAuthenticationResult result) {
-        IdpResponse response = result.getIdpResponse();
-        if (result.getResultCode() == RESULT_OK) {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            // Check if user already exists
-            FirebaseAuth auth = FirebaseAuth.getInstance();
-            auth.fetchSignInMethodsForEmail(user.getEmail())
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            if (task.getResult().getSignInMethods().isEmpty()) {
-                                // New user, create account
-                                // (Handle new user creation logic)
-                            } else {
-                                // Existing user, log them in
-                                // ... (Proceed with logged-in user operations)
-                            }
-                        } else {
-                            // Handle error fetching sign-in methods
-                        }
-                    });
-        } else {
-            // Sign in failed handling
         }
     }
 
