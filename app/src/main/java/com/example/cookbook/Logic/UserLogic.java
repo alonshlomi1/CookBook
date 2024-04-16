@@ -39,11 +39,14 @@ public class UserLogic {
         setUserListFromDB();
         setUserRecipeListFromDB();
     }
-    public UserLogic(UserLoadCallback userCallback, UserRecipeListLoadCallback userResipeListCallback, User user){
+    public UserLogic(UserLoadCallback userCallback, UserRecipeListLoadCallback userResipeListCallback, User theuser){
         this.userCallback = userCallback;
         this.userResipeListCallback = userResipeListCallback;
         this.dbManager = new DBManager();
-        this.user = user;
+//        this.user = new User();
+        Log.d("USER3", theuser.toString());
+        this.user = theuser;
+        Log.d("USER4", this.user.toString());
         setUserListFromDB();
         setUserRecipeListFromDB();
     }
@@ -58,50 +61,53 @@ public class UserLogic {
                 .setProfile_URL("https://i.stack.imgur.com/l60Hf.png");
     }
     private void setUserListFromDB() {
+        if(user != null){
+            StorageReference storageRef = SingleManager.getInstance().getStorage().getReference().child("images/"+ user.getId() +".jpg");
+            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    // Got the download URL for 'users/me/profile.png'
+                    Log.d("URI-@@@@@@@@@", uri.toString());
 
-
-
-        StorageReference storageRef = SingleManager.getInstance().getStorage().getReference().child("images/"+ 1111 +".jpg");
-        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                // Got the download URL for 'users/me/profile.png'
-                Log.d("URI-@@@@@@@@@", uri.toString());
-
-                try {
-                    user.setProfile_URL(new URL(uri.toString()).toString() );
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
+                    try {
+                        user.setProfile_URL(new URL(uri.toString()).toString() );
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Log.d("URI-@@@@@@@@@", exception.toString());
+                }
+            });
+            if (userCallback != null) {
+                userCallback.onUserLoaded(user);
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.d("URI-@@@@@@@@@", exception.toString());
-            }
-        });
-        if (userCallback != null) {
-            userCallback.onUserLoaded(user);
         }
+
     }
 
     private void setUserRecipeListFromDB() {
-        dbManager.getUserRecipes(new OnRecipesLoadedListener() {
-            @Override
-            public void onRecipesLoaded(ArrayList<Recipe> recipes) {
-                // Handle fetched recipes
-                userRecipeList = recipes;
-                attachURL(recipes);
-                if (userResipeListCallback != null) {
-                    userResipeListCallback.onUserRecipeListLoaded(userRecipeList);
+        if(user != null) {
+            dbManager.getUserRecipes(new OnRecipesLoadedListener() {
+                @Override
+                public void onRecipesLoaded(ArrayList<Recipe> recipes) {
+                    // Handle fetched recipes
+                    userRecipeList = recipes;
+                    attachURL(recipes);
+                    if (userResipeListCallback != null) {
+                        userResipeListCallback.onUserRecipeListLoaded(userRecipeList);
+                    }
                 }
-            }
-            @Override
-            public void onRecipesLoadFailed(Exception e) {
-                // Handle failure
-                Log.e(TAG, "Error loading recipes", e);
-            }
-        }, user.getId());
+
+                @Override
+                public void onRecipesLoadFailed(Exception e) {
+                    // Handle failure
+                    Log.e(TAG, "Error loading recipes", e);
+                }
+            }, user.getId());
+        }
     }
     private void attachURL(ArrayList<Recipe> recipeList) {
         for (Recipe recipe: recipeList) {

@@ -3,10 +3,10 @@ package com.example.cookbook.Utilities;
 import com.example.cookbook.Models.User;
 
 public class UserManager {
-    public static User user = null;
+    public static User user;
 
     public UserManager(){
-
+        user = null;
     }
 
     public static User getUser() {

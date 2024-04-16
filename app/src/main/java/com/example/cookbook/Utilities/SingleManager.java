@@ -1,14 +1,20 @@
 package com.example.cookbook.Utilities;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.widget.Toast;
 
 import com.example.cookbook.DataBaseLayer.DBManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class SingleManager {
     private static SingleManager instance = null;
@@ -65,5 +71,21 @@ public class SingleManager {
             //deprecated in API 26
             vibrator.vibrate(500);
         }
+    }
+    public byte[] compresImage(Uri uri){
+        Bitmap bmp = null;
+        try {
+            bmp = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        // here we can choose quality factor
+        // in third parameter(ex. here it is 25)
+        bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
+
+        byte[] fileInBytes = baos.toByteArray();
+        return fileInBytes;
     }
 }

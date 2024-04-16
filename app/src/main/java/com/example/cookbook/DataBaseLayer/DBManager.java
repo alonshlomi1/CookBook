@@ -116,10 +116,9 @@ public class DBManager {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 User user = document.toObject(User.class);
                                 Log.d("@@@@@@@@", user.getEmail());
-                                Log.d("@@@@@@@@", user.toString());
+                                Log.d("@@@@@@@@--", user.toString());
                                 // Pass the fetched user object to the listener
                                 listener.onUserLoaded(user);
-                                Log.d(TAG, document.getId() + " => " + document.getData());
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -215,5 +214,6 @@ public class DBManager {
                     }
                 });
     }
+
 }
 

@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
         setContentView(R.layout.activity_main);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-        userLogic = new UserLogic(this, this, UserManager.getUser());
+        Log.d("USER2", SingleManager.getInstance().getUserManager().getUser().toString());
+        userLogic = new UserLogic(this, this, SingleManager.getInstance().getUserManager().getUser());
         recipeLogic = new RecipeLogic(this, getApplicationContext());
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(),this))
@@ -54,10 +55,20 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     Fragment selectedFragment = null;
-                    if (item.getItemId() == R.id.navigation_home)
-                        selectedFragment = new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(), MainActivity.this);
-                    else if (item.getItemId() == R.id.navigation_profile)
-                        selectedFragment = new UserProfileFragment(getApplicationContext(), userLogic.getUser(),  userLogic.getUserRecipeList());
+                    if (item.getItemId() == R.id.navigation_home){
+                        selectedFragment = getSupportFragmentManager().findFragmentByTag("HomePageFragment");
+                        if (selectedFragment == null) {
+                            selectedFragment = new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(), MainActivity.this);
+                        }
+                    }
+                        //selectedFragment = new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(), MainActivity.this);
+                    else if (item.getItemId() == R.id.navigation_profile){
+                        selectedFragment = getSupportFragmentManager().findFragmentByTag("UserProfileFragment");
+                        if (selectedFragment == null) {
+                            selectedFragment = new UserProfileFragment(getApplicationContext(), userLogic.getUser(), userLogic.getUserRecipeList());
+                        }
+                    }
+//                        selectedFragment = new UserProfileFragment(getApplicationContext(), userLogic.getUser(),  userLogic.getUserRecipeList());
                     else if (item.getItemId() == R.id.new_recipe)
                         selectedFragment = new NewRecipeFragment(getApplicationContext(), recipeLogic, userLogic.getUser().getId());
 

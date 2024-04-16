@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".UI.Fragments.UserProfileFragment">
 
     <LinearLayout
@@ -65,12 +66,20 @@
 
                 </LinearLayout>
             </LinearLayout>
-
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/profile_BTN_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                app:icon="@drawable/settings_icon"
+                android:backgroundTint="@color/fui_transparent"/>
             <LinearLayout
+                android:id="@+id/profile_LLO_seting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/profile_BTN_setting_image"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -79,6 +88,7 @@
                     android:backgroundTint="@color/theme_4"/>
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/profile_BTN_setting_info"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -86,6 +96,7 @@
                     android:text="edit info"
                     android:backgroundTint="@color/theme_4"/>
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/profile_BTN_setting_logout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

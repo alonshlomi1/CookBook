@@ -87,29 +87,29 @@ public class RecipeLogic {
     public boolean saveNewRecipe(Recipe recipe, Uri uri, RecipeResetListener resetListener){
         if(validateRecipe(recipe)){
             //recipe.setId(UUID.randomUUID().toString());
-            dbManager.addRecipe(recipe, compresImage(uri), resetListener);
+            dbManager.addRecipe(recipe, SingleManager.getInstance().compresImage(uri), resetListener);
             return true;
         }
 
         return false;
 
     }
-    public byte[] compresImage(Uri uri){
-        Bitmap bmp = null;
-        try {
-            bmp = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        // here we can choose quality factor
-        // in third parameter(ex. here it is 25)
-        bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
-
-        byte[] fileInBytes = baos.toByteArray();
-        return fileInBytes;
-    }
+//    public byte[] compresImage(Uri uri){
+//        Bitmap bmp = null;
+//        try {
+//            bmp = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//
+//        // here we can choose quality factor
+//        // in third parameter(ex. here it is 25)
+//        bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
+//
+//        byte[] fileInBytes = baos.toByteArray();
+//        return fileInBytes;
+//    }
 
     private boolean validateRecipe(Recipe recipe){
         if(recipe.getTitle().length() < 3 || recipe.getTitle().length() > 20){
