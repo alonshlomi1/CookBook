@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import com.example.cookbook.Interfaces.OnFollowsListener;
 import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
 import com.example.cookbook.Interfaces.OnRecipesURLLoadedListener;
+import com.example.cookbook.Interfaces.OnUserLoadedListener;
 import com.example.cookbook.Interfaces.OnUserSavedListener;
 import com.example.cookbook.Interfaces.RecipeResetListener;
 import com.example.cookbook.Models.Following;
@@ -21,8 +22,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -33,8 +32,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
-
-import javax.security.auth.callback.Callback;
 
 public class DBManager {
     private FirebaseFirestore db;
@@ -242,15 +239,15 @@ public class DBManager {
                 });
     }
 
-    public void follow(Following following, String followingId) {
-        following.addFollowing(followingId);
+    public void follow(Following following, String followingId, String name) {
+        following.addFollowing(followingId, name);
         db.collection("follow").document(following.getUserId())
                 .set(following)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "User followed successfully");
-                        updateFollowing(followingId, following.getUserId());
+                        updateFollowing(followingId, following.getUserId(), name);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -261,7 +258,7 @@ public class DBManager {
                 });
     }
 
-    public void updateFollowing(String followingId, String followerId){
+    public void updateFollowing(String followingId, String followerId, String follower_name){
         db.collection("follow")
                 .whereEqualTo("userId", followingId)
                 .get()
@@ -272,7 +269,7 @@ public class DBManager {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Following following = document.toObject(Following.class);
                                 Log.d("@@@@@@@@", following.getUserId());
-                                following.addFollower(followerId);
+                                following.addFollower(followerId, follower_name);
 
 
                                 db.collection("follow").document(followingId)
@@ -313,6 +310,7 @@ public class DBManager {
                         if (task.isSuccessful() && !task.getResult().isEmpty()) {
                             QueryDocumentSnapshot document = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0); // Retrieve the first document
                             Following follows = document.toObject(Following.class);
+                            Log.d("FOLLOW@@", follows.toString());
                             listener.onFollowReady(true, follows);
 
                         } else {

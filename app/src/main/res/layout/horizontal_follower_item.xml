@@ -9,6 +9,7 @@
         android:id="@+id/following_TV_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:text="follow_name"/>
 
 

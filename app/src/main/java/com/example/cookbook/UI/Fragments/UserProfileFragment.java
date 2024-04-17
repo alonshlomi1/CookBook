@@ -20,8 +20,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.cookbook.Adapters.FollowersAdapter;
+import com.example.cookbook.Adapters.FollowingAdapter;
 import com.example.cookbook.Adapters.RecipeAdapter;
 import com.example.cookbook.MainActivity;
+import com.example.cookbook.Models.Following;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.Models.User;
 import com.example.cookbook.R;
@@ -41,14 +44,16 @@ public class UserProfileFragment extends Fragment {
 
     private ShapeableImageView profile_SIV_image;
     private MaterialTextView profile_TV_name, profile_TV_info;
-    private RecyclerView home_LST_recipe;
+    private RecyclerView home_LST_recipe, home_LST_following, home_LST_follower;
     private MaterialButton profile_BTN_setting, profile_BTN_setting_image, profile_BTN_setting_info
-    , profile_BTN_setting_logout;
+    , profile_BTN_setting_logout, profile_BTN_following, profile_BTN_followers;
     private LinearLayout profile_LLO_seting;
     private Context applicationContext;
     private ArrayList<Recipe> recipeList;
     private User user;
     private boolean expandedSetting = false;
+    private boolean expandedFollowing = false;
+    private boolean expandedFollowers = false;
 
     public UserProfileFragment(Context Context, User user, ArrayList<Recipe> recipeList) {
         this.recipeList = recipeList;
@@ -86,7 +91,23 @@ public class UserProfileFragment extends Fragment {
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         home_LST_recipe.setLayoutManager(linearLayoutManager);
         home_LST_recipe.setAdapter(recipeAdapter);
+
+//        Following following = new Following();
+        FollowingAdapter followingAdapter = new FollowingAdapter(applicationContext, user.getFollows());
+        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(applicationContext);
+        linearLayoutManager1.setOrientation(RecyclerView.VERTICAL);
+        home_LST_following.setLayoutManager(linearLayoutManager1);
+        home_LST_following.setAdapter(followingAdapter);
+
+        FollowersAdapter followersAdapter = new FollowersAdapter(applicationContext, user.getFollows());
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(applicationContext);
+        linearLayoutManager2.setOrientation(RecyclerView.VERTICAL);
+        home_LST_follower.setLayoutManager(linearLayoutManager2);
+        home_LST_follower.setAdapter(followersAdapter);
+
         profile_LLO_seting.setVisibility(View.GONE);
+        home_LST_following.setVisibility(View.GONE);
+        home_LST_follower.setVisibility(View.GONE);
 
         profile_BTN_setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,9 +115,46 @@ public class UserProfileFragment extends Fragment {
                 expandedSetting =! expandedSetting;
                 if (expandedSetting) {
                     profile_LLO_seting.setVisibility(View.VISIBLE);
-
+                    home_LST_following.setVisibility(View.GONE);
+                    home_LST_follower.setVisibility(View.GONE);
+                    expandedFollowing = false;
+                    expandedFollowers = false;
                 } else {
                     profile_LLO_seting.setVisibility(View.GONE);
+
+                }
+            }
+        });
+        profile_BTN_following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expandedFollowing =! expandedFollowing;
+                if (expandedFollowing) {
+                    home_LST_following.setVisibility(View.VISIBLE);
+                    profile_LLO_seting.setVisibility(View.GONE);
+                    home_LST_follower.setVisibility(View.GONE);
+                    expandedFollowers = false;
+                    expandedSetting = false;
+
+                } else {
+                    home_LST_following.setVisibility(View.GONE);
+
+                }
+            }
+        });
+        profile_BTN_followers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expandedFollowers =! expandedFollowers;
+                if (expandedFollowers) {
+                    home_LST_follower.setVisibility(View.VISIBLE);
+                    home_LST_following.setVisibility(View.GONE);
+                    profile_LLO_seting.setVisibility(View.GONE);
+                    expandedFollowing = false;
+                    expandedSetting = false;
+
+                } else {
+                    home_LST_follower.setVisibility(View.GONE);
 
                 }
             }
@@ -146,6 +204,10 @@ public class UserProfileFragment extends Fragment {
         profile_BTN_setting_info = view.findViewById(R.id.profile_BTN_setting_info);
         profile_BTN_setting_logout = view.findViewById(R.id.profile_BTN_setting_logout);
         profile_LLO_seting = view.findViewById(R.id.profile_LLO_seting);
+        home_LST_following = view.findViewById(R.id.home_LST_following);
+        home_LST_follower = view.findViewById(R.id.home_LST_follower);
+        profile_BTN_following = view.findViewById(R.id.profile_BTN_following);
+        profile_BTN_followers = view.findViewById(R.id.profile_BTN_followers);
     }
     public void updateUser(User user){
         this.user = user;

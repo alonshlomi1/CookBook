@@ -1,13 +1,14 @@
 package com.example.cookbook.Models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Following {
 
     private String id = "";
     private String userId = "";
-    private ArrayList<String> followers = new ArrayList<>();
-    private ArrayList<String> following = new ArrayList<>();
+    private HashMap<String, String> followers = new HashMap<String, String>();
+    private HashMap<String, String> following = new HashMap<String, String>();
 
     public Following() {
     }
@@ -30,31 +31,31 @@ public class Following {
         return this;
     }
 
-    public ArrayList<String> getFollowers() {
+    public HashMap<String, String> getFollowers() {
         return followers;
     }
 
-    public Following setFollowers(ArrayList<String> followers) {
+    public Following setFollowers(HashMap<String, String> followers) {
         this.followers = followers;
         return this;
     }
 
-    public ArrayList<String> getFollowing() {
+    public HashMap<String, String> getFollowing() {
         return following;
     }
 
-    public Following setFollowing(ArrayList<String> following) {
+    public Following setFollowing(HashMap<String, String> following) {
         this.following = following;
         return this;
     }
 
-    public void addFollowing(String  following_id) {
+    public void addFollowing(String  following_id, String name) {
         // Add the comment to the comments list
-        following.add(following_id);
+        following.put(following_id, name);
     }
-    public void addFollower(String  follower_id) {
+    public void addFollower(String  follower_id, String name) {
         // Add the comment to the comments list
-        followers.add(follower_id);    }
+        followers.put(follower_id, name);    }
 
     @Override
     public String toString() {

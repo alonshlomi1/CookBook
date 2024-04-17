@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.cookbook.DataBaseLayer.OnUserLoadedListener;
 import com.example.cookbook.Interfaces.RecipeLoadCallback;
 import com.example.cookbook.Interfaces.RefreshHomeListener;
 import com.example.cookbook.Interfaces.UserLoadCallback;
@@ -25,7 +24,6 @@ import com.example.cookbook.UI.Fragments.HomePageFragment;
 import com.example.cookbook.UI.Fragments.NewRecipeFragment;
 import com.example.cookbook.UI.Fragments.UserProfileFragment;
 import com.example.cookbook.Utilities.SingleManager;
-import com.example.cookbook.Utilities.UserManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;

@@ -9,14 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.example.cookbook.DataBaseLayer.OnUserLoadedListener;
+import com.example.cookbook.Interfaces.OnUserLoadedListener;
 import com.example.cookbook.Interfaces.OnFollowsListener;
 import com.example.cookbook.Interfaces.OnUserSavedListener;
 import com.example.cookbook.MainActivity;
@@ -24,7 +23,6 @@ import com.example.cookbook.Models.Following;
 import com.example.cookbook.Models.User;
 import com.example.cookbook.R;
 import com.example.cookbook.Utilities.SingleManager;
-import com.example.cookbook.Utilities.UserManager;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
@@ -229,8 +227,6 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
         else {
             Log.d("User Save", "Failed");
         }
-
-
     }
 
     @Override
