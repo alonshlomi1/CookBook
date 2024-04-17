@@ -2,8 +2,12 @@ package com.example.cookbook.Models;
 
 import android.util.Log;
 
+import com.google.firebase.Timestamp;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Recipe {
     private String id = "";
@@ -15,6 +19,7 @@ public class Recipe {
     private ArrayList<String> categoriesTags = new ArrayList<>();
     private ArrayList<Comment> comments = new ArrayList<>();
     private ArrayList<Rate> ratings = new ArrayList<>();
+    private Timestamp  date = Timestamp.now();
 
     public Recipe() {
     }
@@ -107,6 +112,15 @@ public class Recipe {
 
     public Recipe setRatings(ArrayList<Rate> ratings) {
         this.ratings = ratings;
+        return this;
+    }
+
+    public Timestamp getDate() {
+        return date;
+    }
+
+    public Recipe setDate(Timestamp date) {
+        this.date = date;
         return this;
     }
 

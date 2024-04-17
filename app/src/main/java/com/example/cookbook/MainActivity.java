@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
                     else if (item.getItemId() == R.id.navigation_profile){
                         selectedFragment = getSupportFragmentManager().findFragmentByTag("UserProfileFragment");
                         if (selectedFragment == null) {
-                            selectedFragment = new UserProfileFragment(getApplicationContext(), userLogic.getUser(), userLogic.getUserRecipeList());
+                            selectedFragment = new UserProfileFragment(getApplicationContext(), userLogic.getUser(), userLogic.getUserRecipeList(), MainActivity.this);
                         }
                     }
 //                        selectedFragment = new UserProfileFragment(getApplicationContext(), userLogic.getUser(),  userLogic.getUserRecipeList());
@@ -90,11 +90,21 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
         Fragment homePageFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (homePageFragment instanceof HomePageFragment) {
             ((HomePageFragment) homePageFragment).updateRecipeList(recipes);
+         }
+        if (swipeRefreshLayout != null)
+            swipeRefreshLayout.setRefreshing(false);
+
+    }
+
+    @Override
+    public void onFavoriteRecipeListLoaded(ArrayList<Recipe> recipes) {
+        Fragment homePageFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (homePageFragment instanceof HomePageFragment) {
+            ((HomePageFragment) homePageFragment).updateFavoriteRecipeList(recipes);
             if (swipeRefreshLayout != null)
                 swipeRefreshLayout.setRefreshing(false);
 
         }
-
     }
 
     @Override
@@ -120,6 +130,10 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
         Fragment userProfileFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (userProfileFragment instanceof UserProfileFragment) {
             ((UserProfileFragment) userProfileFragment).updateRecipeList(recipes);
+            ((UserProfileFragment) userProfileFragment).updateRecipeList(recipes);
+            if (swipeRefreshLayout != null)
+                swipeRefreshLayout.setRefreshing(false);
+
         }
     }
 

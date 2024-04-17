@@ -18,7 +18,9 @@ import android.widget.LinearLayout;
 import com.example.cookbook.Interfaces.OnUserLoadedListener;
 import com.example.cookbook.Interfaces.OnFollowsListener;
 import com.example.cookbook.Interfaces.OnUserSavedListener;
+import com.example.cookbook.Interfaces.onFavoritesListener;
 import com.example.cookbook.MainActivity;
+import com.example.cookbook.Models.Favorites;
 import com.example.cookbook.Models.Following;
 import com.example.cookbook.Models.User;
 import com.example.cookbook.R;
@@ -40,7 +42,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class LoginActivity extends AppCompatActivity implements OnUserLoadedListener, OnUserSavedListener, OnFollowsListener {
+public class LoginActivity extends AppCompatActivity implements OnUserLoadedListener, OnUserSavedListener, OnFollowsListener, onFavoritesListener {
 
     private FirebaseAuth mAuth;
    // private MaterialButton login_BTN_signout;
@@ -233,12 +235,24 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
     public void onFollowReady(boolean success, Following follows) {
         if(success){
             SingleManager.getInstance().getUserManager().getUser().setFollows(follows);
+            SingleManager.getInstance().getDBManager().getFavorites(SingleManager.getInstance().getUserManager().getUser().getId(), this);
+
+        }
+        else {
+            Log.d("FOLLOW@@@", null);
+        }
+    }
+
+    @Override
+    public void onFavoritesReady(boolean success, Favorites favorites) {
+        if (success){
+            SingleManager.getInstance().getUserManager().getUser().setFavorites(favorites);
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
         else {
-            Log.d("FOLLOW@@@", null);
+            Log.d("Favorites@@@", null);
         }
     }
 }

@@ -13,6 +13,8 @@ import com.example.cookbook.Interfaces.OnRecipesURLLoadedListener;
 import com.example.cookbook.Interfaces.OnUserLoadedListener;
 import com.example.cookbook.Interfaces.OnUserSavedListener;
 import com.example.cookbook.Interfaces.RecipeResetListener;
+import com.example.cookbook.Interfaces.onFavoritesListener;
+import com.example.cookbook.Models.Favorites;
 import com.example.cookbook.Models.Following;
 import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
@@ -22,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -105,6 +108,49 @@ public class DBManager {
                     }
                 });
     }
+
+    public void getFavoriteRecipes(OnRecipesLoadedListener listener){
+
+        ArrayList<String > favoritesRecipeIDList = SingleManager.getInstance().getUserManager().getUser().getFavorites().getFavoritesId();
+        ArrayList<Recipe> recipeList = new ArrayList<>();
+        Log.d("FAVORI##LIST", favoritesRecipeIDList.toString());
+
+        if(favoritesRecipeIDList.size() > 0){
+            db.collection("recipes")
+                    .whereIn(FieldPath.documentId(), favoritesRecipeIDList)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Recipe recipe = document.toObject(Recipe.class);
+                                    // Assuming your Firestore document contains fields for ingredients and instructions
+                                    ArrayList<Map<String, Object>> ingredientsData = (ArrayList<Map<String, Object>>) document.get("ingredients");
+                                    ArrayList<String> instructions = (ArrayList<String>) document.get("instructions");
+                                    // Parse ingredientsData and instructionsData into appropriate objects
+                                    ArrayList<Ingredient> ingredients = parseIngredients(ingredientsData, recipe.getId());
+                                    // Set parsed ingredients and instructions to the recipe
+                                    recipe.setIngredients(ingredients);
+                                    recipe.setInstructions(instructions);
+                                    recipeList.add(recipe);
+
+                                }
+                                // Invoke the listener with the fetched recipes
+
+                                listener.onRecipesLoaded(recipeList);
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                                // Invoke the listener with the error
+                                listener.onRecipesLoadFailed(task.getException());
+                            }
+                        }
+                    });
+        }
+        listener.onRecipesLoaded(recipeList);
+
+
+    }
     public void getUser(OnUserLoadedListener listener, String email){
         ArrayList<Recipe> recipeList = new ArrayList<>();
 
@@ -118,7 +164,6 @@ public class DBManager {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 User user = document.toObject(User.class);
                                 Log.d("@@@@@@@@", user.getEmail());
-                                Log.d("@@@@@@@@--", user.toString());
                                 // Pass the fetched user object to the listener
                                 listener.onUserLoaded(user);
                             }
@@ -310,13 +355,54 @@ public class DBManager {
                         if (task.isSuccessful() && !task.getResult().isEmpty()) {
                             QueryDocumentSnapshot document = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0); // Retrieve the first document
                             Following follows = document.toObject(Following.class);
-                            Log.d("FOLLOW@@", follows.toString());
                             listener.onFollowReady(true, follows);
 
                         } else {
-                            Log.d("FOLLOW@@", task.getResult().getDocuments().toString());
                             listener.onFollowReady(false, null);
                         }
+                    }
+                });
+    }
+
+    public void getFavorites(String user_Id, onFavoritesListener listener){
+        db.collection("favorites")
+                .whereEqualTo("userId", user_Id)
+                .limit(1) // Limit the query to retrieve only one document
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        //Following follows = new Following();
+                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                            QueryDocumentSnapshot document = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0); // Retrieve the first document
+                            Favorites favorites = document.toObject(Favorites.class);
+                            Log.d("FOLLOW@@", favorites.toString());
+                            listener.onFavoritesReady(true, favorites);
+
+                        } else {
+                            Log.d("FOLLOW@@", task.getResult().getDocuments().toString());
+                            listener.onFavoritesReady(false, null);
+                        }
+                    }
+                });
+    }
+
+
+    public void saveFavorites() {
+        Favorites favorites = SingleManager.getInstance().getUserManager().getUser().getFavorites();
+        db.collection("favorites").document(favorites.getUserId())
+                .set(favorites)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        SingleManager.getInstance().toast("Favorite Saved");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error Save UnFavorite document", e);
+                        // If adding user document failed, invoke the listener with failure
                     }
                 });
     }

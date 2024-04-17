@@ -24,6 +24,7 @@ public class HomePageFragment extends Fragment {
     private SwipeRefreshLayout home_SWIPE_refresh;
     private Context applicationContext;
     private ArrayList<Recipe> recipeList;
+    private ArrayList<Recipe> favoriteRecipeList;
     private RefreshHomeListener refreshCallback;
 
 
@@ -72,6 +73,12 @@ public class HomePageFragment extends Fragment {
     }
     public void updateRecipeList(ArrayList<Recipe> recipeList){
         this.recipeList = recipeList;
+        initViews();
+    }
+
+    public void updateFavoriteRecipeList(ArrayList<Recipe> favoriteRecipeList){
+        this.favoriteRecipeList = favoriteRecipeList;
+        Log.d("FAVORI", favoriteRecipeList.toString());
         initViews();
     }
 

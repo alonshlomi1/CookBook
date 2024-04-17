@@ -6,5 +6,6 @@ import java.util.ArrayList;
 
 public interface RecipeLoadCallback {
     void onRecipeListLoaded(ArrayList<Recipe> recipes);
+    void onFavoriteRecipeListLoaded(ArrayList<Recipe> recipes);
     void onRecipeListLoadFailed(Exception e);
 }

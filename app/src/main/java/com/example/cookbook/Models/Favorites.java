@@ -38,4 +38,13 @@ public class Favorites {
         this.favoritesId = favoritesId;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Favorites{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", favoritesId=" + favoritesId +
+                '}';
+    }
 }

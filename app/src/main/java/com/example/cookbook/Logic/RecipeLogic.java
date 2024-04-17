@@ -18,11 +18,13 @@ import com.example.cookbook.Interfaces.OnRecipesURLLoadedListener;
 import com.example.cookbook.Interfaces.RecipeLoadCallback;
 import com.example.cookbook.Interfaces.RecipeResetListener;
 import com.example.cookbook.Models.Recipe;
+import com.example.cookbook.R;
 import com.example.cookbook.Utilities.SingleManager;
 import java.util.ArrayList;
 
 public class RecipeLogic {
     private ArrayList<Recipe> recipeList = new ArrayList<>();
+    private ArrayList<Recipe> favoriterecipeList = new ArrayList<>();
     private RecipeLoadCallback callback;
     private DBManager dbManager;
     private Context context;
@@ -31,6 +33,7 @@ public class RecipeLogic {
         this.dbManager = new DBManager();
         this.context = context;
         setRecipeListFromDB();
+        //setFavoriteRecipeListFromDB();
     }
 
     private void setRecipeListFromDB() {
@@ -40,10 +43,33 @@ public class RecipeLogic {
                 // Handle fetched recipes
                 recipeList = recipes;
                 attachURL(recipeList);
+                setFavoriteRecipeListFromDB();
                 if (callback != null) {
                     callback.onRecipeListLoaded(recipeList);
                 }
 
+            }
+            @Override
+            public void onRecipesLoadFailed(Exception e) {
+                Log.e(TAG, "Error loading recipes", e);
+                if (callback != null) {
+                    callback.onRecipeListLoadFailed(e);
+                }
+            }
+        });
+    }
+
+    private void setFavoriteRecipeListFromDB() {
+        Log.d("@@@@@@@@imhere", "imherree");
+        dbManager.getFavoriteRecipes(new OnRecipesLoadedListener() {
+            @Override
+            public void onRecipesLoaded(ArrayList<Recipe> recipes) {
+                // Handle fetched recipes
+                favoriterecipeList = recipes;
+                attachURL(favoriterecipeList);
+                if (callback != null) {
+                    callback.onFavoriteRecipeListLoaded(favoriterecipeList);
+                }
             }
             @Override
             public void onRecipesLoadFailed(Exception e) {

@@ -12,9 +12,11 @@ public class User implements Serializable {
     private String profile_URL = "";
     private String bio = "";
     private Following follows = null;
+    private Favorites favorites = null;
 
     public User() {
         follows = new Following();
+        favorites = new Favorites();
     }
 
     public String getId() {
@@ -86,6 +88,15 @@ public class User implements Serializable {
 
     public User setFollows(Following follows) {
         this.follows = follows;
+        return this;
+    }
+
+    public Favorites getFavorites() {
+        return favorites;
+    }
+
+    public User setFavorites(Favorites favorites) {
+        this.favorites = favorites;
         return this;
     }
 

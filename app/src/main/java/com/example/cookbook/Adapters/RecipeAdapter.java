@@ -26,13 +26,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.cookbook.DataBaseLayer.DBManager;
 import com.example.cookbook.Models.Comment;
+import com.example.cookbook.Models.Favorites;
 import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.R;
 import com.example.cookbook.Utilities.SingleManager;
 import com.google.android.material.button.MaterialButton;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
     private ArrayList<Recipe> recipeList;
@@ -85,12 +89,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     }
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder {
+        private Recipe recipe;
         private ImageView recipeImage, recipe_comments_SIV_icon, home_SIV_comments_icon;
-        private TextView recipeTitle, recipeIngredients, recipeInstructions, recipeCommentsTitle;
+        private TextView recipeTitle, recipe_date, recipeIngredients, recipeInstructions, recipeCommentsTitle;
         private RatingBar recipeRating;
         private RecyclerView recipeLSTComments;
         private RelativeLayout recipeLLOSeg;
-        private LinearLayout home_LLO_comments_title, home_LLO_comments;
+        private LinearLayout home_LLO_comments_title, home_LLO_comments, recipe_rating_clickable;
         private EditText home_ET_comments;
         private MaterialButton home_BTN_comments;
         private boolean commentsVisible = false;
@@ -111,6 +116,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             super(itemView);
             recipeImage = itemView.findViewById(R.id.recipe_image);
             recipeTitle = itemView.findViewById(R.id.recipe_title);
+            recipe_date = itemView.findViewById(R.id.recipe_date);
             recipeRating = itemView.findViewById(R.id.recipe_rating);
             recipeIngredients = itemView.findViewById(R.id.recipe_ingredients);
             recipeInstructions = itemView.findViewById(R.id.recipe_instructions);
@@ -122,6 +128,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             home_ET_comments = itemView.findViewById(R.id.home_ET_comments);
             home_BTN_comments = itemView.findViewById(R.id.home_BTN_comments);
             home_SIV_comments_icon = itemView.findViewById(R.id.home_SIV_comments_icon);
+            recipe_rating_clickable = itemView.findViewById(R.id.recipe_rating_clickable);
             styleComments();
             recipe_comments_SIV_icon = itemView.findViewById(R.id.recipe_comments_SIV_icon);
             recipeLLOSeg.setOnClickListener(new View.OnClickListener() {
@@ -184,13 +191,40 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                     }
                 }
             });
+            recipe_rating_clickable.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Favorites favorites = SingleManager.getInstance().getUserManager().getUser().getFavorites();
+                    if(recipeRating.getRating() == 1){
+                        favorites.getFavoritesId().remove(recipe.getId());
+                        recipeRating.setRating(0);
+                    }
+                    else {
+                        favorites.getFavoritesId().add(recipe.getId());
+                        recipeRating.setRating(1);
+                    }
+                    SingleManager.getInstance().getUserManager().getUser().setFavorites(favorites);
+                    SingleManager.getInstance().getDBManager().saveFavorites();
+
+                }
+            });
         }
 
         public void bind(Recipe recipe) {
+            this.recipe = recipe;
             // Bind data to views
             recipeTitle.setText(recipe.getTitle());
-            recipeRating.setNumStars(5);
-            recipeRating.setRating(recipe.getAVGRating());
+            Date date = recipe.getDate().toDate();
+            // Format the Date using SimpleDateFormat
+            SimpleDateFormat sdf = new SimpleDateFormat(" HH:mm - dd/MM/yyyy", Locale.getDefault());
+            String formattedDate = sdf.format(date);
+            recipe_date.setText(formattedDate);
+            recipeRating.setNumStars(1);
+            ArrayList<String> favoritesIdList = SingleManager.getInstance().getUserManager().getUser().getFavorites().getFavoritesId();
+            if(favoritesIdList.contains(recipe.getId()))
+                recipeRating.setRating(1);
+            else
+                recipeRating.setRating(0);
             StringBuilder ingredientsBuilder = new StringBuilder();
             for (Ingredient ingredient : recipe.getIngredients()) {
                 ingredientsBuilder.append(ingredient.getName()).append(": ").append(ingredient.getAmount()).append("\n");

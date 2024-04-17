@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.example.cookbook.Adapters.FollowersAdapter;
 import com.example.cookbook.Adapters.FollowingAdapter;
 import com.example.cookbook.Adapters.RecipeAdapter;
+import com.example.cookbook.Interfaces.RefreshHomeListener;
 import com.example.cookbook.MainActivity;
 import com.example.cookbook.Models.Following;
 import com.example.cookbook.Models.Recipe;
@@ -50,15 +52,21 @@ public class UserProfileFragment extends Fragment {
     private LinearLayout profile_LLO_seting;
     private Context applicationContext;
     private ArrayList<Recipe> recipeList;
+    private SwipeRefreshLayout profile_SWIPE_refresh;
+
     private User user;
     private boolean expandedSetting = false;
     private boolean expandedFollowing = false;
     private boolean expandedFollowers = false;
+    private RefreshHomeListener refreshCallback;
 
-    public UserProfileFragment(Context Context, User user, ArrayList<Recipe> recipeList) {
+
+    public UserProfileFragment(Context Context, User user, ArrayList<Recipe> recipeList, RefreshHomeListener refreshCallback) {
         this.recipeList = recipeList;
         this.applicationContext = Context;
         this.user = user;
+        this.refreshCallback = refreshCallback;
+
     }
 
     @Override
@@ -67,7 +75,7 @@ public class UserProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         findViews(view);
-        initViews(view);
+        initViews();
         return view;
 
     }
@@ -84,7 +92,7 @@ public class UserProfileFragment extends Fragment {
         }
     }
 
-    private void initViews(View view) {
+    private void initViews() {
         updateUserInfo();
         RecipeAdapter recipeAdapter = new RecipeAdapter(applicationContext, recipeList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(applicationContext);
@@ -108,6 +116,7 @@ public class UserProfileFragment extends Fragment {
         profile_LLO_seting.setVisibility(View.GONE);
         home_LST_following.setVisibility(View.GONE);
         home_LST_follower.setVisibility(View.GONE);
+        profile_SWIPE_refresh.setOnRefreshListener(() -> refreshCallback.refresh(profile_SWIPE_refresh));
 
         profile_BTN_setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,12 +217,15 @@ public class UserProfileFragment extends Fragment {
         home_LST_follower = view.findViewById(R.id.home_LST_follower);
         profile_BTN_following = view.findViewById(R.id.profile_BTN_following);
         profile_BTN_followers = view.findViewById(R.id.profile_BTN_followers);
+        profile_SWIPE_refresh = view.findViewById(R.id.profile_SWIPE_refresh);
+
     }
     public void updateUser(User user){
         this.user = user;
     }
     public void updateRecipeList(ArrayList<Recipe> recipeList){
         this.recipeList = recipeList;
+        initViews();
     }
 
     @Override
