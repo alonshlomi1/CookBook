@@ -304,17 +304,20 @@ public class DBManager {
     public void getFollowing(String user_Id, OnFollowsListener listener){
         db.collection("follow")
                 .whereEqualTo("userId", user_Id)
+                .limit(1) // Limit the query to retrieve only one document
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Following following = document.toObject(Following.class);
-                                listener.onFollowReady(true, following);
-                            }
+                        //Following follows = new Following();
+                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                            QueryDocumentSnapshot document = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0); // Retrieve the first document
+                            Following follows = document.toObject(Following.class);
+                            listener.onFollowReady(true, follows);
+
                         } else {
-                            listener.onFollowReady(true, null);
+                            Log.d("FOLLOW@@", task.getResult().getDocuments().toString());
+                            listener.onFollowReady(false, null);
                         }
                     }
                 });

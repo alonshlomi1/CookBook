@@ -17,8 +17,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.example.cookbook.DataBaseLayer.OnUserLoadedListener;
+import com.example.cookbook.Interfaces.OnFollowsListener;
 import com.example.cookbook.Interfaces.OnUserSavedListener;
 import com.example.cookbook.MainActivity;
+import com.example.cookbook.Models.Following;
 import com.example.cookbook.Models.User;
 import com.example.cookbook.R;
 import com.example.cookbook.Utilities.SingleManager;
@@ -40,7 +42,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class LoginActivity extends AppCompatActivity implements OnUserLoadedListener, OnUserSavedListener {
+public class LoginActivity extends AppCompatActivity implements OnUserLoadedListener, OnUserSavedListener, OnFollowsListener {
 
     private FirebaseAuth mAuth;
    // private MaterialButton login_BTN_signout;
@@ -96,7 +98,8 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
                             .setEmail(login_ET_email.getText().toString())
                             .setFirstName(login_ET_first_name.getText().toString())
                             .setLastName(login_ET_last_name.getText().toString())
-                            .setId(UUID.randomUUID().toString());
+                            .setId(UUID.randomUUID().toString())
+                            .setFollows(new Following());
                     SingleManager.getInstance().getDBManager().saveNewUser(new_user, this);
                 } else {
                     Log.d("$$$", "auth Fail");
@@ -203,10 +206,12 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
     @Override
     public void onUserLoaded(User user) {
         SingleManager.getInstance().getUserManager().setUser(user);
-        Log.d("USER1", SingleManager.getInstance().getUserManager().getUser().toString());
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        SingleManager.getInstance().getDBManager().getFollowing(SingleManager.getInstance().getUserManager().getUser().getId(), this);
+//
+//        Log.d("USER1", SingleManager.getInstance().getUserManager().getUser().toString());
+//        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//        startActivity(intent);
+//        finish();
     }
 
     @Override
@@ -219,11 +224,25 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
         if(success){
             SingleManager.getInstance().getUserManager().setUser(user);
             Log.d("USER1", SingleManager.getInstance().getUserManager().getUser().toString());
+            SingleManager.getInstance().getDBManager().getFollowing(SingleManager.getInstance().getUserManager().getUser().getId(), this);
+        }
+        else {
+            Log.d("User Save", "Failed");
+        }
+
+
+    }
+
+    @Override
+    public void onFollowReady(boolean success, Following follows) {
+        if(success){
+            SingleManager.getInstance().getUserManager().getUser().setFollows(follows);
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
-
-
+        else {
+            Log.d("FOLLOW@@@", null);
+        }
     }
 }

@@ -11,8 +11,10 @@ public class User implements Serializable {
     private String email = "";
     private String profile_URL = "";
     private String bio = "";
+    private Following follows = null;
 
     public User() {
+        follows = new Following();
     }
 
     public String getId() {
@@ -78,6 +80,15 @@ public class User implements Serializable {
         return this;
     }
 
+    public Following getFollows() {
+        return follows;
+    }
+
+    public User setFollows(Following follows) {
+        this.follows = follows;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -88,6 +99,7 @@ public class User implements Serializable {
                 ", email='" + email + '\'' +
                 ", profile_URL='" + profile_URL + '\'' +
                 ", bio='" + bio + '\'' +
+                ", follows=" + follows.toString() +
                 '}';
     }
 }

@@ -55,4 +55,14 @@ public class Following {
     public void addFollower(String  follower_id) {
         // Add the comment to the comments list
         followers.add(follower_id);    }
+
+    @Override
+    public String toString() {
+        return "Following{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", followers=" + followers +
+                ", following=" + following +
+                '}';
+    }
 }
