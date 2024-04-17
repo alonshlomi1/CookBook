@@ -35,6 +35,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.UUID;
 
 public class DBManager {
     private FirebaseFirestore db;
@@ -282,6 +283,37 @@ public class DBManager {
                         listener.onUserSaved(false, null);
                     }
                 });
+
+        db.collection("favorites").document(user.getId())
+                .set(user.getFavorites().setUserId(user.getId()).setId(UUID.randomUUID().toString()))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: ");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+
+                    }
+                });
+
+        db.collection("follow").document(user.getId())
+                .set(user.getFollows().setUserId(user.getId()).setId(UUID.randomUUID().toString()))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: ");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
     }
 
     public void follow(Following following, String followingId, String name) {
@@ -406,6 +438,22 @@ public class DBManager {
                     }
                 });
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

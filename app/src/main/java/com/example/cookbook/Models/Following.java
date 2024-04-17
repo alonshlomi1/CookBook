@@ -49,13 +49,16 @@ public class Following {
         return this;
     }
 
-    public void addFollowing(String  following_id, String name) {
+    public Following addFollowing(String  following_id, String name) {
         // Add the comment to the comments list
         following.put(following_id, name);
+        return this;
     }
-    public void addFollower(String  follower_id, String name) {
+    public Following addFollower(String  follower_id, String name) {
         // Add the comment to the comments list
-        followers.put(follower_id, name);    }
+        followers.put(follower_id, name);
+        return this;
+    }
 
     @Override
     public String toString() {
