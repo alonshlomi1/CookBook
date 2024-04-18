@@ -34,7 +34,7 @@ public class FollowsDB {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "User followed successfully");
-                        updateFollowing(followingId, following.getUserId(), name);
+                        updateFollowing(followingId, following.getUserId(), SingleManager.getInstance().getUserManager().getUser().getFirstName() + " "+SingleManager.getInstance().getUserManager().getUser().getLastName() );
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -83,7 +83,74 @@ public class FollowsDB {
                     }
                 });
     }
+    public void unfollow(String followingId, String followerId) {
+        db.collection("follow")
+                .whereEqualTo("userId", followingId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Following following = document.toObject(Following.class);
+                                following.removeFollower(followerId);
+                                SingleManager.getInstance().getUserManager().getUser().setFollows(following);
 
+                                db.collection("follow").document(followingId)
+                                        .set(following)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                updateUnfollow(followingId, followerId);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.e(TAG, "Error unfollowing user", e);
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+    public void updateUnfollow(String followingId, String followerId) {
+        db.collection("follow")
+                .whereEqualTo("userId", followerId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Following following = document.toObject(Following.class);
+                                following.removeFollowing(followingId);
+
+                                db.collection("follow").document(followerId)
+                                        .set(following)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "User unfollowed successfully");
+                                                SingleManager.getInstance().toast("User unfollowed successfully");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.e(TAG, "Error unfollowing user", e);
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
     public void getFollowing(String user_Id, OnFollowsListener listener){
         db.collection("follow")
                 .whereEqualTo("userId", user_Id)

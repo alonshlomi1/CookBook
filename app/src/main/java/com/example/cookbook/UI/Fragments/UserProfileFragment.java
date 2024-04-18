@@ -1,6 +1,7 @@
 package com.example.cookbook.UI.Fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +53,7 @@ public class UserProfileFragment extends Fragment {
     private MaterialTextView profile_TV_name, profile_TV_info;
     private RecyclerView home_LST_recipe, home_LST_following, home_LST_follower;
     private MaterialButton profile_BTN_setting, profile_BTN_setting_image, profile_BTN_setting_info
-    , profile_BTN_setting_logout, profile_BTN_following, profile_BTN_followers;
+    , profile_BTN_setting_logout, profile_BTN_following, profile_BTN_followers, profile_BTN_follow;
     private LinearLayout profile_LLO_seting;
     private Context applicationContext;
     private ArrayList<Recipe> recipeList;
@@ -111,15 +113,18 @@ public class UserProfileFragment extends Fragment {
         profile_LLO_seting.setVisibility(View.GONE);
         home_LST_following.setVisibility(View.GONE);
         home_LST_follower.setVisibility(View.GONE);
+        profile_BTN_follow.setVisibility(View.GONE);
         profile_SWIPE_refresh.setOnRefreshListener(() -> refreshCallback.refresh(profile_SWIPE_refresh));
 
         setListenerProfile_BTN_setting();
         setListenerProfile_BTN_following();
         setListenerProfile_BTN_followers();
+        setListenerProfile_BTN_follow();
+        setListenerProfile_BTN_setting_info();
         profile_BTN_setting_image.setOnClickListener(v -> openGalleryOrCamera());
         profile_BTN_setting_logout.setOnClickListener(v -> setListenerProfile_BTN_setting_logout());
-        profile_BTN_following.setText(profile_BTN_following.getText() + "\n" + user.getFollows().getFollowing().size());
-        profile_BTN_followers.setText(profile_BTN_followers.getText() + "\n" + user.getFollows().getFollowers().size());
+        profile_BTN_following.setText("Following\n" + user.getFollows().getFollowing().size());
+        profile_BTN_followers.setText("Followers\n" + user.getFollows().getFollowers().size());
 
     }
     private void setListener(){
@@ -134,6 +139,7 @@ public class UserProfileFragment extends Fragment {
                     profile_LLO_seting.setVisibility(View.VISIBLE);
                     home_LST_following.setVisibility(View.GONE);
                     home_LST_follower.setVisibility(View.GONE);
+                    profile_BTN_follow.setVisibility(View.GONE);
                     expandedFollowing = false;
                     expandedFollowers = false;
                 } else {
@@ -150,6 +156,7 @@ public class UserProfileFragment extends Fragment {
                 expandedFollowing =! expandedFollowing;
                 if (expandedFollowing) {
                     home_LST_following.setVisibility(View.VISIBLE);
+                    profile_BTN_follow.setVisibility(View.VISIBLE);
                     profile_LLO_seting.setVisibility(View.GONE);
                     home_LST_follower.setVisibility(View.GONE);
                     expandedFollowers = false;
@@ -157,7 +164,7 @@ public class UserProfileFragment extends Fragment {
 
                 } else {
                     home_LST_following.setVisibility(View.GONE);
-
+                    profile_BTN_follow.setVisibility(View.GONE);
                 }
             }
         });
@@ -171,6 +178,7 @@ public class UserProfileFragment extends Fragment {
                     home_LST_follower.setVisibility(View.VISIBLE);
                     home_LST_following.setVisibility(View.GONE);
                     profile_LLO_seting.setVisibility(View.GONE);
+                    profile_BTN_follow.setVisibility(View.GONE);
                     expandedFollowing = false;
                     expandedSetting = false;
 
@@ -194,6 +202,22 @@ public class UserProfileFragment extends Fragment {
                         }
                     });
         }
+    }
+    private void setListenerProfile_BTN_follow(){
+        profile_BTN_follow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopup();
+            }
+        });
+    }
+    private void setListenerProfile_BTN_setting_info(){
+        profile_BTN_setting_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showInfoPopup();
+            }
+        });
     }
     private void logout(){
         Intent intent = new Intent(applicationContext, LoginActivity.class);
@@ -231,6 +255,7 @@ public class UserProfileFragment extends Fragment {
         profile_BTN_following = view.findViewById(R.id.profile_BTN_following);
         profile_BTN_followers = view.findViewById(R.id.profile_BTN_followers);
         profile_SWIPE_refresh = view.findViewById(R.id.profile_SWIPE_refresh);
+        profile_BTN_follow = view.findViewById(R.id.profile_BTN_follow);
 
     }
     public void updateUser(User user){
@@ -262,4 +287,93 @@ public class UserProfileFragment extends Fragment {
             SingleManager.getInstance().getDBManager().saveImage(user.getId(), SingleManager.getInstance().compresImage(selectedImageUri));
         }
     }
+
+    private void showPopup() {
+        // Inflate the layout for the popup window
+        View popupView = getLayoutInflater().inflate(R.layout.popup_follow_layout, null);
+
+        // Create a Dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setView(popupView);
+        AlertDialog dialog = builder.create();
+
+        // Find views in the popup layout
+        EditText editText = popupView.findViewById(R.id.editText);
+        MaterialButton submitButton = popupView.findViewById(R.id.button);
+
+        // Handle button click
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle submit button click
+                String inputText = editText.getText().toString();
+                SingleManager.getInstance().getDBManager().followWithEmail(inputText);
+                dialog.dismiss();
+            }
+        });
+
+        // Show the dialog
+        dialog.show();
+    }
+
+    private void showInfoPopup() {
+        // Inflate the layout for the popup window
+        View popupView = getLayoutInflater().inflate(R.layout.popup_edit_info, null);
+
+        // Create a Dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setView(popupView);
+        AlertDialog dialog = builder.create();
+
+        // Find views in the popup layout
+        EditText edit_ET_first = popupView.findViewById(R.id.edit_ET_first);
+        EditText edit_ET_last = popupView.findViewById(R.id.edit_ET_last);
+        EditText edit_ET_bio = popupView.findViewById(R.id.edit_ET_bio);
+        edit_ET_first.setText(user.getFirstName());
+        edit_ET_last.setText(user.getLastName());
+        edit_ET_bio.setText(user.getBio());
+        MaterialButton save_button = popupView.findViewById(R.id.save_button);
+
+        // Handle button click
+        save_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(validInfo()){
+                    User user = SingleManager.getInstance().getUserManager().getUser();
+                    user.setFirstName(edit_ET_first.getText().toString());
+                    user.setLastName(edit_ET_last.getText().toString());
+                    user.setBio(edit_ET_bio.getText().toString());
+                    SingleManager.getInstance().getUserManager().setUser(user);
+                    SingleManager.getInstance().getDBManager().saveUser(user, (success, user1) -> {
+                        if(success){
+                            SingleManager.getInstance().toast("User info Saved");
+                        }
+                    });
+                }
+                dialog.dismiss();
+            }
+
+            private boolean validInfo() {
+                if(edit_ET_first.getText().length()< 2 || edit_ET_first.getText().length() > 20){
+                    SingleManager.getInstance().toast("First name has to be between 2-20");
+                    return false;
+                }
+                if(edit_ET_last.getText().length()< 2 || edit_ET_last.getText().length() > 20){
+                    SingleManager.getInstance().toast("Last name has to be between 2-20");
+                    return false;
+                }
+                if(edit_ET_bio.getText().length() > 50){
+                    SingleManager.getInstance().toast("Bio has to be between 0-50");
+                    return false;
+                }
+                return true;
+            }
+        });
+
+        // Show the dialog
+        dialog.show();
+    }
+
+
+
 }

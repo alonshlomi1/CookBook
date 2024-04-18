@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
         Log.d("REFRESH-------", "Refresh");
         swipeRefreshLayout = home_SWIPE_refresh;
         recipeLogic = new RecipeLogic(this, getApplicationContext());
+        userLogic = new UserLogic(this, this, SingleManager.getInstance().getUserManager().getUser());
 
     }
     public void onRecipeListLoaded(ArrayList<Recipe> recipes) {

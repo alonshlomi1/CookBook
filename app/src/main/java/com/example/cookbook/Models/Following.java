@@ -59,6 +59,16 @@ public class Following {
         followers.put(follower_id, name);
         return this;
     }
+    public Following removeFollower(String  follower_id) {
+        // Add the comment to the comments list
+        followers.remove(follower_id);
+        return this;
+    }
+    public Following removeFollowing(String  follower_id) {
+        // Add the comment to the comments list
+        following.remove(follower_id);
+        return this;
+    }
 
     @Override
     public String toString() {

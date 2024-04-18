@@ -90,7 +90,7 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
 
         public void bind(String following_id, String following_name) {
             following_TV_name.setText(following_name);
-            following_BTN_unfollow.setOnClickListener(v -> SingleManager.getInstance().toast("unfollow"));
+            following_BTN_unfollow.setOnClickListener(v -> SingleManager.getInstance().getDBManager().unfollow(following_id));
             this.following_id = following_id;
             this.following_name = following_name;
         }

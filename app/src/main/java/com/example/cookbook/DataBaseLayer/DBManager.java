@@ -83,14 +83,39 @@ public class DBManager {
         recipeDB.updateRecipe(recipe);
     }
 
+    public void saveUser(User user, OnUserSavedListener listener) {
+        userDB.saveUser(user, listener);
+    }
     public void saveNewUser(User user, OnUserSavedListener listener) {
         userDB.saveNewUser(user, listener);
     }
 
     public void follow(Following following, String followingId, String name) {
         followsDB.follow(following, followingId, name);
-    }
+        Log.d("Email@@@", name);
 
+    }
+    public void followWithEmail(String email) {
+        Log.d("Email@@", email);
+
+
+        userDB.getUser(new OnUserLoadedListener() {
+            @Override
+            public void onUserLoaded(User user) {
+                Log.d("Email@@", user.toString());
+
+                follow(SingleManager.getInstance().getUserManager().getUser().getFollows(), user.getId(), user.getFirstName() +" "+ user.getLastName());
+            }
+
+            @Override
+            public void onUserLoadFailed(Exception e) {
+                SingleManager.getInstance().toast("User was not found");
+            }
+        }, email);
+    }
+    public void unfollow(String followerId) {
+        followsDB.unfollow(followerId, SingleManager.getInstance().getUserManager().getUser().getId());
+    }
     public void getFollowing(String user_Id, OnFollowsListener listener){
         followsDB.getFollowing(user_Id, listener);
     }

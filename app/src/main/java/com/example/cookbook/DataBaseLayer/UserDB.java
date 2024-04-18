@@ -53,6 +53,26 @@ public class UserDB {
                 });
     }
 
+    public void saveUser(User user, OnUserSavedListener listener){
+        db.collection("Users").document(user.getId())
+                .set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: ");
+                        // If user document added successfully, invoke the listener with success
+                        listener.onUserSaved(true, user);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                        // If adding user document failed, invoke the listener with failure
+                        listener.onUserSaved(false, null);
+                    }
+                });
+    }
 
     public void saveNewUser(User user, OnUserSavedListener listener) {
         // Add a new document with a generated ID

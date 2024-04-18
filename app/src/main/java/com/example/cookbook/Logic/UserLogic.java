@@ -115,6 +115,7 @@ public class UserLogic {
                 dbManager.getRecipesURI(new OnRecipesURLLoadedListener() {
                     @Override
                     public void onRecipesURLLoaded(URL url) {
+
                         recipe.setPhotoUrl(url.toString());
                     }
 
