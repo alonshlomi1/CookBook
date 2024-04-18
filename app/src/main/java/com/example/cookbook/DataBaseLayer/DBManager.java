@@ -39,404 +39,69 @@ import java.util.UUID;
 
 public class DBManager {
     private FirebaseFirestore db;
+    private UserDB userDB;
+    private RecipeDB recipeDB;
+    private ImageDB imageDB;
+    private FollowsDB followsDB;
+    private FavoritesDB favoritesDB;
 
     public DBManager(){
+
         db = SingleManager.getInstance().getDb();
+        userDB = new UserDB(db);
+        recipeDB = new RecipeDB(db);
+        imageDB = new ImageDB(db);
+        followsDB = new FollowsDB(db);
+        favoritesDB = new FavoritesDB(db);
     }
 
     public void addRecipe(Recipe recipe,byte[] uri, RecipeResetListener resetListener){
-        db.collection("recipes").document(recipe.getId()).set(recipe)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        saveImage(recipe.getId(), uri);
-                        SingleManager.getInstance().toast("Recipe Uploaded!");
-                        resetListener.resetRecipe();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        SingleManager.getInstance().toast("Recipe Upload Failed!");
-                    }
-                });
+        recipeDB.addRecipe(recipe,uri,resetListener);
     }
 
-    public void saveImage(String id, byte[] uri){
-        StorageReference storageRef = SingleManager.getInstance().getStorage().getReference().child("images/"+id+".jpg");// new_recipe.getId() +".jpg");
-        UploadTask uploadTask = storageRef.putBytes(uri);
-
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-            }
-        });
-    }
     public void getRecipes(OnRecipesLoadedListener listener){
-        ArrayList<Recipe> recipeList = new ArrayList<>();
-
-        db.collection("recipes")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Recipe recipe = document.toObject(Recipe.class);
-                                // Assuming your Firestore document contains fields for ingredients and instructions
-                                ArrayList<Map<String, Object>> ingredientsData = (ArrayList<Map<String, Object>>) document.get("ingredients");
-                                ArrayList<String> instructions = (ArrayList<String>) document.get("instructions");
-                                // Parse ingredientsData and instructionsData into appropriate objects
-                                ArrayList<Ingredient> ingredients = parseIngredients(ingredientsData, recipe.getId());
-                                // Set parsed ingredients and instructions to the recipe
-                                recipe.setIngredients(ingredients);
-                                recipe.setInstructions(instructions);
-                                recipeList.add(recipe);
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                            }
-                            // Invoke the listener with the fetched recipes
-                            listener.onRecipesLoaded(recipeList);
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                            // Invoke the listener with the error
-                            listener.onRecipesLoadFailed(task.getException());
-                        }
-                    }
-                });
+        recipeDB.getRecipes(listener);
     }
 
     public void getFavoriteRecipes(OnRecipesLoadedListener listener){
-
-        ArrayList<String > favoritesRecipeIDList = SingleManager.getInstance().getUserManager().getUser().getFavorites().getFavoritesId();
-        ArrayList<Recipe> recipeList = new ArrayList<>();
-        Log.d("FAVORI##LIST", favoritesRecipeIDList.toString());
-
-        if(favoritesRecipeIDList.size() > 0){
-            db.collection("recipes")
-                    .whereIn(FieldPath.documentId(), favoritesRecipeIDList)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Recipe recipe = document.toObject(Recipe.class);
-                                    // Assuming your Firestore document contains fields for ingredients and instructions
-                                    ArrayList<Map<String, Object>> ingredientsData = (ArrayList<Map<String, Object>>) document.get("ingredients");
-                                    ArrayList<String> instructions = (ArrayList<String>) document.get("instructions");
-                                    // Parse ingredientsData and instructionsData into appropriate objects
-                                    ArrayList<Ingredient> ingredients = parseIngredients(ingredientsData, recipe.getId());
-                                    // Set parsed ingredients and instructions to the recipe
-                                    recipe.setIngredients(ingredients);
-                                    recipe.setInstructions(instructions);
-                                    recipeList.add(recipe);
-
-                                }
-                                // Invoke the listener with the fetched recipes
-
-                                listener.onRecipesLoaded(recipeList);
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
-                                // Invoke the listener with the error
-                                listener.onRecipesLoadFailed(task.getException());
-                            }
-                        }
-                    });
-        }
-        listener.onRecipesLoaded(recipeList);
-
-
+        recipeDB.getFavoriteRecipes(listener);
     }
     public void getUser(OnUserLoadedListener listener, String email){
-        ArrayList<Recipe> recipeList = new ArrayList<>();
-
-        db.collection("Users")
-                .whereEqualTo("email", email)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                User user = document.toObject(User.class);
-                                Log.d("@@@@@@@@", user.getEmail());
-                                // Pass the fetched user object to the listener
-                                listener.onUserLoaded(user);
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                            // Invoke the listener with the error
-                            listener.onUserLoadFailed(task.getException());
-                        }
-                    }
-                });
+        userDB.getUser(listener,email);
     }
     public void getRecipesURI(OnRecipesURLLoadedListener listener, String recipeID){
-        StorageReference storageRef = SingleManager.getInstance().getStorage().getReference().child("images/"+ recipeID +".jpg");
-        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                // Got the download URL for 'users/me/profile.png'
-                try {
-                    listener.onRecipesURLLoaded(new URL(uri.toString()));
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.d("URI-@@@@@@@@@", exception.toString());
-            }
-        });
+        imageDB.getRecipesURI(listener, recipeID);
+    }
+    public void saveImage(String id, byte[] uri) {
+        imageDB.saveImage(id,uri);
     }
     public void getUserRecipes(OnRecipesLoadedListener listener, String id){
-        ArrayList<Recipe> recipeList = new ArrayList<>();
-
-        db.collection("recipes")
-                .whereEqualTo("authorId", id)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Recipe recipe = document.toObject(Recipe.class);
-                                // Assuming your Firestore document contains fields for ingredients and instructions
-                                ArrayList<Map<String, Object>> ingredientsData = (ArrayList<Map<String, Object>>) document.get("ingredients");
-                                ArrayList<String> instructions = (ArrayList<String>) document.get("instructions");
-                                // Parse ingredientsData and instructionsData into appropriate objects
-                                ArrayList<Ingredient> ingredients = parseIngredients(ingredientsData, recipe.getId());
-                                // Set parsed ingredients and instructions to the recipe
-                                recipe.setIngredients(ingredients);
-                                recipe.setInstructions(instructions);
-                                recipeList.add(recipe);
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                            }
-                            // Invoke the listener with the fetched recipes
-                            listener.onRecipesLoaded(recipeList);
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                            // Invoke the listener with the error
-                            listener.onRecipesLoadFailed(task.getException());
-                        }
-                    }
-                });
-    }
-
-    // Method to parse ingredients data into Ingredient objects
-    private ArrayList<Ingredient> parseIngredients(ArrayList<Map<String, Object>> ingredientsData, String id) {
-        ArrayList<Ingredient> ingredients = new ArrayList<>();
-        for (Map<String, Object> ingredientData : ingredientsData) {
-            // Extract the name, amount, and recipeId from the map
-            String name = (String) ingredientData.get("name");
-            double amount = (double) ingredientData.get("amount");
-            // Create and add the Ingredient object to the list
-            ingredients.add(new Ingredient().setName(name).setAmount(amount).setRecipeId(id));
-        }
-        return ingredients;
+        recipeDB.getUserRecipes(listener,id);
     }
 
     public void updateRecipe(Recipe recipe) {
-        db.collection("recipes").document(recipe.getId())
-                // Update the fields of the document with the new data from the recipe object
-                .set(recipe)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // Recipe updated successfully
-                        Log.d(TAG, "Recipe updated successfully");
-                        SingleManager.getInstance().toast("Comment Submitted!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Failed to update recipe
-                        Log.e(TAG, "Error updating recipe", e);
-                    }
-                });
+        recipeDB.updateRecipe(recipe);
     }
 
     public void saveNewUser(User user, OnUserSavedListener listener) {
-        // Add a new document with a generated ID
-        db.collection("Users").document(user.getId())
-                .set(user)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: ");
-                        // If user document added successfully, invoke the listener with success
-                        listener.onUserSaved(true, user);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                        // If adding user document failed, invoke the listener with failure
-                        listener.onUserSaved(false, null);
-                    }
-                });
-
-        db.collection("favorites").document(user.getId())
-                .set(user.getFavorites().setUserId(user.getId()).setId(UUID.randomUUID().toString()))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: ");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-
-                    }
-                });
-
-        db.collection("follow").document(user.getId())
-                .set(user.getFollows().setUserId(user.getId()).setId(UUID.randomUUID().toString()))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: ");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+        userDB.saveNewUser(user, listener);
     }
 
     public void follow(Following following, String followingId, String name) {
-        following.addFollowing(followingId, name);
-        db.collection("follow").document(following.getUserId())
-                .set(following)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "User followed successfully");
-                        updateFollowing(followingId, following.getUserId(), name);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error following user", e);
-                    }
-                });
-    }
-
-    public void updateFollowing(String followingId, String followerId, String follower_name){
-        db.collection("follow")
-                .whereEqualTo("userId", followingId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Following following = document.toObject(Following.class);
-                                Log.d("@@@@@@@@", following.getUserId());
-                                following.addFollower(followerId, follower_name);
-
-
-                                db.collection("follow").document(followingId)
-                                        .set(following)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.d(TAG, "User following successfully");
-                                                SingleManager.getInstance().toast("User followed successfully");
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.e(TAG, "Error following user", e);
-                                            }
-                                        });
-
-
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                            // Invoke the listener with the error
-                        }
-                    }
-                });
+        followsDB.follow(following, followingId, name);
     }
 
     public void getFollowing(String user_Id, OnFollowsListener listener){
-        db.collection("follow")
-                .whereEqualTo("userId", user_Id)
-                .limit(1) // Limit the query to retrieve only one document
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        //Following follows = new Following();
-                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                            QueryDocumentSnapshot document = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0); // Retrieve the first document
-                            Following follows = document.toObject(Following.class);
-                            listener.onFollowReady(true, follows);
-
-                        } else {
-                            listener.onFollowReady(false, null);
-                        }
-                    }
-                });
+        followsDB.getFollowing(user_Id, listener);
     }
 
     public void getFavorites(String user_Id, onFavoritesListener listener){
-        db.collection("favorites")
-                .whereEqualTo("userId", user_Id)
-                .limit(1) // Limit the query to retrieve only one document
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        //Following follows = new Following();
-                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                            QueryDocumentSnapshot document = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0); // Retrieve the first document
-                            Favorites favorites = document.toObject(Favorites.class);
-                            Log.d("FOLLOW@@", favorites.toString());
-                            listener.onFavoritesReady(true, favorites);
-
-                        } else {
-                            Log.d("FOLLOW@@", task.getResult().getDocuments().toString());
-                            listener.onFavoritesReady(false, null);
-                        }
-                    }
-                });
+        favoritesDB.getFavorites(user_Id, listener);
     }
 
 
     public void saveFavorites() {
-        Favorites favorites = SingleManager.getInstance().getUserManager().getUser().getFavorites();
-        db.collection("favorites").document(favorites.getUserId())
-                .set(favorites)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        SingleManager.getInstance().toast("Favorite Saved");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error Save UnFavorite document", e);
-                        // If adding user document failed, invoke the listener with failure
-                    }
-                });
+        favoritesDB.saveFavorites();
     }
 
 
