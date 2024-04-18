@@ -75,12 +75,14 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/profile_BTN_setting"
-                    android:layout_width="0dp"
+                    android:layout_width="65dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginHorizontal="2dp"
                     app:icon="@drawable/settings_icon"
-                    android:backgroundTint="@color/fui_transparent"/>
+                    android:background="@drawable/small_button_background"
+                    app:backgroundTint="@null"
+
+                    />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/profile_BTN_following"
@@ -89,7 +91,8 @@
                     android:layout_gravity="end"
                     android:layout_marginHorizontal="2dp"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/fui_transparent"
+                    android:background="@drawable/small_button_background"
+                    app:backgroundTint="@null"
                     android:text="Following" />
 
                 <com.google.android.material.button.MaterialButton
@@ -100,30 +103,36 @@
                     android:layout_marginHorizontal="2dp"
                     android:layout_gravity="end"
                     android:text="Followers"
-                    android:backgroundTint="@color/fui_transparent"/>
+                    android:background="@drawable/small_button_background"
+                    app:backgroundTint="@null"
+                    />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/profile_LLO_seting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@drawable/segment_border"
+                android:padding="4dp"
+                android:layout_margin="4dp"
+                >
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/profile_BTN_setting_image"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginHorizontal="2dp"
-                    android:text="change pic"
-                    app:backgroundTint="@null"
+                    android:layout_weight="2"
                     android:background="@drawable/button_background"
-                    />
+                    android:text="change pic"
+                    app:backgroundTint="@null" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/profile_BTN_setting_info"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:layout_marginHorizontal="2dp"
                     android:text="edit info"
                     app:backgroundTint="@null"
@@ -132,43 +141,77 @@
                     android:id="@+id/profile_BTN_setting_logout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:layout_marginHorizontal="2dp"
                     android:text="logout"
                     app:backgroundTint="@null"
                     android:background="@drawable/button_background"/>
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/following_LLO_following"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/segment_border"
+                android:padding="4dp"
+                android:layout_margin="4dp"
+                >
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/following_TV_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="following"
+                    android:layout_gravity="center"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="4dp"
+                    android:id="@+id/home_LST_following"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    tools:listitem="@layout/horizontal_following_item"
+                    android:layout_gravity="center"
+                    android:padding="2dp"
+                    />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/profile_BTN_follow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:backgroundTint="@null"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Follow User"
+                    android:background="@drawable/button_background"
+                    />
+            </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/profile_BTN_follow"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/following_LLO_followers"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:backgroundTint="@null"
-                android:layout_gravity="end"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="1dp"
-                android:text="Follow User"
-                android:background="@drawable/button_background"
-                />
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginTop="4dp"
-                android:id="@+id/home_LST_following"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                tools:listitem="@layout/horizontal_following_item"
-                android:layout_gravity="end"
-                android:layout_marginEnd="40dp"
-                />
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginTop="4dp"
-                android:id="@+id/home_LST_follower"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                tools:listitem="@layout/horizontal_follower_item"
-                android:layout_gravity="end"
-                />
+                android:orientation="vertical"
+                android:background="@drawable/segment_border"
+                android:padding="4dp"
+                android:layout_margin="4dp">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/followers_TV_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="followers"
+                    android:layout_gravity="center"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="4dp"
+                    android:id="@+id/home_LST_follower"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    tools:listitem="@layout/horizontal_follower_item"
+                    android:layout_gravity="center"
+                    />
+            </LinearLayout>
+
         </LinearLayout>
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/profile_SWIPE_refresh"

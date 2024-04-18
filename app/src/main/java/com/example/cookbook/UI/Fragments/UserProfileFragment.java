@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -50,11 +51,11 @@ import java.util.ArrayList;
 public class UserProfileFragment extends Fragment {
 
     private ShapeableImageView profile_SIV_image;
-    private MaterialTextView profile_TV_name, profile_TV_info;
+    private MaterialTextView profile_TV_name, profile_TV_info, following_TV_count, followers_TV_count;
     private RecyclerView home_LST_recipe, home_LST_following, home_LST_follower;
     private MaterialButton profile_BTN_setting, profile_BTN_setting_image, profile_BTN_setting_info
     , profile_BTN_setting_logout, profile_BTN_following, profile_BTN_followers, profile_BTN_follow;
-    private LinearLayout profile_LLO_seting;
+    private LinearLayout profile_LLO_seting, following_LLO_following, following_LLO_followers;
     private Context applicationContext;
     private ArrayList<Recipe> recipeList;
     private SwipeRefreshLayout profile_SWIPE_refresh;
@@ -111,9 +112,8 @@ public class UserProfileFragment extends Fragment {
         home_LST_follower.setLayoutManager(linearLayoutManager2);
         home_LST_follower.setAdapter(followersAdapter);
         profile_LLO_seting.setVisibility(View.GONE);
-        home_LST_following.setVisibility(View.GONE);
-        home_LST_follower.setVisibility(View.GONE);
-        profile_BTN_follow.setVisibility(View.GONE);
+        following_LLO_followers.setVisibility(View.GONE);
+        following_LLO_following.setVisibility(View.GONE);
         profile_SWIPE_refresh.setOnRefreshListener(() -> refreshCallback.refresh(profile_SWIPE_refresh));
 
         setListenerProfile_BTN_setting();
@@ -123,8 +123,8 @@ public class UserProfileFragment extends Fragment {
         setListenerProfile_BTN_setting_info();
         profile_BTN_setting_image.setOnClickListener(v -> openGalleryOrCamera());
         profile_BTN_setting_logout.setOnClickListener(v -> setListenerProfile_BTN_setting_logout());
-        profile_BTN_following.setText("Following\n" + user.getFollows().getFollowing().size());
-        profile_BTN_followers.setText("Followers\n" + user.getFollows().getFollowers().size());
+        following_TV_count.setText("Following:   " + user.getFollows().getFollowing().size());
+        followers_TV_count.setText("Followers:   " + user.getFollows().getFollowers().size());
 
     }
     private void setListener(){
@@ -137,9 +137,9 @@ public class UserProfileFragment extends Fragment {
                 expandedSetting =! expandedSetting;
                 if (expandedSetting) {
                     profile_LLO_seting.setVisibility(View.VISIBLE);
-                    home_LST_following.setVisibility(View.GONE);
-                    home_LST_follower.setVisibility(View.GONE);
-                    profile_BTN_follow.setVisibility(View.GONE);
+                    following_LLO_following.setVisibility(View.GONE);
+                    following_LLO_followers.setVisibility(View.GONE);
+
                     expandedFollowing = false;
                     expandedFollowers = false;
                 } else {
@@ -155,16 +155,16 @@ public class UserProfileFragment extends Fragment {
             public void onClick(View v) {
                 expandedFollowing =! expandedFollowing;
                 if (expandedFollowing) {
-                    home_LST_following.setVisibility(View.VISIBLE);
-                    profile_BTN_follow.setVisibility(View.VISIBLE);
+
+                    following_LLO_following.setVisibility(View.VISIBLE);
                     profile_LLO_seting.setVisibility(View.GONE);
-                    home_LST_follower.setVisibility(View.GONE);
+                    following_LLO_followers.setVisibility(View.GONE);
                     expandedFollowers = false;
                     expandedSetting = false;
 
                 } else {
-                    home_LST_following.setVisibility(View.GONE);
-                    profile_BTN_follow.setVisibility(View.GONE);
+
+                    following_LLO_following.setVisibility(View.GONE);
                 }
             }
         });
@@ -175,15 +175,15 @@ public class UserProfileFragment extends Fragment {
             public void onClick(View v) {
                 expandedFollowers =! expandedFollowers;
                 if (expandedFollowers) {
-                    home_LST_follower.setVisibility(View.VISIBLE);
-                    home_LST_following.setVisibility(View.GONE);
+                    following_LLO_followers.setVisibility(View.VISIBLE);
+                    following_LLO_following.setVisibility(View.GONE);
                     profile_LLO_seting.setVisibility(View.GONE);
-                    profile_BTN_follow.setVisibility(View.GONE);
+
                     expandedFollowing = false;
                     expandedSetting = false;
 
                 } else {
-                    home_LST_follower.setVisibility(View.GONE);
+                    following_LLO_followers.setVisibility(View.GONE);
 
                 }
             }
@@ -256,7 +256,10 @@ public class UserProfileFragment extends Fragment {
         profile_BTN_followers = view.findViewById(R.id.profile_BTN_followers);
         profile_SWIPE_refresh = view.findViewById(R.id.profile_SWIPE_refresh);
         profile_BTN_follow = view.findViewById(R.id.profile_BTN_follow);
-
+        following_TV_count = view.findViewById(R.id.following_TV_count);
+        followers_TV_count = view.findViewById(R.id.followers_TV_count);
+        following_LLO_following = view.findViewById(R.id.following_LLO_following);
+        following_LLO_followers = view.findViewById(R.id.following_LLO_followers);
     }
     public void updateUser(User user){
         this.user = user;
@@ -297,6 +300,8 @@ public class UserProfileFragment extends Fragment {
         builder.setView(popupView);
         AlertDialog dialog = builder.create();
 
+        Drawable drawable = getResources().getDrawable(R.drawable.segment_border);
+        dialog.getWindow().setBackgroundDrawable(drawable);
         // Find views in the popup layout
         EditText editText = popupView.findViewById(R.id.editText);
         MaterialButton submitButton = popupView.findViewById(R.id.button);
@@ -325,6 +330,8 @@ public class UserProfileFragment extends Fragment {
         builder.setView(popupView);
         AlertDialog dialog = builder.create();
 
+        Drawable drawable = getResources().getDrawable(R.drawable.segment_border);
+        dialog.getWindow().setBackgroundDrawable(drawable);
         // Find views in the popup layout
         EditText edit_ET_first = popupView.findViewById(R.id.edit_ET_first);
         EditText edit_ET_last = popupView.findViewById(R.id.edit_ET_last);

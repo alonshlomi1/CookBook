@@ -34,6 +34,7 @@ import com.google.firebase.storage.UploadTask;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -102,9 +103,15 @@ public class DBManager {
         userDB.getUser(new OnUserLoadedListener() {
             @Override
             public void onUserLoaded(User user) {
-                Log.d("Email@@", user.toString());
+                HashMap<String , String> list = SingleManager.getInstance().getUserManager().getUser().getFollows().getFollowing();
+                if(!list.containsKey(user.getId())){
+                    Log.d("Email@@", user.toString());
+                    follow(SingleManager.getInstance().getUserManager().getUser().getFollows(), user.getId(), user.getFirstName() +" "+ user.getLastName());
+                }
+                else{
+                    SingleManager.getInstance().toast("Already Follow that User");
+                }
 
-                follow(SingleManager.getInstance().getUserManager().getUser().getFollows(), user.getId(), user.getFirstName() +" "+ user.getLastName());
             }
 
             @Override

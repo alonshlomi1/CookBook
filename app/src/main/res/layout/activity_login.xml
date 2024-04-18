@@ -83,7 +83,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
-                    android:hint="@string/password" />
+                    android:hint="@string/password"
+                    android:inputType="textPassword"/>
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/login_BTN_signin"
                     android:layout_width="wrap_content"
@@ -179,19 +180,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
-                    android:hint="password" />
+                    android:hint="password"
+                    android:inputType="textPassword"/>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/password" />
+                    android:text="@string/password"
+                    />
 
                 <EditText
                     android:id="@+id/login_ET_password_again"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
-                    android:hint="password again" />
+                    android:hint="password again"
+                    android:inputType="textPassword"/>
 
 
                 <com.google.android.material.button.MaterialButton

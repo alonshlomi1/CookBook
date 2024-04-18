@@ -243,11 +243,7 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
     public void onUserLoaded(User user) {
         SingleManager.getInstance().getUserManager().setUser(user);
         SingleManager.getInstance().getDBManager().getFollowing(SingleManager.getInstance().getUserManager().getUser().getId(), this);
-//
-//        Log.d("USER1", SingleManager.getInstance().getUserManager().getUser().toString());
-//        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//        startActivity(intent);
-//        finish();
+
     }
 
     @Override
@@ -259,7 +255,6 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
     public void onUserSaved(boolean success, User user) {
         if(success){
             SingleManager.getInstance().getUserManager().setUser(user);
-            Log.d("USER1", SingleManager.getInstance().getUserManager().getUser().toString());
             SingleManager.getInstance().getDBManager().getFollowing(SingleManager.getInstance().getUserManager().getUser().getId(), this);
         }
         else {
@@ -275,7 +270,7 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
 
         }
         else {
-            Log.d("FOLLOW@@@", null);
+            Log.d("FOLLOW", null);
         }
     }
 
@@ -288,7 +283,7 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
             finish();
         }
         else {
-            Log.d("Favorites@@@", null);
+            Log.d("Favorites", null);
         }
     }
 }
