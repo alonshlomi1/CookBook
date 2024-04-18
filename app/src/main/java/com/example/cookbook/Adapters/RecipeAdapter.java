@@ -69,6 +69,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         holder.recipeCommentsTitle.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.recipeLLOSeg.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.recipeLSTComments.setVisibility(holder.commentsVisible ? View.VISIBLE : View.GONE);
+        holder.recipe_comments_SIV_icon.setImageResource(holder.commentsVisible? R.drawable.minus_icon: R.drawable.plus_icon);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

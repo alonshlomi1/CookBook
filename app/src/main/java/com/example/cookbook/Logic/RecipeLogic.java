@@ -116,26 +116,9 @@ public class RecipeLogic {
             dbManager.addRecipe(recipe, SingleManager.getInstance().compresImage(uri), resetListener);
             return true;
         }
-
         return false;
 
     }
-//    public byte[] compresImage(Uri uri){
-//        Bitmap bmp = null;
-//        try {
-//            bmp = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//
-//        // here we can choose quality factor
-//        // in third parameter(ex. here it is 25)
-//        bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
-//
-//        byte[] fileInBytes = baos.toByteArray();
-//        return fileInBytes;
-//    }
 
     private boolean validateRecipe(Recipe recipe){
         if(recipe.getTitle().length() < 3 || recipe.getTitle().length() > 20){
@@ -153,10 +136,6 @@ public class RecipeLogic {
             Log.d("Recipe Instructions Error", "min 1 max 100");
             return false;
         }
-
-
-
-
         return true;
     }
 

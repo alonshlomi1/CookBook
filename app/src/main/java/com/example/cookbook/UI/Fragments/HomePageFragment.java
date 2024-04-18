@@ -27,23 +27,14 @@ public class HomePageFragment extends Fragment {
     private ArrayList<Recipe> favoriteRecipeList;
     private RefreshHomeListener refreshCallback;
 
-
-//    public HomePageFragment() {
-//        // Required empty public constructor
-//    }
-
-
     public HomePageFragment(Context Context, ArrayList<Recipe> recipeList, RefreshHomeListener refreshCallback) {
-        //int limit = Math.min(recipeList.size(), 10);
-        this.recipeList = recipeList;//(ArrayList<Recipe>) recipeList.subList(0, limit);
+        this.recipeList = recipeList;
         applicationContext = Context;
         this.refreshCallback = refreshCallback;
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_page, container, false);
 
         findViews(view);
@@ -57,15 +48,8 @@ public class HomePageFragment extends Fragment {
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         home_LST_recipe.setLayoutManager(linearLayoutManager);
         home_LST_recipe.setAdapter(recipeAdapter);
-        //highscoreAdapter.setHighscoreCallback(this.callbackHighScoreClicked);
         home_SWIPE_refresh.setOnRefreshListener(() -> refreshCallback.refresh(home_SWIPE_refresh));
     }
-
-//    private void refresh() {
-//        Log.d("REFRESH-------", "Refresh");
-//        home_SWIPE_refresh.setRefreshing(false);
-//    }
-
 
     private void findViews(View view) {
         home_LST_recipe = view.findViewById(R.id.home_LST_recipe);
@@ -78,7 +62,6 @@ public class HomePageFragment extends Fragment {
 
     public void updateFavoriteRecipeList(ArrayList<Recipe> favoriteRecipeList){
         this.favoriteRecipeList = favoriteRecipeList;
-        Log.d("FAVORI", favoriteRecipeList.toString());
         initViews();
     }
 

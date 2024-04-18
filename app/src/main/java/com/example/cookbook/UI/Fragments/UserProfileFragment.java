@@ -56,22 +56,15 @@ public class UserProfileFragment extends Fragment {
     private Context applicationContext;
     private ArrayList<Recipe> recipeList;
     private SwipeRefreshLayout profile_SWIPE_refresh;
-
+    private boolean expandedSetting = false, expandedFollowing = false,  expandedFollowers = false;
     private User user;
-    private boolean expandedSetting = false;
-    private boolean expandedFollowing = false;
-    private boolean expandedFollowers = false;
     private RefreshHomeListener refreshCallback;
-
-
     public UserProfileFragment(Context Context, User user, ArrayList<Recipe> recipeList, RefreshHomeListener refreshCallback) {
         this.recipeList = recipeList;
         this.applicationContext = Context;
         this.user = user;
         this.refreshCallback = refreshCallback;
-
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -105,25 +98,34 @@ public class UserProfileFragment extends Fragment {
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         home_LST_recipe.setLayoutManager(linearLayoutManager);
         home_LST_recipe.setAdapter(recipeAdapter);
-
-//        Following following = new Following();
         FollowingAdapter followingAdapter = new FollowingAdapter(applicationContext, user.getFollows());
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(applicationContext);
         linearLayoutManager1.setOrientation(RecyclerView.VERTICAL);
         home_LST_following.setLayoutManager(linearLayoutManager1);
         home_LST_following.setAdapter(followingAdapter);
-
         FollowersAdapter followersAdapter = new FollowersAdapter(applicationContext, user.getFollows());
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(applicationContext);
         linearLayoutManager2.setOrientation(RecyclerView.VERTICAL);
         home_LST_follower.setLayoutManager(linearLayoutManager2);
         home_LST_follower.setAdapter(followersAdapter);
-
         profile_LLO_seting.setVisibility(View.GONE);
         home_LST_following.setVisibility(View.GONE);
         home_LST_follower.setVisibility(View.GONE);
         profile_SWIPE_refresh.setOnRefreshListener(() -> refreshCallback.refresh(profile_SWIPE_refresh));
 
+        setListenerProfile_BTN_setting();
+        setListenerProfile_BTN_following();
+        setListenerProfile_BTN_followers();
+        profile_BTN_setting_image.setOnClickListener(v -> openGalleryOrCamera());
+        profile_BTN_setting_logout.setOnClickListener(v -> setListenerProfile_BTN_setting_logout());
+        profile_BTN_following.setText(profile_BTN_following.getText() + "\n" + user.getFollows().getFollowing().size());
+        profile_BTN_followers.setText(profile_BTN_followers.getText() + "\n" + user.getFollows().getFollowers().size());
+
+    }
+    private void setListener(){
+
+    }
+    private void setListenerProfile_BTN_setting(){
         profile_BTN_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,8 +142,8 @@ public class UserProfileFragment extends Fragment {
                 }
             }
         });
-        profile_BTN_following.setText(profile_BTN_following.getText() + "\n" + user.getFollows().getFollowing().size());
-
+    }
+    private void setListenerProfile_BTN_following(){
         profile_BTN_following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,7 +161,8 @@ public class UserProfileFragment extends Fragment {
                 }
             }
         });
-        profile_BTN_followers.setText(profile_BTN_followers.getText() + "\n" + user.getFollows().getFollowers().size());
+    }
+    private void setListenerProfile_BTN_followers(){
         profile_BTN_followers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,8 +180,9 @@ public class UserProfileFragment extends Fragment {
                 }
             }
         });
-        profile_BTN_setting_image.setOnClickListener(v -> openGalleryOrCamera());
-        profile_BTN_setting_logout.setOnClickListener(v ->{
+    }
+    private void setListenerProfile_BTN_setting_logout(){
+        {
             AuthUI.getInstance()
                     .signOut(applicationContext)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -189,7 +193,7 @@ public class UserProfileFragment extends Fragment {
                             //login();
                         }
                     });
-        });
+        }
     }
     private void logout(){
         Intent intent = new Intent(applicationContext, LoginActivity.class);

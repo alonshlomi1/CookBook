@@ -100,6 +100,16 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
         return Pattern.matches(regex, str);
     }
     private void initViews(View view) {
+        textCahngeListenerNew_recipe_ET_name();
+        addListenerNew_recipe_BTN_instructions_add();
+        addListenerNew_recipe_BTN_ingredients_add();
+        setIngredientsViews();
+        setInstructionViews();
+        new_recipe_MBTN_submit.setOnClickListener(v -> submit_recipe());
+        new_recipe_SIV_image.setOnClickListener(v -> openGalleryOrCamera());
+        addSpinnerAdapter();
+    }
+    private void textCahngeListenerNew_recipe_ET_name(){
         new_recipe_ET_name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -111,13 +121,17 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
 
             }
         });
+    }
+    private void addListenerNew_recipe_BTN_instructions_add() {
         new_recipe_BTN_instructions_add.setOnClickListener(v -> {
-            if(new_recipe_ET_instructions.getText().length() > 0){
+            if (new_recipe_ET_instructions.getText().length() > 0) {
                 addInstruction(new_recipe_ET_instructions.getText().toString());
                 setInstructionViews();
                 new_recipe_ET_instructions.setText("");
             }
         });
+    }
+    private void addListenerNew_recipe_BTN_ingredients_add(){
         new_recipe_BTN_ingredients_add.setOnClickListener(v -> {
             int selectedItemPosition = Ingredient_Spinner_Type.getSelectedItemPosition();
             Ingredient.AMOUNT_TYPE selectedAmountType = Ingredient.AMOUNT_TYPE.values()[selectedItemPosition];
@@ -135,20 +149,15 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
                 new_recipe_ET_ingredients_amount.setText("");
             }
         });
-        setIngredientsViews();
-        setInstructionViews();
-        new_recipe_MBTN_submit.setOnClickListener(v -> submit_recipe());
-        new_recipe_SIV_image.setOnClickListener(v -> openGalleryOrCamera());
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(applicationContext,
-                    R.array.amount_types_array , android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            // Set ArrayAdapter to the Spinner
-            Ingredient_Spinner_Type.setAdapter(adapter);
-
     }
+    private void addSpinnerAdapter(){
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(applicationContext,
+                R.array.amount_types_array , android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        // Set ArrayAdapter to the Spinner
+        Ingredient_Spinner_Type.setAdapter(adapter);
+    }
     private void openGalleryOrCamera() {
         // Create an intent to open the gallery
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -179,15 +188,13 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
         new_recipe_ET_ingredients_amount.setText("");
         new_recipe_ET_instructions.setText("");
         new_recipe_ET_tags.setText("");
-        // Clear RecyclerView adapters
-        new_recipe_LST_ingredients.setAdapter(null);
-        new_recipe_LST_instructions.setAdapter(null);
-        // Clear Recipe object
         new_recipe = new Recipe();
         new_recipe.setAuthorId(userID);
         new_recipe.setId(UUID.randomUUID().toString());
+        setIngredientsViews();
+        setInstructionViews();
         new_recipe_SIV_image.setImageResource(R.drawable.default_recipe_image);
-        new_recipe_SIV_image.setMinimumHeight(10);
+        new_recipe_SIV_image.setMinimumHeight(100);
     }
 
 
@@ -208,7 +215,6 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
     }
     private void findViews(View view) {
         new_recipe_ET_name = view.findViewById(R.id.new_recipe_ET_name);
-        //new_recipe_ET_ingredients = view.findViewById(R.id.new_recipe_ET_ingredients);
         new_recipe_ET_instructions = view.findViewById(R.id.new_recipe_ET_instructions);
         new_recipe_ET_tags = view.findViewById(R.id.new_recipe_ET_tags);
         new_recipe_SIV_image = view.findViewById(R.id.new_recipe_SIV_image);
