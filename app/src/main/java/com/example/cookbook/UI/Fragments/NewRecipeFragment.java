@@ -19,7 +19,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
 import com.example.cookbook.Adapters.IngredientAdapter;
@@ -42,7 +44,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.UUID;
-
+import java.util.regex.Pattern;
 
 
 public class NewRecipeFragment extends Fragment implements RecipeResetListener {
@@ -57,6 +59,7 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
     private ShapeableImageView new_recipe_SIV_image;
     private MaterialButton new_recipe_MBTN_submit, new_recipe_BTN_ingredients_add, new_recipe_BTN_instructions_add;
     private RecyclerView new_recipe_LST_ingredients, new_recipe_LST_instructions;
+    private Spinner Ingredient_Spinner_Type;
     private RecipeLogic recipeLogic;
     private Recipe new_recipe;
     private String userID;
@@ -88,6 +91,14 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
     private void addInstruction(String instruction){
         new_recipe.addInstructions(instruction);
     }
+
+    public boolean isNumeric(String str) {
+        // Regular expression to match numeric values
+        String regex = "-?\\d+(\\.\\d+)?";  // Allows for negative numbers and decimal points
+
+        // Check if the string matches the regular expression
+        return Pattern.matches(regex, str);
+    }
     private void initViews(View view) {
         new_recipe_ET_name.addTextChangedListener(new TextWatcher() {
             @Override
@@ -108,11 +119,16 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
             }
         });
         new_recipe_BTN_ingredients_add.setOnClickListener(v -> {
+            int selectedItemPosition = Ingredient_Spinner_Type.getSelectedItemPosition();
+            Ingredient.AMOUNT_TYPE selectedAmountType = Ingredient.AMOUNT_TYPE.values()[selectedItemPosition];
+
             if(new_recipe_ET_ingredients_name.getText().length() > 0 &&
-                    new_recipe_ET_ingredients_amount.getText().length() > 0){
+                    new_recipe_ET_ingredients_amount.getText().length() > 0 &&
+                    isNumeric(new_recipe_ET_ingredients_amount.getText().toString())){
                 Ingredient temp_ingredient = new Ingredient()
                         .setName(new_recipe_ET_ingredients_name.getText().toString())
-                        .setAmount(Double.parseDouble(5 + ""));
+                        .setAmount(Double.parseDouble(new_recipe_ET_ingredients_amount.getText().toString()))
+                        .setType(selectedAmountType);
                 addIngredient(temp_ingredient);
                 setIngredientsViews();
                 new_recipe_ET_ingredients_name.setText("");
@@ -123,6 +139,13 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
         setInstructionViews();
         new_recipe_MBTN_submit.setOnClickListener(v -> submit_recipe());
         new_recipe_SIV_image.setOnClickListener(v -> openGalleryOrCamera());
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(applicationContext,
+                    R.array.amount_types_array , android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            // Set ArrayAdapter to the Spinner
+            Ingredient_Spinner_Type.setAdapter(adapter);
 
     }
 
@@ -166,6 +189,8 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
         new_recipe_SIV_image.setImageResource(R.drawable.default_recipe_image);
         new_recipe_SIV_image.setMinimumHeight(10);
     }
+
+
     private void setIngredientsViews(){
         IngredientAdapter ingredientAdapter = new IngredientAdapter(applicationContext, new_recipe.getIngredients());
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(applicationContext);
@@ -194,7 +219,7 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
         new_recipe_BTN_instructions_add = view.findViewById(R.id.new_recipe_BTN_instructions_add);
         new_recipe_ET_ingredients_name = view.findViewById(R.id.new_recipe_ET_ingredients_name);
         new_recipe_ET_ingredients_amount = view.findViewById(R.id.new_recipe_ET_ingredients_amount);
-
+        Ingredient_Spinner_Type = view.findViewById(R.id.Ingredient_Spinner_Type);
     }
 
     @Override

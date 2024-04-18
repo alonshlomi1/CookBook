@@ -115,7 +115,9 @@
                     android:layout_weight="1"
                     android:layout_marginHorizontal="2dp"
                     android:text="change pic"
-                    android:backgroundTint="@color/theme_4"/>
+                    app:backgroundTint="@null"
+                    android:background="@drawable/button_background"
+                    />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/profile_BTN_setting_info"
@@ -124,7 +126,8 @@
                     android:layout_weight="1"
                     android:layout_marginHorizontal="2dp"
                     android:text="edit info"
-                    android:backgroundTint="@color/theme_4"/>
+                    app:backgroundTint="@null"
+                    android:background="@drawable/button_background"/>
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/profile_BTN_setting_logout"
                     android:layout_width="0dp"
@@ -132,7 +135,8 @@
                     android:layout_weight="1"
                     android:layout_marginHorizontal="2dp"
                     android:text="logout"
-                    android:backgroundTint="@color/theme_4"/>
+                    app:backgroundTint="@null"
+                    android:background="@drawable/button_background"/>
             </LinearLayout>
 
 

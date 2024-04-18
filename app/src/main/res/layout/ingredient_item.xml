@@ -23,12 +23,20 @@
         android:hint="Amount"
         android:layout_margin="4dp"/>
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/Ingredient_MTV_Type"
+        android:id="@+id/Ingredient_MTV_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginStart="8dp"
-        android:hint="Type"
+        android:hint="Amount"
         android:layout_margin="4dp"/>
 
+<!--    <Spinner-->
+<!--        android:id="@+id/Ingredient_Spinner_Type"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:hint="Amount"-->
+<!--        android:layout_margin="4dp"/>-->
 </LinearLayout>

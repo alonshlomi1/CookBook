@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.LoginActivity">
+    tools:context=".UI.LoginActivity"
+    android:background="@color/theme_2">
 <!--    <com.google.android.material.button.MaterialButton-->
 <!--        android:id="@+id/login_BTN_signout"-->
 <!--        android:layout_width="wrap_content"-->
@@ -27,6 +28,8 @@
             android:layout_height="wrap_content"
             android:text="@string/SignIn"
             android:layout_below="@+id/login_TV_have_account"
+            app:backgroundTint="@null"
+            android:background="@drawable/button_background"
             />
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/login_TV_signin"
@@ -100,7 +103,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/SignUp"
-
+                app:backgroundTint="@null"
+                android:background="@drawable/button_background"
                 />
         </LinearLayout>
 

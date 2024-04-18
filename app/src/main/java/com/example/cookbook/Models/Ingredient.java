@@ -1,5 +1,7 @@
 package com.example.cookbook.Models;
 
+import android.util.Log;
+
 public class Ingredient {
     public static enum AMOUNT_TYPE {
         CUP, TEASPOON, SPOON, GRAMS, DEF
@@ -46,6 +48,7 @@ public class Ingredient {
 
     public Ingredient setType(AMOUNT_TYPE type) {
         this.type = type;
+        Log.d("TYPE@@", type.toString());
         return this;
     }
 }

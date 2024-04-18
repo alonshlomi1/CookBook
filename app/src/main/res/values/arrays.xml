@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="amount_types_array">
+        <item>CUP</item>
+        <item>TEASPOON</item>
+        <item>SPOON</item>
+        <item>GRAMS</item>
+        <item>DEF</item>
+    </string-array>
+</resources>

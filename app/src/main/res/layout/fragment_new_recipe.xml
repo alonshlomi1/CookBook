@@ -51,13 +51,15 @@
                 android:id="@+id/new_recipe_TV_ingredients"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/new_recipe_ingredients_title"
-                android:gravity="start"
-                android:layout_margin="12dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:layout_below="@+id/new_recipe_ET_name"
-                />
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="12dp"
+                android:gravity="start"
+                android:text="@string/new_recipe_ingredients_title"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/new_recipe_LST_ingredients"
@@ -79,10 +81,10 @@
                     android:id="@+id/new_recipe_ET_ingredients_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:layout_marginStart="12dp"
+                    android:layout_weight="2"
+                    android:layout_marginStart="1dp"
                     android:layout_marginTop="12dp"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="1dp"
                     android:layout_marginBottom="12dp"
                     android:layout_gravity="center_vertical"
                     android:hint="@string/new_recipe_ingredients_name"
@@ -91,22 +93,35 @@
                     android:id="@+id/new_recipe_ET_ingredients_amount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="1dp"
                     android:layout_marginTop="12dp"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="1dp"
                     android:layout_marginBottom="12dp"
                     android:layout_gravity="center_vertical"
                     android:hint="@string/new_recipe_ingredients_amount"
                     android:textSize="16sp"
                     />
+                    <Spinner
+                        android:id="@+id/Ingredient_Spinner_Type"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_marginStart="1dp"
+                        android:hint="Amount"
+                        android:layout_margin="4dp"
+                        android:layout_gravity="center_vertical"
+                        />
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/new_recipe_BTN_ingredients_add"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     app:icon="@drawable/plus_icon"
-                    android:layout_gravity="center_vertical"/>
+                    android:layout_gravity="center_vertical"
+                    app:backgroundTint="@null"
+                    android:background="@drawable/button_background"
+                    />
 
             </LinearLayout>
 
@@ -152,7 +167,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     app:icon="@drawable/plus_icon"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    app:backgroundTint="@null"
+                    android:background="@drawable/button_background"/>
             </LinearLayout>
 
             <com.google.android.material.textview.MaterialTextView
@@ -205,7 +222,8 @@
                 android:layout_centerInParent="true"
                 android:text="@string/Submit"
                 android:textColor="@color/theme_2"
-                android:backgroundTint="@color/theme_1"
+                app:backgroundTint="@null"
+                android:background="@drawable/button_background"
                 android:layout_below="@+id/new_recipe_ET_tags"/>
 
         </RelativeLayout>

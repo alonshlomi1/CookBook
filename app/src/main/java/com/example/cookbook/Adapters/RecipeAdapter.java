@@ -24,6 +24,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.cookbook.DataBaseLayer.DBManager;
 import com.example.cookbook.Models.Comment;
 import com.example.cookbook.Models.Favorites;
@@ -243,9 +246,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             home_ET_comments.setVisibility(View.GONE);
             home_BTN_comments.setVisibility(View.GONE);
             commentsVisible = false;
+
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(90));
             Glide.with(context)
                     .load(recipe.getPhotoUrl())
-                    .fitCenter()
+                    .apply(requestOptions)
                     .placeholder(R.drawable.default_recipe_image)
                     .into(recipeImage);
         }

@@ -21,14 +21,14 @@
         android:orientation="vertical">
 
         <!-- Recipe Image -->
+
+        <!--         Recipe Title -->
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/recipe_image"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="fitCenter"
+            android:layout_height="188dp"
             android:src="@drawable/default_recipe_image" />
 
-<!--         Recipe Title -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -187,7 +187,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Submit"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                app:backgroundTint="@null"
+                android:background="@drawable/button_background"/>
             </LinearLayout>
 
         </LinearLayout>
