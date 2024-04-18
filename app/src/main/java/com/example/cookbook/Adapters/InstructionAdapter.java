@@ -44,7 +44,7 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
 
     @Override
     public int getItemCount() {
-        return instructionsList.size(); // Return the size of the instructionsList
+        return instructionsList.size();
     }
 
 
