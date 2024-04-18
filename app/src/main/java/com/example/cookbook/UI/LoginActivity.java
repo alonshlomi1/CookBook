@@ -9,7 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -49,7 +51,8 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
     private MaterialButton login_BTN_signin, login_BTN_signup;
     private LinearLayout login_LLO_signin_form;
     private MaterialTextView login_TV_signin;
-    private EditText login_ET_first_name, login_ET_last_name, login_ET_email, login_ET_password, login_ET_password_again;
+    private EditText login_ET_first_name, login_ET_last_name, login_ET_email, login_ET_password
+            , login_ET_password_again, login_ET_login_email, login_ET_login_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,8 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
         login_TV_signin.setOnClickListener(v -> toggleSignInFormVisibility() );
         login_BTN_signup.setOnClickListener(v -> signup() );
         login_LLO_signin_form.setVisibility(View.GONE);
+        login_TV_signin.setPaintFlags(login_TV_signin.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+
     }
 
 
@@ -86,7 +91,8 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
         login_ET_email = findViewById(R.id.login_ET_email);
         login_ET_password = findViewById(R.id.login_ET_password);
         login_ET_password_again = findViewById(R.id.login_ET_password_again);
-
+        login_ET_login_email = findViewById(R.id.login_ET_login_email);
+        login_ET_login_password = findViewById(R.id.login_ET_login_password);
     }
 
     private void signup() {
@@ -177,21 +183,49 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
             }
     );
 
-    private void login(){
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder()
-                        .setAllowNewAccounts(false)
-                        .build());//,
-                //new AuthUI.IdpConfig.PhoneBuilder().build());
-                //new AuthUI.IdpConfig.GoogleBuilder().build());
+//    private void login(){
+//        List<AuthUI.IdpConfig> providers = Arrays.asList(
+//                new AuthUI.IdpConfig.EmailBuilder()
+//                        .setAllowNewAccounts(false)
+//                        .build());//,
+//                //new AuthUI.IdpConfig.PhoneBuilder().build());
+//                //new AuthUI.IdpConfig.GoogleBuilder().build());
+//
+//// Create and launch sign-in intent
+//        Intent signInIntent = AuthUI.getInstance()
+//                .createSignInIntentBuilder()
+//                .setIsSmartLockEnabled(false)
+//                .setAvailableProviders(providers)
+//                .build();
+//        signInLauncher.launch(signInIntent);
+//    }
+    private void login() {
+        String email = login_ET_login_email.getText().toString();
+        String password = login_ET_login_password.getText().toString();
 
-// Create and launch sign-in intent
-        Intent signInIntent = AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setIsSmartLockEnabled(false)
-                .setAvailableProviders(providers)
-                .build();
-        signInLauncher.launch(signInIntent);
+        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInWithEmail:success");
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                SingleManager.getInstance().getDBManager().getUser(LoginActivity.this, user.getEmail());
+                                SingleManager.getInstance().toast("Authentication successful.");
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                SingleManager.getInstance().toast("Authentication failed.");
+                            }
+                        }
+                    });
+        } else {
+            // Handle empty email or password fields
+            SingleManager.getInstance().toast("Please enter email and password");
+
+        }
     }
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
