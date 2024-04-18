@@ -141,10 +141,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
                     if (commentsVisible) {
                         home_LLO_comments_title.setVisibility(View.VISIBLE);
+                        home_LLO_comments.setVisibility(View.VISIBLE);
                         recipeLSTComments.setVisibility(View.VISIBLE);
                         recipe_comments_SIV_icon.setImageResource(R.drawable.minus_icon);
                     } else {
                         home_LLO_comments_title.setVisibility(View.GONE);
+                        home_LLO_comments.setVisibility(View.GONE);
                         recipeLSTComments.setVisibility(View.GONE);
                         recipe_comments_SIV_icon.setImageResource(R.drawable.plus_icon);
                         home_ET_comments.setVisibility(View.GONE);
@@ -242,6 +244,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             //recipeLSTComments.setAdapter(commentAdapter);
             recipeLSTComments.setVisibility(View.GONE);
             home_LLO_comments_title.setVisibility(View.GONE);
+            home_LLO_comments.setVisibility(View.GONE);
 //            home_LLO_comments.setVisibility(View.GONE);
             home_ET_comments.setVisibility(View.GONE);
             home_BTN_comments.setVisibility(View.GONE);

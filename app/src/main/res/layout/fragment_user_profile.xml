@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_margin="4dp"
+            android:padding="4dp"
             android:background="@drawable/profile_rounded_corners"
 
             >
@@ -26,7 +27,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginHorizontal="8dp"
-                android:background="@color/theme_1"
                 >
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -86,11 +86,11 @@
                     android:id="@+id/profile_BTN_following"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="2dp"
                     android:layout_gravity="end"
-                    android:text="Following"
-                    android:backgroundTint="@color/fui_transparent"/>
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/fui_transparent"
+                    android:text="Following" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/profile_BTN_followers"

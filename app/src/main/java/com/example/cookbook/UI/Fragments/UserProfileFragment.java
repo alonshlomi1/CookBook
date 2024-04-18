@@ -21,6 +21,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.cookbook.Adapters.FollowersAdapter;
 import com.example.cookbook.Adapters.FollowingAdapter;
 import com.example.cookbook.Adapters.RecipeAdapter;
@@ -84,9 +87,12 @@ public class UserProfileFragment extends Fragment {
         if(user != null){
             profile_TV_name.setText(user.getFirstName() + " " + user.getLastName());
             profile_TV_info.setText(user.getBio());
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(90));
+
             Glide.with(this)
                     .load(user.getProfile_URL())
-                    .centerCrop()
+                    .apply(requestOptions)
                     .placeholder(R.drawable.profile_icon)
                     .into(profile_SIV_image);
         }
@@ -134,6 +140,8 @@ public class UserProfileFragment extends Fragment {
                 }
             }
         });
+        profile_BTN_following.setText(profile_BTN_following.getText() + "\n" + user.getFollows().getFollowing().size());
+
         profile_BTN_following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,6 +159,7 @@ public class UserProfileFragment extends Fragment {
                 }
             }
         });
+        profile_BTN_followers.setText(profile_BTN_followers.getText() + "\n" + user.getFollows().getFollowers().size());
         profile_BTN_followers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -237,9 +246,13 @@ public class UserProfileFragment extends Fragment {
             // Set the selected image URI to the user's profile image
             user.setProfile_URL(selectedImageUri.toString());
             // Update the user's profile image in the UI
+
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(90));
+
             Glide.with(this)
                     .load(selectedImageUri)
-                    .centerCrop()
+                    .apply(requestOptions)
                     .placeholder(R.drawable.profile_icon)
                     .into(profile_SIV_image);
             SingleManager.getInstance().getDBManager().saveImage(user.getId(), SingleManager.getInstance().compresImage(selectedImageUri));

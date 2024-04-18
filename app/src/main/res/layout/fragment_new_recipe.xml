@@ -11,7 +11,11 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/segment_border"
+            android:layout_margin="2dp"
+            android:padding="2dp"
+            >
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/new_recipe_TV_title"
                 android:layout_width="match_parent"
