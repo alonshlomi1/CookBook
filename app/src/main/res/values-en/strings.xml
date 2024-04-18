@@ -27,7 +27,7 @@
     <string name="new_recipe_ingredients_amount">Amount</string>
     <string name="Add">Add</string>
     <string name="SignUp">SignUp</string>
-    <string name="SignIn">SignIn</string>
+    <string name="SignIn">Sign In</string>
     <string name="firstname">First Name</string>
     <string name="lastname">Last Name</string>
     <string name="email">Email</string>
