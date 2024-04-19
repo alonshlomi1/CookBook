@@ -12,7 +12,7 @@
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit Info"
+        android:text="@string/edit_info"
         android:layout_gravity="center"
         android:textStyle="bold"
         android:textSize="20sp"/>
@@ -24,7 +24,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="First Name"
+            android:text="@string/firstname"
             android:layout_gravity="center"
             android:textSize="18sp"/>
         <EditText
@@ -42,7 +42,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Last Name"
+            android:text="@string/lastname"
             android:layout_gravity="center"
             android:textSize="18sp"/>
         <EditText
@@ -60,7 +60,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BIO"
+            android:text="@string/bio"
             android:layout_gravity="center"
             android:textSize="18sp"/>
         <EditText
@@ -74,7 +74,7 @@
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:text="@string/save"
         android:background="@drawable/button_background"
         app:backgroundTint="@null"/>
 </LinearLayout>

@@ -1,44 +1,22 @@
 package com.example.cookbook.DataBaseLayer;
 
-import static android.content.ContentValues.TAG;
-
-import android.net.Uri;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import com.example.cookbook.Interfaces.OnFollowsListener;
 import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
 import com.example.cookbook.Interfaces.OnRecipesURLLoadedListener;
 import com.example.cookbook.Interfaces.OnUserLoadedListener;
 import com.example.cookbook.Interfaces.OnUserSavedListener;
-import com.example.cookbook.Interfaces.RecipeLoadCallback;
 import com.example.cookbook.Interfaces.RecipeResetListener;
 import com.example.cookbook.Interfaces.onFavoritesListener;
-import com.example.cookbook.Models.Favorites;
 import com.example.cookbook.Models.Following;
-import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.Models.User;
 import com.example.cookbook.Utilities.SingleManager;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 public class DBManager {
     private final int batchSize = 5;
@@ -99,19 +77,14 @@ public class DBManager {
 
     public void follow(Following following, String followingId, String name) {
         followsDB.follow(following, followingId, name);
-        Log.d("Email@@@", name);
 
     }
     public void followWithEmail(String email) {
-        Log.d("Email@@", email);
-
-
         userDB.getUser(new OnUserLoadedListener() {
             @Override
             public void onUserLoaded(User user) {
                 HashMap<String , String> list = SingleManager.getInstance().getUserManager().getUser().getFollows().getFollowing();
                 if(!list.containsKey(user.getId())){
-                    Log.d("Email@@", user.toString());
                     follow(SingleManager.getInstance().getUserManager().getUser().getFollows(), user.getId(), user.getFirstName() +" "+ user.getLastName());
                 }
                 else{

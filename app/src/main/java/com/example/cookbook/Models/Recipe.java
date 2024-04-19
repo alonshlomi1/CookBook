@@ -124,10 +124,10 @@ public class Recipe {
         return this;
     }
 
-    public float getAVGRating(){
-        float sum = 0;
-        for(Rate rate : ratings)
-            sum += rate.getRate();
-        return (sum/ratings.size());
-    }
+//    public float getAVGRating(){
+//        float sum = 0;
+//        for(Rate rate : ratings)
+//            sum += rate.getRate();
+//        return (sum/ratings.size());
+//    }
 }

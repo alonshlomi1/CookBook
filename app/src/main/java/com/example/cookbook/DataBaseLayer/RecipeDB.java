@@ -7,7 +7,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
-import com.example.cookbook.Interfaces.RecipeLoadCallback;
 import com.example.cookbook.Interfaces.RecipeResetListener;
 import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
@@ -20,6 +19,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -63,12 +63,12 @@ public class RecipeDB {
         Task<QuerySnapshot> task;
         if (lastRecipeDate == null) {
             task = db.collection("recipes")
-                    .orderBy("date")
+                    .orderBy("date", Query.Direction.DESCENDING)
                     .limit(batchSize)
                     .get();
         } else {
             task = db.collection("recipes")
-                    .orderBy("date")
+                    .orderBy("date", Query.Direction.DESCENDING)
                     .startAfter(lastRecipeDate)
                     .limit(batchSize)
                     .get();
@@ -108,20 +108,19 @@ public class RecipeDB {
         lastVisibleRecipeSnapshot= null;
         ArrayList<String > favoritesRecipeIDList = SingleManager.getInstance().getUserManager().getUser().getFavorites().getFavoritesId();
         ArrayList<Recipe> recipeList = new ArrayList<>();
-        Log.d("FAVORI##LIST", favoritesRecipeIDList.toString());
 
         Task<QuerySnapshot> task;
         if(favoritesRecipeIDList.size()>0){
             if (lastRecipeDate == null) {
                 task = db.collection("recipes")
                         .whereIn(FieldPath.documentId(), favoritesRecipeIDList)
-                        .orderBy("date")
+                        .orderBy("date", Query.Direction.DESCENDING)
                         .limit(batchSize)
                         .get();
             } else {
                 task = db.collection("recipes")
                         .whereIn(FieldPath.documentId(), favoritesRecipeIDList)
-                        .orderBy("date")
+                        .orderBy("date", Query.Direction.DESCENDING)
                         .startAfter(lastRecipeDate)
                         .limit(batchSize)
                         .get();
@@ -172,13 +171,13 @@ public class RecipeDB {
             if (lastVisibleRecipeSnapshot  == null) {
                 task = db.collection("recipes")
                         .whereIn("authorId", followingIDList)
-//                        .orderBy("date")
+//                        .orderBy("date", Query.Direction.DESCENDING)
                         .limit(batchSize)
                         .get();
             } else {
                 task = db.collection("recipes")
                         .whereIn("authorId", followingIDList)
-//                        .orderBy("date")
+//                        .orderBy("date", Query.Direction.DESCENDING)
                         .startAfter(lastVisibleRecipeSnapshot)
                         .limit(batchSize)
                         .get();
@@ -225,6 +224,7 @@ public class RecipeDB {
 
         db.collection("recipes")
                 .whereEqualTo("authorId", id)
+                .orderBy("date", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:hint="Ingredient Name"
+        android:hint="@string/Ingredient"
         android:layout_margin="4dp" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginStart="8dp"
-        android:hint="Amount"
+        android:hint="@string/new_recipe_ingredients_amount"
         android:layout_margin="4dp"/>
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/Ingredient_MTV_type"
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginStart="8dp"
-        android:hint="Amount"
+        android:hint="@string/type"
         android:layout_margin="4dp"/>
 
 <!--    <Spinner-->

@@ -56,7 +56,6 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
 
         final boolean isExpanded = position == expandedPosition;
 
-        //holder.userIdTextView.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

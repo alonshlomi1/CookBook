@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
-import com.example.cookbook.Interfaces.RecipeLoadCallback;
 import com.example.cookbook.Interfaces.RefreshHomeListener;
 import com.example.cookbook.Interfaces.UserLoadCallback;
 import com.example.cookbook.Interfaces.UserRecipeListLoadCallback;
@@ -29,7 +28,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements RecipeLoadCallback, UserLoadCallback, UserRecipeListLoadCallback, RefreshHomeListener {
+public class MainActivity extends AppCompatActivity implements OnRecipesLoadedListener, UserLoadCallback, UserRecipeListLoadCallback, RefreshHomeListener {
     private UserLogic userLogic;
     private RecipeLogic recipeLogic;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-        Log.d("USER2", SingleManager.getInstance().getUserManager().getUser().toString());
         userLogic = new UserLogic(this, this, SingleManager.getInstance().getUserManager().getUser());
         recipeLogic = new RecipeLogic(this, getApplicationContext());
         getSupportFragmentManager().beginTransaction()
@@ -82,13 +80,13 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
 
 
     public void refresh(SwipeRefreshLayout home_SWIPE_refresh){
-        Log.d("REFRESH-------", "Refresh");
         swipeRefreshLayout = home_SWIPE_refresh;
         recipeLogic = new RecipeLogic(this, getApplicationContext());
         userLogic = new UserLogic(this, this, SingleManager.getInstance().getUserManager().getUser());
 
     }
-    public void onRecipeListLoaded(ArrayList<Recipe> recipes) {
+    @Override
+    public void onRecipesLoaded(ArrayList<Recipe> recipes) {
         Fragment homePageFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (homePageFragment instanceof HomePageFragment) {
             ((HomePageFragment) homePageFragment).updateRecipeList(recipes);
@@ -99,18 +97,7 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
     }
 
     @Override
-    public void onFavoriteRecipeListLoaded(ArrayList<Recipe> recipes) {
-        Fragment homePageFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if (homePageFragment instanceof HomePageFragment) {
-            ((HomePageFragment) homePageFragment).updateRecipeList(recipes);
-            if (swipeRefreshLayout != null)
-                swipeRefreshLayout.setRefreshing(false);
-
-        }
-    }
-
-    @Override
-    public void onRecipeListLoadFailed(Exception e) {
+    public void onRecipesLoadFailed(Exception e) {
         // Handle failure
         Log.e(TAG, "Error loading recipes", e);
     }

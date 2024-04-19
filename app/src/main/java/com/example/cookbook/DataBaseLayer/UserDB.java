@@ -40,7 +40,6 @@ public class UserDB {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 User user = document.toObject(User.class);
-                                Log.d("@@@@@@@@", user.getEmail());
                                 // Pass the fetched user object to the listener
                                 listener.onUserLoaded(user);
                             }

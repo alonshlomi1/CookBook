@@ -36,11 +36,9 @@ public class FavoritesDB {
                         if (task.isSuccessful() && !task.getResult().isEmpty()) {
                             QueryDocumentSnapshot document = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0); // Retrieve the first document
                             Favorites favorites = document.toObject(Favorites.class);
-                            Log.d("FOLLOW@@", favorites.toString());
                             listener.onFavoritesReady(true, favorites);
 
                         } else {
-                            Log.d("FOLLOW@@", task.getResult().getDocuments().toString());
                             listener.onFavoritesReady(false, null);
                         }
                     }

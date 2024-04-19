@@ -48,7 +48,6 @@ public class Ingredient {
 
     public Ingredient setType(AMOUNT_TYPE type) {
         this.type = type;
-        Log.d("TYPE@@", type.toString());
         return this;
     }
 }

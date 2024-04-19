@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
                             .setFollows(new Following());
                     SingleManager.getInstance().getDBManager().saveNewUser(new_user, this);
                 } else {
-                    Log.d("$$$", "auth Fail");
+                    Log.d("signup", "auth Fail");
                 }
             });
 
@@ -234,8 +234,7 @@ public class LoginActivity extends AppCompatActivity implements OnUserLoadedList
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             SingleManager.getInstance().getDBManager().getUser(this, user.getEmail());
         } else {
-            Log.d("$$$$", "fail");
-            Log.d("$$$$", result.getResultCode().toString());
+            Log.d("onSignInResult", "fail");
         }
     }
 

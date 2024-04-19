@@ -13,7 +13,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="follow_name"
+        android:text="@string/follow_name"
         android:layout_gravity="center"
         />
     <com.google.android.material.button.MaterialButton
@@ -22,7 +22,7 @@
         android:layout_height="35dp"
         app:backgroundTint="@null"
         android:background="@drawable/small_button_background"
-        android:text="unfollow"
+        android:text="@string/unfollow"
         android:textSize="10sp"
         android:layout_gravity="center"/>
 

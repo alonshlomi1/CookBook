@@ -3,22 +3,16 @@ package com.example.cookbook.Logic;
 import static android.content.ContentValues.TAG;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.Log;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.net.URL;
-import java.util.UUID;
+
 import com.example.cookbook.DataBaseLayer.DBManager;
 import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
 import com.example.cookbook.Interfaces.OnRecipesURLLoadedListener;
-import com.example.cookbook.Interfaces.RecipeLoadCallback;
 import com.example.cookbook.Interfaces.RecipeResetListener;
 import com.example.cookbook.Models.Recipe;
-import com.example.cookbook.R;
 import com.example.cookbook.UI.Fragments.HomePageFragment;
 import com.example.cookbook.Utilities.SingleManager;
 import com.google.firebase.Timestamp;
@@ -27,10 +21,10 @@ import java.util.ArrayList;
 
 public class RecipeLogic implements OnRecipesLoadedListener{
     public static ArrayList<Recipe> recipeList = new ArrayList<>();
-    private RecipeLoadCallback callback;
+    private OnRecipesLoadedListener callback;
     private DBManager dbManager;
     private Context context;
-    public RecipeLogic(RecipeLoadCallback callback, Context context){
+    public RecipeLogic(OnRecipesLoadedListener callback, Context context){
         this.callback = callback;
         this.dbManager = new DBManager();
         this.context = context;
@@ -63,6 +57,7 @@ public class RecipeLogic implements OnRecipesLoadedListener{
                     @Override
                     public void onRecipesURLLoaded(URL url) {
                         recipe.setPhotoUrl(url.toString());
+
                     }
 
                     @Override
@@ -92,9 +87,9 @@ public class RecipeLogic implements OnRecipesLoadedListener{
     }
 
     private boolean validateRecipe(Recipe recipe){
-        if(recipe.getTitle().length() < 3 || recipe.getTitle().length() > 20){
+        if(recipe.getTitle().length() < 3 || recipe.getTitle().length() > 40){
             SingleManager.getInstance().toast("Recipe Title must be between 3 and 20");
-            Log.d("Recipe Title Error", "min 3 max 20 " +recipe.getTitle());
+            Log.d("Recipe Title Error", "min 3 max 40 " +recipe.getTitle());
             return false;
         }
         if(recipe.getIngredients().size() < 1 || recipe.getIngredients().size() > 100){
@@ -118,7 +113,7 @@ public class RecipeLogic implements OnRecipesLoadedListener{
         recipeList.addAll(recipes);
 
         if (callback != null) {
-            callback.onRecipeListLoaded(recipeList);
+            callback.onRecipesLoaded(recipeList);
         }
     }
 
@@ -126,7 +121,7 @@ public class RecipeLogic implements OnRecipesLoadedListener{
     public void onRecipesLoadFailed(Exception e) {
         Log.e(TAG, "Error loading recipes", e);
         if (callback != null) {
-            callback.onRecipeListLoadFailed(e);
+            callback.onRecipesLoadFailed(e);
         }
     }
 }

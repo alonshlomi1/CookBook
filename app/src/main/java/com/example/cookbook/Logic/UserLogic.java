@@ -44,9 +44,7 @@ public class UserLogic {
         this.userResipeListCallback = userResipeListCallback;
         this.dbManager = new DBManager();
 //        this.user = new User();
-        Log.d("USER3", theuser.toString());
         this.user = theuser;
-        Log.d("USER4", this.user.toString());
         setUserListFromDB();
         setUserRecipeListFromDB();
     }

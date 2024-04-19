@@ -32,5 +32,28 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="Recipe_Date">12/12/2023 12:12</string>
+    <string name="follow_user">Follow user</string>
+    <string name="enter_user_email">Enter user email</string>
+    <string name="edit_info">Edit Info</string>
+    <string name="bio">BIO</string>
+    <string name="save">Save</string>
+    <string name="Ingredient" >Ingredient</string>
+    <string name="type">Type</string>
+    <string name="follow_name">Follow Name</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
+    <string name="Followers" >Followers</string>
+    <string name="change_pic">Change Pic</string>
+    <string name="edit_info_btn">Edit Info</string>
+    <string name="logout">Logout</string>
+    <string name="no_recipes_to_show">No Recipes to show</string>
+    <string name="new_recipes">New</string>
+    <string name="follow">Follow</string>
+    <string name="favorite">Favorite</string>
+    <string name="login">Login</string>
+    <string name="new_acount">New? click here for Create an account</string>
+    <string name="password_again">Password again...</string>
+    <string name="Add_Cmments">Add Cmment</string>
 
 </resources>

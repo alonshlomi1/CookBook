@@ -54,7 +54,6 @@ public class FollowsDB {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Following following = document.toObject(Following.class);
-                                Log.d("@@@@@@@@", following.getUserId());
                                 following.addFollower(followerId, follower_name);
 
 

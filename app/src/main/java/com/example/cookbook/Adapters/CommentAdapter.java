@@ -45,7 +45,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
         final boolean isExpanded = position == expandedPosition;
 
-        //holder.userIdTextView.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -227,7 +227,6 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
                 // Get the image URI
                 this.imageUri = data.getData();
                 // Do something with the image URI, such as displaying it in the ImageView
-                Log.d("img@@@@@@", imageUri.toString());
                 Glide.with(this)
                         .load(imageUri)
                         .fitCenter()

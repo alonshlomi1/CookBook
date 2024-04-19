@@ -53,7 +53,7 @@ public class ImageDB {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Log.d("URI-@@@@@@@@@", exception.toString());
+                Log.d("getRecipesURI Error", exception.toString());
             }
         });
     }
