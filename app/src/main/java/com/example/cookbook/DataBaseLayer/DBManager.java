@@ -12,6 +12,7 @@ import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
 import com.example.cookbook.Interfaces.OnRecipesURLLoadedListener;
 import com.example.cookbook.Interfaces.OnUserLoadedListener;
 import com.example.cookbook.Interfaces.OnUserSavedListener;
+import com.example.cookbook.Interfaces.RecipeLoadCallback;
 import com.example.cookbook.Interfaces.RecipeResetListener;
 import com.example.cookbook.Interfaces.onFavoritesListener;
 import com.example.cookbook.Models.Favorites;
@@ -24,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -39,6 +41,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class DBManager {
+    private final int batchSize = 3;
     private FirebaseFirestore db;
     private UserDB userDB;
     private RecipeDB recipeDB;
@@ -60,12 +63,15 @@ public class DBManager {
         recipeDB.addRecipe(recipe,uri,resetListener);
     }
 
-    public void getRecipes(OnRecipesLoadedListener listener){
-        recipeDB.getRecipes(listener);
+    public void getRecipes(OnRecipesLoadedListener listener, Timestamp lastRecipeDate){
+        recipeDB.getRecipes(listener, batchSize, lastRecipeDate);
     }
 
-    public void getFavoriteRecipes(OnRecipesLoadedListener listener){
-        recipeDB.getFavoriteRecipes(listener);
+    public void getFavoriteRecipes(OnRecipesLoadedListener listener, Timestamp lastRecipeDate){
+        recipeDB.getFavoriteRecipes(listener, batchSize, lastRecipeDate);
+    }
+    public void getFollowingRecipes(OnRecipesLoadedListener listener, Timestamp lastRecipeDate){
+        recipeDB.getFollowingRecipes(listener, batchSize, lastRecipeDate);
     }
     public void getUser(OnUserLoadedListener listener, String email){
         userDB.getUser(listener,email);

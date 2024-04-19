@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class Ingredient {
     public static enum AMOUNT_TYPE {
-        CUP, TEASPOON, SPOON, GRAMS, DEF
+        CUP, TEASPOON, SPOON, GRAMS, COUNT , DEF
     }
     private String name = " ";
     private double amount = 0.0;

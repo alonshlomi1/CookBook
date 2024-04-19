@@ -191,33 +191,33 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/new_recipe_SIV_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/new_recipe_TV_image"
                 android:src="@drawable/default_recipe_image"
-                />
+            />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/new_recipe_TV_tags"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/new_recipe_tags_title"
-                android:gravity="start"
-                android:layout_margin="12dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_below="@+id/new_recipe_SIV_image"
-                />
+<!--            <com.google.android.material.textview.MaterialTextView-->
+<!--                android:id="@+id/new_recipe_TV_tags"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/new_recipe_tags_title"-->
+<!--                android:gravity="start"-->
+<!--                android:layout_margin="12dp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:textSize="16sp"-->
+<!--                android:layout_below="@+id/new_recipe_SIV_image"-->
+<!--                />-->
 
-            <EditText
-                android:id="@+id/new_recipe_ET_tags"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/new_recipe_tags"
-                android:gravity="start"
-                android:layout_margin="12dp"
-                android:textSize="16sp"
-                android:layout_below="@+id/new_recipe_TV_tags"
-                />
+<!--            <EditText-->
+<!--                android:id="@+id/new_recipe_ET_tags"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:hint="@string/new_recipe_tags"-->
+<!--                android:gravity="start"-->
+<!--                android:layout_margin="12dp"-->
+<!--                android:textSize="16sp"-->
+<!--                android:layout_below="@+id/new_recipe_TV_tags"-->
+<!--                />-->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/new_recipe_MBTN_submit"
                 android:layout_width="wrap_content"
@@ -228,7 +228,7 @@
                 android:textColor="@color/theme_2"
                 app:backgroundTint="@null"
                 android:background="@drawable/button_background"
-                android:layout_below="@+id/new_recipe_ET_tags"/>
+                android:layout_below="@+id/new_recipe_SIV_image"/>
 
         </RelativeLayout>
 

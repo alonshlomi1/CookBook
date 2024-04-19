@@ -8,20 +8,65 @@
         android:id="@+id/home_SWIPE_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/square_segment_border"
+                android:layout_marginHorizontal="4dp"
+                android:padding="3dp"
+                >
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/home_MTV_gen_segment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="New"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@color/theme_1"
+                    />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/home_MTV_follow_segment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Follow"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/home_MTV_favorite_segment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Favorite"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:padding="8dp"
+
+                    />
+
+
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/home_LST_recipe"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
-                android:layout_centerInParent="true"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="6dp"
                 tools:listitem="@layout/horizontal_recipe_item" />
 
-        </RelativeLayout>
+        </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 

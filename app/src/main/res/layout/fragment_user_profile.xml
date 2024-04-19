@@ -34,7 +34,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/profile_icon"
+                    android:src="@drawable/profile_icon1"
                     android:scaleType="fitCenter"
                     android:layout_margin="8dp"
                     android:layout_gravity="center"

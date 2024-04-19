@@ -4,6 +4,7 @@ public class Comment {
 
     private String id = "";
     private String userId = "";
+    private String userName = "";
     private String recipeId = "";
 
     private String comment = "";
@@ -44,6 +45,15 @@ public class Comment {
 
     public Comment setRecipeId(String recipeId) {
         this.recipeId = recipeId;
+        return this;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public Comment setUserName(String userName) {
+        this.userName = userName;
         return this;
     }
 }

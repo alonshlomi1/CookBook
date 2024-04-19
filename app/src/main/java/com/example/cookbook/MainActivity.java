@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
 import com.example.cookbook.Interfaces.RecipeLoadCallback;
 import com.example.cookbook.Interfaces.RefreshHomeListener;
 import com.example.cookbook.Interfaces.UserLoadCallback;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
         userLogic = new UserLogic(this, this, SingleManager.getInstance().getUserManager().getUser());
         recipeLogic = new RecipeLogic(this, getApplicationContext());
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(),this))
+                .replace(R.id.fragment_container, new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(),this, recipeLogic))
                 .commit();
     }
 
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
                     if (item.getItemId() == R.id.navigation_home){
                         selectedFragment = getSupportFragmentManager().findFragmentByTag("HomePageFragment");
                         if (selectedFragment == null) {
-                            selectedFragment = new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(), MainActivity.this);
+                            selectedFragment = new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(), MainActivity.this, recipeLogic);
                         }
                     }
                         //selectedFragment = new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(), MainActivity.this);
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
     public void onFavoriteRecipeListLoaded(ArrayList<Recipe> recipes) {
         Fragment homePageFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (homePageFragment instanceof HomePageFragment) {
-            ((HomePageFragment) homePageFragment).updateFavoriteRecipeList(recipes);
+            ((HomePageFragment) homePageFragment).updateRecipeList(recipes);
             if (swipeRefreshLayout != null)
                 swipeRefreshLayout.setRefreshing(false);
 
@@ -130,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements RecipeLoadCallbac
     public void onUserRecipeListLoaded(ArrayList<Recipe> recipes) {
         Fragment userProfileFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (userProfileFragment instanceof UserProfileFragment) {
-            ((UserProfileFragment) userProfileFragment).updateRecipeList(recipes);
             ((UserProfileFragment) userProfileFragment).updateRecipeList(recipes);
             if (swipeRefreshLayout != null)
                 swipeRefreshLayout.setRefreshing(false);

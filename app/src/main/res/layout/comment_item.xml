@@ -19,12 +19,19 @@
 
         <!-- User ID or Name -->
         <TextView
-            android:id="@+id/comment_user_id"
+            android:id="@+id/usernameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/User_ID"
             android:textSize="16sp"
             android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/emailTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/email"
+            android:textSize="11sp"
+            android:textStyle="italic"/>
 
         <!-- Comment Text -->
         <TextView

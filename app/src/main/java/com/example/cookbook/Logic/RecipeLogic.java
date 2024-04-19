@@ -19,12 +19,14 @@ import com.example.cookbook.Interfaces.RecipeLoadCallback;
 import com.example.cookbook.Interfaces.RecipeResetListener;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.R;
+import com.example.cookbook.UI.Fragments.HomePageFragment;
 import com.example.cookbook.Utilities.SingleManager;
+import com.google.firebase.Timestamp;
+
 import java.util.ArrayList;
 
-public class RecipeLogic {
-    private ArrayList<Recipe> recipeList = new ArrayList<>();
-    private ArrayList<Recipe> favoriterecipeList = new ArrayList<>();
+public class RecipeLogic implements OnRecipesLoadedListener{
+    public static ArrayList<Recipe> recipeList = new ArrayList<>();
     private RecipeLoadCallback callback;
     private DBManager dbManager;
     private Context context;
@@ -35,51 +37,24 @@ public class RecipeLogic {
         setRecipeListFromDB();
         //setFavoriteRecipeListFromDB();
     }
-
-    private void setRecipeListFromDB() {
-        dbManager.getRecipes(new OnRecipesLoadedListener() {
-            @Override
-            public void onRecipesLoaded(ArrayList<Recipe> recipes) {
-                // Handle fetched recipes
-                recipeList = recipes;
-                attachURL(recipeList);
-                setFavoriteRecipeListFromDB();
-                if (callback != null) {
-                    callback.onRecipeListLoaded(recipeList);
-                }
-
-            }
-            @Override
-            public void onRecipesLoadFailed(Exception e) {
-                Log.e(TAG, "Error loading recipes", e);
-                if (callback != null) {
-                    callback.onRecipeListLoadFailed(e);
-                }
-            }
-        });
+    private Timestamp getLastRecipeDate(){
+        int recipeListSize = recipeList.size();
+        Timestamp lastRecipeDate = recipeListSize == 0? null : recipeList.get(recipeListSize-1).getDate();
+        return lastRecipeDate;
+    }
+    public void setRecipeListFromDB() {
+        dbManager.getRecipes(this, getLastRecipeDate());
     }
 
-    private void setFavoriteRecipeListFromDB() {
-        Log.d("@@@@@@@@imhere", "imherree");
-        dbManager.getFavoriteRecipes(new OnRecipesLoadedListener() {
-            @Override
-            public void onRecipesLoaded(ArrayList<Recipe> recipes) {
-                // Handle fetched recipes
-                favoriterecipeList = recipes;
-                attachURL(favoriterecipeList);
-                if (callback != null) {
-                    callback.onFavoriteRecipeListLoaded(favoriterecipeList);
-                }
-            }
-            @Override
-            public void onRecipesLoadFailed(Exception e) {
-                Log.e(TAG, "Error loading recipes", e);
-                if (callback != null) {
-                    callback.onRecipeListLoadFailed(e);
-                }
-            }
-        });
+    public void setFavoriteRecipeListFromDB() {
+
+        dbManager.getFavoriteRecipes(this, getLastRecipeDate());
     }
+    public void setFollowingRecipeListFromDB() {
+        dbManager.getFollowingRecipes(this, getLastRecipeDate());
+    }
+
+
 
     private void attachURL(ArrayList<Recipe> recipeList) {
         for (Recipe recipe: recipeList) {
@@ -105,10 +80,6 @@ public class RecipeLogic {
     }
 
 
-    public RecipeLogic setRecipeList(ArrayList<Recipe> recipeList) {
-        this.recipeList = recipeList;
-        return this;
-    }
 
     public boolean saveNewRecipe(Recipe recipe, Uri uri, RecipeResetListener resetListener){
         if(validateRecipe(recipe)){
@@ -140,4 +111,22 @@ public class RecipeLogic {
     }
 
 
+    @Override
+    public void onRecipesLoaded(ArrayList<Recipe> recipes) {
+        HomePageFragment.isLoading = false;
+        attachURL(recipes);
+        recipeList.addAll(recipes);
+
+        if (callback != null) {
+            callback.onRecipeListLoaded(recipeList);
+        }
+    }
+
+    @Override
+    public void onRecipesLoadFailed(Exception e) {
+        Log.e(TAG, "Error loading recipes", e);
+        if (callback != null) {
+            callback.onRecipeListLoadFailed(e);
+        }
+    }
 }

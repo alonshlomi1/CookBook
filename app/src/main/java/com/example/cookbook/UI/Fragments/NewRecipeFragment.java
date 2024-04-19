@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.graphics.Bitmap;
 
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -26,23 +24,15 @@ import android.widget.Spinner;
 import com.bumptech.glide.Glide;
 import com.example.cookbook.Adapters.IngredientAdapter;
 import com.example.cookbook.Adapters.InstructionAdapter;
-import com.example.cookbook.Adapters.RecipeAdapter;
 import com.example.cookbook.Interfaces.RecipeResetListener;
 import com.example.cookbook.Logic.RecipeLogic;
 import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.R;
-import com.example.cookbook.Utilities.SingleManager;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -187,7 +177,7 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
         new_recipe_ET_ingredients_name.setText("");
         new_recipe_ET_ingredients_amount.setText("");
         new_recipe_ET_instructions.setText("");
-        new_recipe_ET_tags.setText("");
+        //new_recipe_ET_tags.setText("");
         new_recipe = new Recipe();
         new_recipe.setAuthorId(userID);
         new_recipe.setId(UUID.randomUUID().toString());
@@ -216,7 +206,7 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
     private void findViews(View view) {
         new_recipe_ET_name = view.findViewById(R.id.new_recipe_ET_name);
         new_recipe_ET_instructions = view.findViewById(R.id.new_recipe_ET_instructions);
-        new_recipe_ET_tags = view.findViewById(R.id.new_recipe_ET_tags);
+        //new_recipe_ET_tags = view.findViewById(R.id.new_recipe_ET_tags);
         new_recipe_SIV_image = view.findViewById(R.id.new_recipe_SIV_image);
         new_recipe_MBTN_submit = view.findViewById(R.id.new_recipe_MBTN_submit);
         new_recipe_LST_ingredients = view.findViewById(R.id.new_recipe_LST_ingredients);
@@ -241,7 +231,7 @@ public class NewRecipeFragment extends Fragment implements RecipeResetListener {
                 Glide.with(this)
                         .load(imageUri)
                         .fitCenter()
-                        .placeholder(R.drawable.profile_icon)
+                        .placeholder(R.drawable.profile_icon1)
                         .into(new_recipe_SIV_image);
                 new_recipe_SIV_image.setMinimumHeight(800);
                 new_recipe.setPhotoUrl(imageUri.toString());

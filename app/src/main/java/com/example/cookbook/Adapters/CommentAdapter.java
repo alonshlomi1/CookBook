@@ -68,27 +68,39 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     }
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {
-        private TextView userIdTextView, commentTextView;
+        private TextView usernameTextView, commentTextView, emailTextView;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
-            userIdTextView = itemView.findViewById(R.id.comment_user_id);
+            usernameTextView = itemView.findViewById(R.id.usernameTextView);
             commentTextView = itemView.findViewById(R.id.comment_text);
+            emailTextView = itemView.findViewById(R.id.emailTextView);
         }
 
         public void bind(Comment comment) {
-            userIdTextView.setText(comment.getUserId());
-
+            usernameTextView.setText(comment.getUserName());
+            emailTextView.setText(comment.getUserId());
             // Check if the comment is expanded
             if (getAdapterPosition() == expandedPosition) {
                 // If expanded, show the entire comment
                 commentTextView.setText(comment.getComment());
+                emailTextView.setVisibility(View.VISIBLE);
             } else {
                 // If not expanded, show only the first 7 characters of the comment
-                String shortComment = comment.getComment().substring(0, Math.min(comment.getComment().length(), 55));
-                if(comment.getComment().length() > 55)
+                String shortComment;
+                int maxLength = 55; // Maximum length for the shortened comment
+
+                int newlineIndex = comment.getComment().indexOf('\n');
+                if (newlineIndex != -1 && newlineIndex <= maxLength) {
+                    shortComment = comment.getComment().substring(0, newlineIndex);
+                } else {
+                    shortComment = comment.getComment().substring(0, Math.min(comment.getComment().length(), maxLength));
+                }
+                if (comment.getComment().length() > maxLength || newlineIndex != -1) {
                     shortComment += "..";
+                }
                 commentTextView.setText(shortComment);
+                emailTextView.setVisibility(View.GONE);
             }
         }
     }

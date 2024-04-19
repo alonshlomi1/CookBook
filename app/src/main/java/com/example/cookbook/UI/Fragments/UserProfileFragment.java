@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +30,6 @@ import com.example.cookbook.Adapters.FollowersAdapter;
 import com.example.cookbook.Adapters.FollowingAdapter;
 import com.example.cookbook.Adapters.RecipeAdapter;
 import com.example.cookbook.Interfaces.RefreshHomeListener;
-import com.example.cookbook.MainActivity;
-import com.example.cookbook.Models.Following;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.Models.User;
 import com.example.cookbook.R;
@@ -89,28 +86,16 @@ public class UserProfileFragment extends Fragment {
             Glide.with(this)
                     .load(user.getProfile_URL())
                     .apply(requestOptions)
-                    .placeholder(R.drawable.profile_icon)
+                    .placeholder(R.drawable.profile_icon1)
                     .into(profile_SIV_image);
         }
     }
 
     private void initViews() {
         updateUserInfo();
-        RecipeAdapter recipeAdapter = new RecipeAdapter(applicationContext, recipeList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(applicationContext);
-        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-        home_LST_recipe.setLayoutManager(linearLayoutManager);
-        home_LST_recipe.setAdapter(recipeAdapter);
-        FollowingAdapter followingAdapter = new FollowingAdapter(applicationContext, user.getFollows());
-        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(applicationContext);
-        linearLayoutManager1.setOrientation(RecyclerView.VERTICAL);
-        home_LST_following.setLayoutManager(linearLayoutManager1);
-        home_LST_following.setAdapter(followingAdapter);
-        FollowersAdapter followersAdapter = new FollowersAdapter(applicationContext, user.getFollows());
-        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(applicationContext);
-        linearLayoutManager2.setOrientation(RecyclerView.VERTICAL);
-        home_LST_follower.setLayoutManager(linearLayoutManager2);
-        home_LST_follower.setAdapter(followersAdapter);
+        setRecipeAdapter();
+        setFollowingAdapter();
+        setFollowerAdapter();
         profile_LLO_seting.setVisibility(View.GONE);
         following_LLO_followers.setVisibility(View.GONE);
         following_LLO_following.setVisibility(View.GONE);
@@ -127,6 +112,31 @@ public class UserProfileFragment extends Fragment {
         followers_TV_count.setText("Followers:   " + user.getFollows().getFollowers().size());
 
     }
+
+    private void setFollowerAdapter() {
+        FollowersAdapter followersAdapter = new FollowersAdapter(applicationContext, user.getFollows());
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(applicationContext);
+        linearLayoutManager2.setOrientation(RecyclerView.VERTICAL);
+        home_LST_follower.setLayoutManager(linearLayoutManager2);
+        home_LST_follower.setAdapter(followersAdapter);
+    }
+
+    private void setFollowingAdapter() {
+        FollowingAdapter followingAdapter = new FollowingAdapter(applicationContext, user.getFollows());
+        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(applicationContext);
+        linearLayoutManager1.setOrientation(RecyclerView.VERTICAL);
+        home_LST_following.setLayoutManager(linearLayoutManager1);
+        home_LST_following.setAdapter(followingAdapter);
+    }
+
+    private void setRecipeAdapter() {
+        RecipeAdapter recipeAdapter = new RecipeAdapter(applicationContext, recipeList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(applicationContext);
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        home_LST_recipe.setLayoutManager(linearLayoutManager);
+        home_LST_recipe.setAdapter(recipeAdapter);
+    }
+
     private void setListener(){
 
     }
@@ -266,7 +276,7 @@ public class UserProfileFragment extends Fragment {
     }
     public void updateRecipeList(ArrayList<Recipe> recipeList){
         this.recipeList = recipeList;
-        initViews();
+        setRecipeAdapter();
     }
 
     @Override
@@ -285,7 +295,7 @@ public class UserProfileFragment extends Fragment {
             Glide.with(this)
                     .load(selectedImageUri)
                     .apply(requestOptions)
-                    .placeholder(R.drawable.profile_icon)
+                    .placeholder(R.drawable.profile_icon1)
                     .into(profile_SIV_image);
             SingleManager.getInstance().getDBManager().saveImage(user.getId(), SingleManager.getInstance().compresImage(selectedImageUri));
         }

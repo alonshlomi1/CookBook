@@ -5,6 +5,7 @@
         <item>TEASPOON</item>
         <item>SPOON</item>
         <item>GRAMS</item>
+        <item>COUNT</item>
         <item>DEF</item>
     </string-array>
 </resources>

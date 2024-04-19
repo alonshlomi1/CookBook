@@ -28,10 +28,12 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.cookbook.DataBaseLayer.DBManager;
+import com.example.cookbook.DataBaseLayer.UserDB;
 import com.example.cookbook.Models.Comment;
 import com.example.cookbook.Models.Favorites;
 import com.example.cookbook.Models.Ingredient;
 import com.example.cookbook.Models.Recipe;
+import com.example.cookbook.Models.User;
 import com.example.cookbook.R;
 import com.example.cookbook.Utilities.SingleManager;
 import com.google.android.material.button.MaterialButton;
@@ -66,21 +68,21 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         final boolean isExpanded = position == expandedPosition;
         holder.recipeIngredients.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.recipeInstructions.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-        holder.recipeCommentsTitle.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-        holder.recipeLLOSeg.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+
+        holder.recipe_BTN_seg.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.recipeLSTComments.setVisibility(holder.commentsVisible ? View.VISIBLE : View.GONE);
-        holder.recipe_comments_SIV_icon.setImageResource(holder.commentsVisible? R.drawable.minus_icon: R.drawable.plus_icon);
+        holder.recipe_BTN_seg.setIconResource(holder.commentsVisible? R.drawable.minus_icon: R.drawable.plus_icon);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isExpanded) {
-                    expandedPosition = -1; // Collapse the currently expanded item
+                    expandedPosition = -1;
                 } else {
-                    int prevExpandedPosition = expandedPosition; // Store the previous expanded position
-                    expandedPosition = position; // Set the newly expanded position
-                    notifyItemChanged(prevExpandedPosition); // Collapse the previous expanded item
+                    int prevExpandedPosition = expandedPosition;
+                    expandedPosition = position;
+                    notifyItemChanged(prevExpandedPosition);
                 }
-                notifyItemChanged(position); // Expand or collapse the clicked item
+                notifyItemChanged(position);
             }
         });
     }
@@ -113,21 +115,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         private RelativeLayout recipeLLOSeg;
         private LinearLayout home_LLO_comments_title, home_LLO_comments, recipe_rating_clickable;
         private EditText home_ET_comments;
-        private MaterialButton home_BTN_comments;
+        private MaterialButton home_BTN_comments, recipe_BTN_seg, recipe_BTN_add_comment;
         private boolean commentsVisible = false;
         private boolean newCommentsVisible = false;
 
-        private void styleComments(){
-
-            GradientDrawable backgroundDrawable = new GradientDrawable();
-            backgroundDrawable.setShape(GradientDrawable.RECTANGLE);
-            backgroundDrawable.setCornerRadius(20); // Larger corner radius
-            backgroundDrawable.setColor(ContextCompat.getColor(context, R.color.theme_3));
-            backgroundDrawable.setStroke(1, ContextCompat.getColor(context, R.color.theme_5)); // Black border
-
-            // Set the background drawable to the relative layout
-            recipeLLOSeg.setBackground(backgroundDrawable);
-        }
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeImage = itemView.findViewById(R.id.recipe_image);
@@ -136,17 +127,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             recipeRating = itemView.findViewById(R.id.recipe_rating);
             recipeIngredients = itemView.findViewById(R.id.recipe_ingredients);
             recipeInstructions = itemView.findViewById(R.id.recipe_instructions);
-            recipeCommentsTitle = itemView.findViewById(R.id.recipe_comments_title);
             recipeLSTComments = itemView.findViewById(R.id.recipe_LST_comments);
-            recipeLLOSeg = itemView.findViewById(R.id.recipe_RLO_seg);
-            home_LLO_comments_title = itemView.findViewById(R.id.home_LLO_comments_title);
+            //home_LLO_comments_title = itemView.findViewById(R.id.home_LLO_comments_title);
             home_LLO_comments = itemView.findViewById(R.id.home_LLO_comments);
             home_ET_comments = itemView.findViewById(R.id.home_ET_comments);
             home_BTN_comments = itemView.findViewById(R.id.home_BTN_comments);
-            home_SIV_comments_icon = itemView.findViewById(R.id.home_SIV_comments_icon);
+            //home_SIV_comments_icon = itemView.findViewById(R.id.home_SIV_comments_icon);
             recipe_rating_clickable = itemView.findViewById(R.id.recipe_rating_clickable);
-            styleComments();
-            recipe_comments_SIV_icon = itemView.findViewById(R.id.recipe_comments_SIV_icon);
+            recipe_BTN_seg = itemView.findViewById(R.id.recipe_BTN_seg);
+            recipe_BTN_add_comment = itemView.findViewById(R.id.recipe_BTN_add_comment);
             setListenerRecipeLLOSeg();
             setListenerHome_LLO_comments_title();
             setListenerHome_BTN_comments();
@@ -154,42 +143,41 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         }
 
         private void setListenerRecipeLLOSeg(){
-            recipeLLOSeg.setOnClickListener(new View.OnClickListener() {
+            recipe_BTN_seg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Toggle comments visibility
 
                     if (commentsVisible) {
-                        home_LLO_comments_title.setVisibility(View.VISIBLE);
+                        recipe_BTN_add_comment.setVisibility(View.VISIBLE);
                         home_LLO_comments.setVisibility(View.VISIBLE);
                         recipeLSTComments.setVisibility(View.VISIBLE);
-                        recipe_comments_SIV_icon.setImageResource(R.drawable.minus_icon);
+                        recipe_BTN_seg.setIconResource(R.drawable.minus_icon);
                     } else {
-                        home_LLO_comments_title.setVisibility(View.GONE);
+                        recipe_BTN_add_comment.setVisibility(View.GONE);
                         home_LLO_comments.setVisibility(View.GONE);
                         recipeLSTComments.setVisibility(View.GONE);
-                        recipe_comments_SIV_icon.setImageResource(R.drawable.plus_icon);
+                        recipe_BTN_seg.setIconResource(R.drawable.plus_icon);
                         home_ET_comments.setVisibility(View.GONE);
                         home_BTN_comments.setVisibility(View.GONE);
-                        home_SIV_comments_icon.setImageResource(R.drawable.plus_icon);
+                        recipe_BTN_add_comment.setIconResource(R.drawable.plus_icon);
                     }
                     commentsVisible = !commentsVisible;
                 }
             });
         }
         private void setListenerHome_LLO_comments_title(){
-            home_LLO_comments_title.setOnClickListener(new View.OnClickListener() {
+            recipe_BTN_add_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Toggle comments visibility
                     if (newCommentsVisible) {
                         home_ET_comments.setVisibility(View.VISIBLE);
                         home_BTN_comments.setVisibility(View.VISIBLE);
-                        home_SIV_comments_icon.setImageResource(R.drawable.minus_icon);
+                        recipe_BTN_add_comment.setIconResource(R.drawable.minus_icon);
                     } else {
                         home_ET_comments.setVisibility(View.GONE);
                         home_BTN_comments.setVisibility(View.GONE);
-                        home_SIV_comments_icon.setImageResource(R.drawable.plus_icon);
+                        recipe_BTN_add_comment.setIconResource(R.drawable.plus_icon);
                     }
                     newCommentsVisible = !newCommentsVisible;
                 }
@@ -201,11 +189,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                 public void onClick(View v) {
 
                     String commentText = home_ET_comments.getText().toString().trim();
-                    // Get the recipe at this position
+                    User user = SingleManager.getInstance().getUserManager().getUser();
                     Recipe recipe = recipeList.get(getAdapterPosition());
                     if (!commentText.isEmpty()) {
                         Comment newComment = new Comment()
-                                .setUserId("userID_1")
+                                .setUserId(user.getEmail())
+                                .setUserName(user.getFirstName()+" "+ user.getLastName())
                                 .setComment(commentText)
                                 .setRecipeId(recipe.getId());;
 
@@ -291,7 +280,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         }
         private void setVisible(){
             recipeLSTComments.setVisibility(View.GONE);
-            home_LLO_comments_title.setVisibility(View.GONE);
+            recipe_BTN_add_comment.setVisibility(View.GONE);
             home_LLO_comments.setVisibility(View.GONE);
             home_ET_comments.setVisibility(View.GONE);
             home_BTN_comments.setVisibility(View.GONE);
