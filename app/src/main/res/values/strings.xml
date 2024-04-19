@@ -53,7 +53,7 @@
     <string name="favorite">Favorite</string>
     <string name="login">Login</string>
     <string name="new_acount">New? click here for Create an account</string>
-    <string name="password_again">Password again...</string>
-    <string name="Add_Cmments">Add Cmment</string>
+    <string name="password_again">Password again…</string>
+    <string name="Add_Cmments">Add Comment</string>
 
 </resources>
