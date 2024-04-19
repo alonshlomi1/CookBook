@@ -40,9 +40,9 @@
     <string name="save">שמור</string>
     <string name="Ingredient" >רכיב</string>
     <string name="type">סוג</string>
-    <string name="follow_name">Follow Name</string>
+    <string name="follow_name">שם עוקב</string>
     <string name="unfollow">הסר</string>
-    <string name="following">Following</string>
+    <string name="following">"עוקב "</string>
     <string name="followers">עוקבים</string>
     <string name="Followers" >עוקבים</string>
     <string name="change_pic">שנה תמונה</string>
