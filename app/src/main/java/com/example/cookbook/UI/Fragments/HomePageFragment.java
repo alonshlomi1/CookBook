@@ -66,6 +66,7 @@ public class HomePageFragment extends Fragment {
         applicationContext = Context;
         this.refreshCallback = refreshCallback;
         this.recipeLogic = recipeLogic;
+        //current_segment = home_MTV_gen_segment;
     }
 
     @Override
@@ -75,7 +76,6 @@ public class HomePageFragment extends Fragment {
 
         findViews(view);
         initViews();
-
         return view;
     }
     @Override
