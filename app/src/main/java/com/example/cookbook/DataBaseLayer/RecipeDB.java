@@ -91,6 +91,9 @@ public class RecipeDB {
                                 Log.d("RecipeFromDB", document.getId() + " => " + recipe.toString());
                             }
                             // Invoke the listener with the fetched recipes
+                            if(recipeList.size() == 0 && lastRecipeDate != null)
+                                SingleManager.getInstance().toast("No More Recipe To Load");
+
                             listener.onRecipesLoaded(recipeList);
                         } else {
                             Log.d("RecipeFromDBError", "Error getting documents: ", task.getException());
@@ -141,7 +144,8 @@ public class RecipeDB {
 
                         }
                         // Invoke the listener with the fetched recipes
-
+                        if(recipeList.size() == 0)
+                            SingleManager.getInstance().toast("No More Recipe To Load");
                         listener.onRecipesLoaded(recipeList);
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
@@ -197,7 +201,8 @@ public class RecipeDB {
 
                                 }
                                 // Invoke the listener with the fetched recipes
-                                Log.d("HIHIHI", recipeList.toString());
+                                if(recipeList.size() == 0 && lastVisibleRecipeSnapshot  != null)
+                                    SingleManager.getInstance().toast("No More Recipe To Load");
                                 if (!recipeList.isEmpty()) {
                                     lastVisibleRecipeSnapshot = task.getResult().getDocuments().get(task.getResult().size() - 1);
                                 }

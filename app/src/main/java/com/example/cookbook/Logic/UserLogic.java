@@ -66,13 +66,14 @@ public class UserLogic {
             storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-                    // Got the download URL for 'users/me/profile.png'
-                    Log.d("URI-@@@@@@@@@", uri.toString());
 
                     try {
                         user.setProfile_URL(new URL(uri.toString()).toString() );
                     } catch (MalformedURLException e) {
                         throw new RuntimeException(e);
+                    }
+                    if (userCallback != null) {
+                        userCallback.onUserLoaded(user);
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -81,9 +82,7 @@ public class UserLogic {
                     Log.d("URI-@@@@@@@@@", exception.toString());
                 }
             });
-            if (userCallback != null) {
-                userCallback.onUserLoaded(user);
-            }
+
         }
 
     }

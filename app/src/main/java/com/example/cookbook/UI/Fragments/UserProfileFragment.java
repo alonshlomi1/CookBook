@@ -48,7 +48,7 @@ import java.util.ArrayList;
 public class UserProfileFragment extends Fragment {
 
     private ShapeableImageView profile_SIV_image;
-    private MaterialTextView profile_TV_name, profile_TV_info, following_TV_count, followers_TV_count;
+    private MaterialTextView profile_TV_name, profile_TV_info, following_TV_count, followers_TV_count, profile_MTV_nor_ecipe;
     private RecyclerView home_LST_recipe, home_LST_following, home_LST_follower;
     private MaterialButton profile_BTN_setting, profile_BTN_setting_image, profile_BTN_setting_info
     , profile_BTN_setting_logout, profile_BTN_following, profile_BTN_followers, profile_BTN_follow;
@@ -93,6 +93,7 @@ public class UserProfileFragment extends Fragment {
 
     private void initViews() {
         updateUserInfo();
+        setNoRecipe();
         setRecipeAdapter();
         setFollowingAdapter();
         setFollowerAdapter();
@@ -270,15 +271,22 @@ public class UserProfileFragment extends Fragment {
         followers_TV_count = view.findViewById(R.id.followers_TV_count);
         following_LLO_following = view.findViewById(R.id.following_LLO_following);
         following_LLO_followers = view.findViewById(R.id.following_LLO_followers);
+        profile_MTV_nor_ecipe = view.findViewById(R.id.profile_MTV_no_recipe);
     }
     public void updateUser(User user){
         this.user = user;
     }
     public void updateRecipeList(ArrayList<Recipe> recipeList){
         this.recipeList = recipeList;
+        setNoRecipe();
         setRecipeAdapter();
     }
-
+    private void setNoRecipe(){
+        if (recipeList.size() == 0)
+            profile_MTV_nor_ecipe.setVisibility(View.VISIBLE);
+        else
+            profile_MTV_nor_ecipe.setVisibility(View.GONE);
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -37,7 +37,7 @@ public class HomePageFragment extends Fragment {
     private Context applicationContext;
     private ArrayList<Recipe> recipeList;
     private RefreshHomeListener refreshCallback;
-    private MaterialTextView home_MTV_gen_segment, home_MTV_follow_segment, home_MTV_favorite_segment, current_segment;
+    private MaterialTextView home_MTV_gen_segment, home_MTV_follow_segment, home_MTV_favorite_segment, current_segment, home_MTV_no_recipe;
     private RecipeLogic recipeLogic;
 
     public static boolean isLoading = false;
@@ -117,6 +117,7 @@ public class HomePageFragment extends Fragment {
             recipeLogic.setFavoriteRecipeListFromDB();
 
         });
+        setNoRecipe();
         setRecipeAdapter();
         home_SWIPE_refresh.setOnRefreshListener(() -> refreshCallback.refresh(home_SWIPE_refresh));
         home_LST_recipe.addOnScrollListener(paginationScrollListener);
@@ -152,11 +153,18 @@ public class HomePageFragment extends Fragment {
         home_MTV_gen_segment = view.findViewById(R.id.home_MTV_gen_segment);
         home_MTV_follow_segment = view.findViewById(R.id.home_MTV_follow_segment);
         home_MTV_favorite_segment = view.findViewById(R.id.home_MTV_favorite_segment);
+        home_MTV_no_recipe = view.findViewById(R.id.home_MTV_no_recipe);
     }
     public void updateRecipeList(ArrayList<Recipe> recipeList){
         this.recipeList = recipeList;
+        setNoRecipe();
         setRecipeAdapter();
     }
-
+    private void setNoRecipe(){
+        if (recipeList.size() == 0)
+            home_MTV_no_recipe.setVisibility(View.VISIBLE);
+        else
+            home_MTV_no_recipe.setVisibility(View.GONE);
+    }
 
 }

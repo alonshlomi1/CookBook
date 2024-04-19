@@ -13,6 +13,7 @@
         android:layout_margin="4dp">
 
         <LinearLayout
+            android:id="@+id/profile_LLO"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -213,19 +214,29 @@
             </LinearLayout>
 
         </LinearLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/profile_MTV_no_recipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="No Recipes to show"
+            />
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/profile_SWIPE_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_marginTop="4dp"
                 android:id="@+id/home_LST_recipe"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 tools:listitem="@layout/horizontal_recipe_item"
 
                 />
+
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>

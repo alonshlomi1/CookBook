@@ -41,7 +41,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class DBManager {
-    private final int batchSize = 3;
+    private final int batchSize = 5;
     private FirebaseFirestore db;
     private UserDB userDB;
     private RecipeDB recipeDB;

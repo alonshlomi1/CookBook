@@ -58,7 +58,16 @@
 
 
             </LinearLayout>
-
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/home_MTV_no_recipe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="No Recipes to show"
+                android:layout_marginTop="50dp"
+                />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/home_LST_recipe"
                 android:layout_width="match_parent"
