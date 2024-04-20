@@ -20,12 +20,11 @@ CookBook is a recipe sharing platform designed to simplify the process of discov
 ## Video
 
 Check out our video showcasing the features of CookBook:
-[![CookBook Video](https://www.youtube.com/watch?v=NWr1AhMGj4I&ab_channel=alonshlomi)](https://www.youtube.com/watch?v=NWr1AhMGj4I&ab_channel=alonshlomi)
+[[CookBook Video](https://www.youtube.com/watch?v=NWr1AhMGj4I&ab_channel=alonshlomi)](https://www.youtube.com/watch?v=NWr1AhMGj4I&ab_channel=alonshlomi)
 
 ## Presentation
 
 For a detailed overview of CookBook's features and development process, check out our PowerPoint presentation:
-[Download PowerPoint Presentation](link_to_your_presentation.pptx)
 [Download PowerPoint Presentation](https://github.com/alonshlomi1/CookBook/files/15048317/CookBook.Presentation.pptx)
 
 ## Installation
