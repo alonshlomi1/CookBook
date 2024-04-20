@@ -25,6 +25,7 @@ import com.example.cookbook.UI.Fragments.NewRecipeFragment;
 import com.example.cookbook.UI.Fragments.UserProfileFragment;
 import com.example.cookbook.Utilities.SingleManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements OnRecipesLoadedLi
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
         userLogic = new UserLogic(this, this, SingleManager.getInstance().getUserManager().getUser());
-        recipeLogic = new RecipeLogic(this, getApplicationContext());
+        recipeLogic = new RecipeLogic(this, getApplicationContext(), R.id.home_MTV_gen_segment);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new HomePageFragment(getApplicationContext(), recipeLogic.getRecipeList(),this, recipeLogic))
                 .commit();
@@ -79,9 +80,9 @@ public class MainActivity extends AppCompatActivity implements OnRecipesLoadedLi
             };
 
 
-    public void refresh(SwipeRefreshLayout home_SWIPE_refresh){
+    public void refresh(SwipeRefreshLayout home_SWIPE_refresh, int current){
         swipeRefreshLayout = home_SWIPE_refresh;
-        recipeLogic = new RecipeLogic(this, getApplicationContext());
+        recipeLogic = new RecipeLogic(this, getApplicationContext(), current);
         userLogic = new UserLogic(this, this, SingleManager.getInstance().getUserManager().getUser());
 
     }

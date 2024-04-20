@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.cookbook.Interfaces.OnFollowsListener;
 import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
 import com.example.cookbook.Interfaces.OnRecipesURLLoadedListener;
+import com.example.cookbook.Interfaces.OnUnfollowListener;
 import com.example.cookbook.Interfaces.OnUserLoadedListener;
 import com.example.cookbook.Interfaces.OnUserSavedListener;
 import com.example.cookbook.Interfaces.RecipeResetListener;
@@ -99,8 +100,8 @@ public class DBManager {
             }
         }, email);
     }
-    public void unfollow(String followerId) {
-        followsDB.unfollow(followerId, SingleManager.getInstance().getUserManager().getUser().getId());
+    public void unfollow(String followerId, OnUnfollowListener listener) {
+        followsDB.unfollow(followerId, SingleManager.getInstance().getUserManager().getUser().getId(), listener);
     }
     public void getFollowing(String user_Id, OnFollowsListener listener){
         followsDB.getFollowing(user_Id, listener);

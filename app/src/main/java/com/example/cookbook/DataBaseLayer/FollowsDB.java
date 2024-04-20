@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.cookbook.Interfaces.OnFollowsListener;
+import com.example.cookbook.Interfaces.OnUnfollowListener;
 import com.example.cookbook.Interfaces.onFavoritesListener;
 import com.example.cookbook.Models.Favorites;
 import com.example.cookbook.Models.Following;
@@ -82,7 +83,7 @@ public class FollowsDB {
                     }
                 });
     }
-    public void unfollow(String followingId, String followerId) {
+    public void unfollow(String followerId, String followingId, OnUnfollowListener listener) {
         db.collection("follow")
                 .whereEqualTo("userId", followingId)
                 .get()
@@ -92,7 +93,7 @@ public class FollowsDB {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Following following = document.toObject(Following.class);
-                                following.removeFollower(followerId);
+                                following.removeFollowing(followerId);
                                 SingleManager.getInstance().getUserManager().getUser().setFollows(following);
 
                                 db.collection("follow").document(followingId)
@@ -100,7 +101,8 @@ public class FollowsDB {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                updateUnfollow(followingId, followerId);
+                                                listener.onUnfollow();
+                                                updateUnfollow( followerId, followingId);
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -116,7 +118,7 @@ public class FollowsDB {
                     }
                 });
     }
-    public void updateUnfollow(String followingId, String followerId) {
+    public void updateUnfollow(String followerId ,String followingId) {
         db.collection("follow")
                 .whereEqualTo("userId", followerId)
                 .get()
@@ -126,7 +128,7 @@ public class FollowsDB {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Following following = document.toObject(Following.class);
-                                following.removeFollowing(followingId);
+                                following.removeFollower(followingId);
 
                                 db.collection("follow").document(followerId)
                                         .set(following)

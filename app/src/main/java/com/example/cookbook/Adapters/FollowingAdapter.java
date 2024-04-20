@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cookbook.Interfaces.OnUnfollowListener;
 import com.example.cookbook.Models.Comment;
 import com.example.cookbook.Models.Following;
 import com.example.cookbook.R;
@@ -25,6 +26,7 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
     private ArrayList<String> folowingList_name;
     private ArrayList<String> folowingList_id;
     private Context context;
+    private OnUnfollowListener callback;
     private int expandedPosition = -1;
 
     public FollowingAdapter(Context context) {
@@ -33,9 +35,10 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
             this.folowingList_name = new ArrayList<String>(following.getFollowing().values());
             this.folowingList_id = new ArrayList<String>(following.getFollowing().keySet());
     }
-    public FollowingAdapter(Context context, Following following) {
+    public FollowingAdapter(Context context, Following following,OnUnfollowListener callback) {
             this.context = context;
             this.following = following;
+            this.callback = callback;
             this.folowingList_name = new ArrayList<String>(following.getFollowing().values());
             this.folowingList_id = new ArrayList<String>(following.getFollowing().keySet());
 
@@ -90,7 +93,7 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.Foll
 
         public void bind(String following_id, String following_name) {
             following_TV_name.setText(following_name);
-            following_BTN_unfollow.setOnClickListener(v -> SingleManager.getInstance().getDBManager().unfollow(following_id));
+            following_BTN_unfollow.setOnClickListener(v -> SingleManager.getInstance().getDBManager().unfollow(following_id, callback));
             this.following_id = following_id;
             this.following_name = following_name;
         }

@@ -119,7 +119,7 @@ public class HomePageFragment extends Fragment {
         });
         setNoRecipe();
         setRecipeAdapter();
-        home_SWIPE_refresh.setOnRefreshListener(() -> refreshCallback.refresh(home_SWIPE_refresh));
+        home_SWIPE_refresh.setOnRefreshListener(() -> refreshCallback.refresh(home_SWIPE_refresh, current_segment.getId()));
         home_LST_recipe.addOnScrollListener(paginationScrollListener);
 
         //home_MTV_gen_segment

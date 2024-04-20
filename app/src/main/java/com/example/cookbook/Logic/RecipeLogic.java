@@ -13,8 +13,10 @@ import com.example.cookbook.Interfaces.OnRecipesLoadedListener;
 import com.example.cookbook.Interfaces.OnRecipesURLLoadedListener;
 import com.example.cookbook.Interfaces.RecipeResetListener;
 import com.example.cookbook.Models.Recipe;
+import com.example.cookbook.R;
 import com.example.cookbook.UI.Fragments.HomePageFragment;
 import com.example.cookbook.Utilities.SingleManager;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
@@ -24,11 +26,18 @@ public class RecipeLogic implements OnRecipesLoadedListener{
     private OnRecipesLoadedListener callback;
     private DBManager dbManager;
     private Context context;
-    public RecipeLogic(OnRecipesLoadedListener callback, Context context){
+    public RecipeLogic(OnRecipesLoadedListener callback, Context context, int current){
         this.callback = callback;
         this.dbManager = new DBManager();
         this.context = context;
-        setRecipeListFromDB();
+        this.recipeList = new ArrayList<>();
+
+        if(current == R.id.home_MTV_favorite_segment)
+            setFavoriteRecipeListFromDB();
+        else if(current == R.id.home_MTV_follow_segment)
+            setFollowingRecipeListFromDB();
+        else
+            setRecipeListFromDB();
         //setFavoriteRecipeListFromDB();
     }
     private Timestamp getLastRecipeDate(){

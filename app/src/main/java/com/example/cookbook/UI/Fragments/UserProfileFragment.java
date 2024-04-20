@@ -29,7 +29,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.cookbook.Adapters.FollowersAdapter;
 import com.example.cookbook.Adapters.FollowingAdapter;
 import com.example.cookbook.Adapters.RecipeAdapter;
+import com.example.cookbook.Interfaces.OnFollowsListener;
+import com.example.cookbook.Interfaces.OnUnfollowListener;
 import com.example.cookbook.Interfaces.RefreshHomeListener;
+import com.example.cookbook.Models.Following;
 import com.example.cookbook.Models.Recipe;
 import com.example.cookbook.Models.User;
 import com.example.cookbook.R;
@@ -45,7 +48,7 @@ import com.google.android.material.textview.MaterialTextView;
 import java.util.ArrayList;
 
 
-public class UserProfileFragment extends Fragment {
+public class UserProfileFragment extends Fragment implements OnUnfollowListener {
 
     private ShapeableImageView profile_SIV_image;
     private MaterialTextView profile_TV_name, profile_TV_info, following_TV_count, followers_TV_count, profile_MTV_nor_ecipe;
@@ -100,7 +103,7 @@ public class UserProfileFragment extends Fragment {
         profile_LLO_seting.setVisibility(View.GONE);
         following_LLO_followers.setVisibility(View.GONE);
         following_LLO_following.setVisibility(View.GONE);
-        profile_SWIPE_refresh.setOnRefreshListener(() -> refreshCallback.refresh(profile_SWIPE_refresh));
+        profile_SWIPE_refresh.setOnRefreshListener(() -> refreshCallback.refresh(profile_SWIPE_refresh, 0));
 
         setListenerProfile_BTN_setting();
         setListenerProfile_BTN_following();
@@ -123,7 +126,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void setFollowingAdapter() {
-        FollowingAdapter followingAdapter = new FollowingAdapter(applicationContext, user.getFollows());
+        FollowingAdapter followingAdapter = new FollowingAdapter(applicationContext, user.getFollows(), this);
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(applicationContext);
         linearLayoutManager1.setOrientation(RecyclerView.VERTICAL);
         home_LST_following.setLayoutManager(linearLayoutManager1);
@@ -399,6 +402,12 @@ public class UserProfileFragment extends Fragment {
         dialog.show();
     }
 
+
+    @Override
+    public void onUnfollow() {
+        setFollowingAdapter();
+        following_TV_count.setText("Following:   " + user.getFollows().getFollowing().size());
+    }
 
 
 }

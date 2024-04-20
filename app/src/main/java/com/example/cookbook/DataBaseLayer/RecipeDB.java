@@ -169,12 +169,15 @@ public class RecipeDB {
         Task<QuerySnapshot> task;
         if(followingIDList.size() > 0){
             if (lastVisibleRecipeSnapshot  == null) {
+                Log.d("@@@@", "1");
                 task = db.collection("recipes")
                         .whereIn("authorId", followingIDList)
 //                        .orderBy("date", Query.Direction.DESCENDING)
                         .limit(batchSize)
                         .get();
+
             } else {
+                Log.d("@@@@", "2");
                 task = db.collection("recipes")
                         .whereIn("authorId", followingIDList)
 //                        .orderBy("date", Query.Direction.DESCENDING)
