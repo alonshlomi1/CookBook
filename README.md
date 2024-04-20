@@ -30,7 +30,8 @@ CookBook is designed to be intuitive and user-friendly, allowing users to easily
 1. **Browse Recipes:** Navigate to the homepage to explore a variety of recipes displayed in a visually appealing grid layout.
 2. **Personalized Feed:** Use the category filters to find recipes tailored to your preferences, such as New, Follows, and Favorites.
 3. **View Recipe Details:** Click on a recipe card to view its details, including ingredients, instructions, image, and display the comment segment.
-![Screenshot_2024-04-20-11-08-14-285_com example cookbook](https://github.com/alonshlomi1/CookBook/assets/98226796/f9cb9593-a12e-47b2-bb24-4c3b386f3ba3)
+ <img src="Screenshot_2024-04-20-11-08-14-285_com example cookbook](https://github.com/alonshlomi1/CookBook/assets/98226796/f9cb9593-a12e-47b2-bb24-4c3b386f3ba3" alt="Description of the image" width="300">
+
 ![Screenshot_2024-04-20-11-15-05-017_com example cookbook](https://github.com/alonshlomi1/CookBook/assets/98226796/3d6ad683-8504-436c-9494-85b2dd267b3e)
 
 ### Upload Recipes
