@@ -44,7 +44,7 @@ CookBook is designed to be intuitive and user-friendly, allowing users to easily
 ### Engage with Community
 1. **Comment :** Engage with other users by leaving comments on recipes that inspire you.
 2. **Connect with Users:** Follow other users whose recipes you enjoy, and discover new culinary talents to expand your cooking repertoire.
-<img src="https://github.com/alonshlomi1/CookBook/assets/98226796/180d8375-2193-403b-865b-41a20f718aa0" alt="Community Engagement" width="300">
+<img src="https://github.com/alonshlomi1/CookBook/assets/98226796/53f3e368-f05e-4892-80c3-95d5d0265083" alt="Community Engagement" width="300">
 
 ### Profile Management
 1. **Edit Profile:** Navigate to the profile settings page to edit your personal information, including your name, bio, and profile picture.
