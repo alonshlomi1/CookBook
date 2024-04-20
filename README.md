@@ -20,7 +20,7 @@ CookBook is a recipe sharing platform designed to simplify the process of discov
 ## Video
 
 Check out our video showcasing the features of CookBook:
-[[CookBook Video](https://www.youtube.com/watch?v=NWr1AhMGj4I&ab_channel=alonshlomi)](https://www.youtube.com/watch?v=NWr1AhMGj4I&ab_channel=alonshlomi)
+[CookBook Video](https://www.youtube.com/watch?v=NWr1AhMGj4I&ab_channel=alonshlomi)
 
 ## Presentation
 
