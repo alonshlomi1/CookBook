@@ -4,6 +4,8 @@ CookBook is a recipe sharing platform designed to simplify the process of discov
 
 ## Table of Contents
 - [Features](#Features)
+- [Video](#Video)
+- [Presentation](#Presentation)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contact](#contact)
@@ -14,6 +16,17 @@ CookBook is a recipe sharing platform designed to simplify the process of discov
 - **Personalized Feed:** Customize your home feed to display new recipes, followed recipes, and favorite recipes, ensuring you always have fresh inspiration at your fingertips.
 - **Engage with Community:** Comment on recipes, share cooking tips, and connect with like-minded individuals who share your passion for cooking.
 - **Profile Management:** Manage your profile settings, including updating your personal information, changing profile pictures, and viewing your uploaded recipes.
+
+## Video
+
+Check out our video showcasing the features of CookBook:
+[![CookBook Video](https://www.youtube.com/watch?v=NWr1AhMGj4I&ab_channel=alonshlomi)](https://www.youtube.com/watch?v=NWr1AhMGj4I&ab_channel=alonshlomi)
+
+## Presentation
+
+For a detailed overview of CookBook's features and development process, check out our PowerPoint presentation:
+[Download PowerPoint Presentation](link_to_your_presentation.pptx)
+[Download PowerPoint Presentation](https://github.com/alonshlomi1/CookBook/files/15048317/CookBook.Presentation.pptx)
 
 ## Installation
 To run CookBook locally on your machine, follow these steps:
