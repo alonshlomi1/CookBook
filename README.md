@@ -40,7 +40,7 @@ To run CookBook locally on your machine, follow these steps:
 
 CookBook is designed to be intuitive and user-friendly, allowing users to easily discover, upload, and share recipes. Below are examples demonstrating how users can make the most out of CookBook's features:
 ### Login
-1. **Login to mockup user:** Login to a mockup user to expirience the app. use credential:\
+1. **Login to mockup user:** Login to a mockup user to expirience the app. use credential:
    
       Email: "chef.mike@example.com"
    
