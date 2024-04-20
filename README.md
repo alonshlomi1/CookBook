@@ -47,7 +47,7 @@ CookBook is designed to be intuitive and user-friendly, allowing users to easily
       Email: "chef.mike@example.com"
    
       Password: "123456" 
-4. **Signup:** Create a new user and build your own personalised experience.
+2. **Signup:** Create a new user and build your own personalised experience.
    
 ### Discover Recipes
 1. **Browse Recipes:** Navigate to the homepage to explore a variety of recipes displayed in a visually appealing grid layout.
